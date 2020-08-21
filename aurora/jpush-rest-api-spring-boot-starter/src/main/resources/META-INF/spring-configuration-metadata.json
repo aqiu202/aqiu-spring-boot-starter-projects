@@ -1,0 +1,55 @@
+{
+  "groups": [
+    {
+      "name": "jpush.config",
+      "type": "com.github.aqiu202.aurora.jpush.bean.JPushBean",
+      "sourceType": "com.github.aqiu202.aurora.jpush.config.JPushAutoConfiguration",
+      "sourceMethod": "jPushBean()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "jpush.config.app-key",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.aurora.jpush.bean.JPushBean",
+      "defaultValue": ""
+    },
+    {
+      "name": "jpush.config.cid-url",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.aurora.jpush.bean.JPushBean",
+      "defaultValue": "https:\/\/api.jpush.cn\/v3\/push\/cid"
+    },
+    {
+      "name": "jpush.config.master-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.aurora.jpush.bean.JPushBean",
+      "defaultValue": ""
+    },
+    {
+      "name": "jpush.config.prod",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.github.aqiu202.aurora.jpush.bean.JPushBean",
+      "defaultValue": false
+    },
+    {
+      "name": "jpush.config.push-url",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.aurora.jpush.bean.JPushBean",
+      "defaultValue": "https:\/\/api.jpush.cn\/v3\/push"
+    },
+    {
+      "name": "jpush.config.time-to-live",
+      "type": "java.lang.Integer",
+      "sourceType": "com.github.aqiu202.aurora.jpush.bean.JPushBean",
+      "defaultValue": 86400
+    },
+    {
+      "name": "jpush.config.timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.github.aqiu202.aurora.jpush.bean.JPushBean",
+      "defaultValue": 5000
+    }
+  ],
+  "hints": []
+}
