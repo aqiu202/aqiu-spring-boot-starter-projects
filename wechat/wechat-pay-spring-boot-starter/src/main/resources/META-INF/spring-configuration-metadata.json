@@ -1,0 +1,69 @@
+{
+  "groups": [
+    {
+      "name": "wx.pay.props",
+      "type": "com.github.aqiu202.wechat.wxpay.config.WxPayAutoConfiguration",
+      "sourceType": "com.github.aqiu202.wechat.wxpay.bean.WxPayProperty",
+      "sourceMethod": "wxPayProperty()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "wx.pay.props.app-i-d",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.wechat.wxpay.bean.WxPayProperty",
+      "defaultValue": "",
+      "description": "微信小程序appid"
+    },
+    {
+      "name": "wx.pay.props.cert",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.wechat.wxpay.bean.WxPayProperty",
+      "defaultValue": "",
+      "description": "微信商户证书地址"
+    },
+    {
+      "name": "wx.pay.props.key",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.wechat.wxpay.bean.WxPayProperty",
+      "defaultValue": "",
+      "description": "微信商户的api key"
+    },
+    {
+      "name": "wx.pay.props.mch-i-d",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.wechat.wxpay.bean.WxPayProperty",
+      "defaultValue": "",
+      "description": "微信商户ID"
+    },
+    {
+      "name": "wx.pay.props.sign-type",
+      "type": "com.github.aqiu202.wechat.wxpay.sdk.WXPayConstants.SignType",
+      "sourceType": "com.github.aqiu202.wechat.wxpay.bean.WxPayProperty",
+      "defaultValue": "MD5",
+      "description": "签名算法"
+    },
+    {
+      "name": "wx.pay.props.trade-type",
+      "type": "com.github.aqiu202.wechat.wxpay.sdk.WXPayConstants.TradeType",
+      "sourceType": "com.github.aqiu202.wechat.wxpay.bean.WxPayProperty",
+      "defaultValue": "JSAPI",
+      "description": "交易类型"
+    },
+    {
+      "name": "wx.pay.props.notify-url",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.wechat.wxpay.bean.WxPayProperty",
+      "defaultValue": "",
+      "description": "支付回调通知url"
+    },
+    {
+      "name": "wx.pay.props.refund-notify-url",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.wechat.wxpay.bean.WxPayProperty",
+      "defaultValue": "",
+      "description": "退款回调通知url"
+    }
+  ],
+  "hints": []
+}

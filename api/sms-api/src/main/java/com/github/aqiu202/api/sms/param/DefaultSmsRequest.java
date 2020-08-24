@@ -2,6 +2,7 @@ package com.github.aqiu202.api.sms.param;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +18,7 @@ public class DefaultSmsRequest implements SmsRequest, Serializable {
         this.templateType = templateType;
     }
 
-    DefaultSmsRequest(String templateType, List<String> phoneNumbers) {
+    DefaultSmsRequest(String templateType, Collection<String> phoneNumbers) {
         this.templateType = templateType;
         this.phoneNumbers = phoneNumbers;
     }
@@ -27,7 +28,7 @@ public class DefaultSmsRequest implements SmsRequest, Serializable {
         this.phoneNumbers = Arrays.asList(phoneNumbers);
     }
 
-    private List<String> phoneNumbers;
+    private Collection<String> phoneNumbers;
 
     private String templateType;
 
@@ -41,7 +42,7 @@ public class DefaultSmsRequest implements SmsRequest, Serializable {
     }
 
     @Override
-    public List<String> getPhoneNumbers() {
+    public Collection<String> getPhoneNumbers() {
         return phoneNumbers;
     }
 
@@ -56,7 +57,7 @@ public class DefaultSmsRequest implements SmsRequest, Serializable {
     }
 
     @Override
-    public DefaultSmsRequest setPhoneNumbers(List<String> phoneNumbers) {
+    public DefaultSmsRequest setPhoneNumbers(Collection<String> phoneNumbers) {
         this.phoneNumbers = phoneNumbers;
         return this;
     }

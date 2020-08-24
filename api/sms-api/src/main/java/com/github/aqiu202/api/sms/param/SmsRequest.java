@@ -1,5 +1,6 @@
 package com.github.aqiu202.api.sms.param;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ public interface SmsRequest {
         return new DefaultSmsRequest(templateType);
     }
 
-    static SmsRequest of(String templateType, List<String> phoneNumbers) {
+    static SmsRequest of(String templateType, Collection<String> phoneNumbers) {
         return new DefaultSmsRequest(templateType, phoneNumbers);
     }
 
@@ -24,13 +25,13 @@ public interface SmsRequest {
 
     String getSignName();
 
-    List<String> getPhoneNumbers();
+    Collection<String> getPhoneNumbers();
 
     String getTemplateType();
 
     Map<String, String> getParams();
 
-    SmsRequest setPhoneNumbers(List<String> phoneNumbers);
+    SmsRequest setPhoneNumbers(Collection<String> phoneNumbers);
 
     SmsRequest setSignName(String signName);
 

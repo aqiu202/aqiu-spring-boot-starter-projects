@@ -5,11 +5,40 @@
     <parent>
         <artifactId>aliyun</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.github.aqiu202.aliyun</groupId>
     <artifactId>aliyun-sms-spring-boot-starter</artifactId>
+    <packaging>jar</packaging>
+    <name>aliyun-sms-spring-boot-starter</name>
 
+    <properties>
+        <aliyun-sdk-core.version>4.5.7</aliyun-sdk-core.version>
+        <aliyun-sdk-sms.version>2.1.0</aliyun-sdk-sms.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>${aliyun-sdk-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+            <version>${aliyun-sdk-sms.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aqiu202.api</groupId>
+            <artifactId>sms-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 
 </project>

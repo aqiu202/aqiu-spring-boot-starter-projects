@@ -1,6 +1,6 @@
 package com.github.aqiu202.qrcode.util;
 
-import com.github.aqiu202.qrcode.param.QRCodeConfiguration;
+import com.github.aqiu202.qrcode.param.QrCodeProperties;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -26,12 +26,11 @@ import javax.imageio.ImageIO;
 /**
  * 二维码生成工具类
  *
- * @author user
- * @date 2018/12/5
+ * @author aqiu 2018/12/5
  */
-public class QRCodeUtils {
+public final class QRCodeUtils {
 
-    private final static QRCodeConfiguration DEFAULT_CONFIGURATION = new QRCodeConfiguration();
+    private final static QrCodeProperties DEFAULT_CONFIGURATION = new QrCodeProperties();
 
     /**
      * 生成二维码
@@ -39,8 +38,10 @@ public class QRCodeUtils {
      * @param content      二维码内容
      * @param configuration  二维码参数配置
      * @return 图片
+     * @throws IOException IO异常
+     * @throws WriterException ZXing写异常
      */
-    public static BufferedImage createImage(String content, QRCodeConfiguration configuration)
+    public static BufferedImage createImage(String content, QrCodeProperties configuration)
             throws IOException, WriterException {
         Map<EncodeHintType, Object> hints = new HashMap<>();
         hints.put(EncodeHintType.ERROR_CORRECTION, configuration.getCorrectionLevel());
@@ -73,6 +74,8 @@ public class QRCodeUtils {
      * 生成二维码
      * @param content      二维码内容
      * @return 图片
+     * @throws IOException IO异常
+     * @throws WriterException ZXing写异常
      */
     public static BufferedImage createImage(String content)
             throws IOException, WriterException {
@@ -88,7 +91,7 @@ public class QRCodeUtils {
         return toBase64Str(content, DEFAULT_CONFIGURATION);
     }
 
-    public static byte[] toByteArray(String content, QRCodeConfiguration configuration)
+    public static byte[] toByteArray(String content, QrCodeProperties configuration)
             throws IOException, WriterException {
         BufferedImage image = createImage(content, configuration);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -96,7 +99,7 @@ public class QRCodeUtils {
         return outputStream.toByteArray();
     }
 
-    public static String toBase64Str(String content, QRCodeConfiguration configuration)
+    public static String toBase64Str(String content, QrCodeProperties configuration)
             throws IOException, WriterException {
         return Base64.getEncoder().encodeToString(toByteArray(content, configuration));
     }
@@ -106,9 +109,9 @@ public class QRCodeUtils {
      *
      * @param source       二维码图片
      * @param configuration     配置信息
-     * @throws IOException exception
+     * @throws IOException IO异常
      */
-    private static void insertImage(BufferedImage source, QRCodeConfiguration configuration)
+    private static void insertImage(BufferedImage source, QrCodeProperties configuration)
             throws IOException {
         InputStream inputStream = null;
         try {

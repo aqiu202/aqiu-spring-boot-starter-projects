@@ -1,6 +1,6 @@
 package com.github.aqiu202.qrcode.util;
 
-public class UrlUtils {
+public final class UrlUtils {
 
     private UrlUtils() {
     }

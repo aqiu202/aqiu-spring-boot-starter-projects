@@ -1,0 +1,75 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.auto.AliYunSmsAutoConfiguration",
+      "name": "aliyun.mns",
+      "type": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty",
+      "name": "aliyun.mns.access-key-id",
+      "description": "accessKeyId（不能为空）",
+      "defaultValue": "",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty",
+      "name": "aliyun.mns.access-key-secret",
+      "description": "accessKeySecret（不能为空）",
+      "defaultValue": "",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty",
+      "name": "aliyun.mns.connect-timeout",
+      "description": "连接超时时间",
+      "defaultValue": "10000",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty",
+      "name": "aliyun.mns.domain",
+      "description": "短信API产品域名",
+      "defaultValue": "dysmsapi.aliyuncs.com",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty",
+      "name": "aliyun.mns.product",
+      "description": "短信API产品名称",
+      "defaultValue": "Dysmsapi",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty",
+      "name": "aliyun.mns.read-timeout",
+      "description": "读取超时时间",
+      "defaultValue": "10000",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty",
+      "name": "aliyun.mns.region-id",
+      "description": "regionId",
+      "defaultValue": "cn-hangzhou",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty",
+      "name": "aliyun.mns.sign-name",
+      "description": "签名名称",
+      "defaultValue": "云通讯",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.github.aqiu202.aliyun.sms.bean.AliYunSmsProperty",
+      "name": "aliyun.mns.templates",
+      "description": "模板映射",
+      "defaultValue": "{}",
+      "type": "java.util.Map<java.lang.String, java.lang.String>"
+    }
+  ]
+}

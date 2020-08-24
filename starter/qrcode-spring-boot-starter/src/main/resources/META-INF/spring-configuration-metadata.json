@@ -2,8 +2,8 @@
   "groups": [
     {
       "name": "qr-code.conf",
-      "type": "com.github.aqiu202.qrcode.param.QRCodeConfiguration",
-      "sourceType": "com.github.aqiu202.qrcode.config.QRCodeAutoConfiguration",
+      "type": "com.github.aqiu202.qrcode.param.QrCodeProperties",
+      "sourceType": "com.github.aqiu202.qrcode.config.QrCodeAutoConfiguration",
       "sourceMethod": "qrCodeConfiguration()"
     }
   ],
@@ -12,72 +12,72 @@
       "name": "qr-code.conf.algorithm",
       "type": "java.lang.Integer",
       "description": "logo图片生成算法 1(DEFAULT) 2(FAST) 4(SMOOTH 默认) 8(REPLICATE) 16(AREA_AVERAGING)",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration"
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties"
     },
     {
       "name": "qr-code.conf.charset",
       "type": "java.nio.charset.Charset",
       "description": "二维码内容编码",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration",
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties",
       "defaultValue": "UTF-8"
     },
     {
       "name": "qr-code.conf.correction-level",
       "type": "com.google.zxing.qrcode.decoder.ErrorCorrectionLevel",
       "description": "容错级别，m,l,h,q 默认是h",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration"
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties"
     },
     {
       "name": "qr-code.conf.format",
       "type": "java.lang.String",
       "description": "输出的二维码图片的编码格式",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration",
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties",
       "defaultValue": "JPEG"
     },
     {
       "name": "qr-code.conf.logo",
       "type": "java.lang.String",
       "description": "logo图片的地址（本地地址和http地址皆可）",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration"
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties"
     },
     {
       "name": "qr-code.conf.logo-size",
       "type": "java.lang.Integer",
       "description": "logo图片的尺寸",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration",
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties",
       "defaultValue": 60
     },
     {
       "name": "qr-code.conf.margin",
       "type": "java.lang.Integer",
       "description": "二维码内容距离边框的距离",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration",
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties",
       "defaultValue": 1
     },
     {
       "name": "qr-code.conf.need-compress",
       "type": "java.lang.Boolean",
       "description": "是否需要压缩logo图片",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration",
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties",
       "defaultValue": true
     },
     {
       "name": "qr-code.conf.rgb-bright",
       "type": "java.lang.Integer",
       "description": "二维码图片亮色颜色默认白色",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration"
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties"
     },
     {
       "name": "qr-code.conf.rgb-dark",
       "type": "java.lang.Integer",
       "description": "二维码图片暗色颜色默认黑色",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration"
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties"
     },
     {
       "name": "qr-code.conf.size",
       "type": "java.lang.Integer",
       "description": "输出二维码图片的尺寸",
-      "sourceType": "com.github.aqiu202.qrcode.param.QRCodeConfiguration",
+      "sourceType": "com.github.aqiu202.qrcode.param.QrCodeProperties",
       "defaultValue": 300
     }
   ],

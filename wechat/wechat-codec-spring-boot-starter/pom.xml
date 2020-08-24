@@ -5,12 +5,33 @@
     <parent>
         <artifactId>wechat</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.aqiu202.wechat</groupId>
     <artifactId>wechat-codec-spring-boot-starter</artifactId>
+    <packaging>jar</packaging>
+    <name>wechat-codec-spring-boot-starter</name>
 
+    <properties>
+        <bcprov.version>1.46</bcprov.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk16</artifactId>
+            <version>${bcprov.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+        </dependency>
+    </dependencies>
 
 </project>

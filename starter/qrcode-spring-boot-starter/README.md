@@ -3,13 +3,12 @@
 对生成二维码进行的简单的封装。
 
 ### 引用
-maven坐标 
-
+maven坐标：
 ```xml
 <dependency>
     <groupId>com.github.aqiu202</groupId>
     <artifactId>qrcode-spring-boot-starter</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 

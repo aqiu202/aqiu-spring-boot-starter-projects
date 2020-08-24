@@ -5,23 +5,19 @@
     <parent>
         <artifactId>java</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>captcha</artifactId>
     <packaging>jar</packaging>
     <name>captcha</name>
-    <url>https://github.com/aqiu202/captcha</url>
-    <description>A captcha generation engine for Java</description>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <!--        <maven.deploy.skip>true</maven.deploy.skip>-->
         <jhlabs.version>2.0.235-1</jhlabs.version>
         <jsr305.version>3.0.2</jsr305.version>
-        <servlet.version>2.5</servlet.version>
     </properties>
 
     <dependencies>
@@ -39,8 +35,8 @@
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>${servlet.version}</version>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet-api.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

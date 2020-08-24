@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.aqiu202.qrcode.config.QRCodeAutoConfiguration
+com.github.aqiu202.qrcode.config.QrCodeAutoConfiguration

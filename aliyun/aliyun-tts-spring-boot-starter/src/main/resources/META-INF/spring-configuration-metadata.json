@@ -1,0 +1,36 @@
+{
+  "groups": [
+    {
+      "name": "aliyun.tts",
+      "type": "com.github.aqiu202.aliyun.tts.config.TtsToken",
+      "sourceType": "com.github.aqiu202.aliyun.tts.config.AliYunTtsAutoConfiguration",
+      "sourceMethod": "ttsToken()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "aliyun.tts.access-key-id",
+      "type": "java.lang.String",
+      "description": "阿里云accessKeyId",
+      "sourceType": "com.github.aqiu202.aliyun.tts.config.TtsToken"
+    },
+    {
+      "name": "aliyun.tts.access-key-secret",
+      "type": "java.lang.String",
+      "description": "阿里云accessKeySecret",
+      "sourceType": "com.github.aqiu202.aliyun.tts.config.TtsToken"
+    },
+    {
+      "name": "aliyun.tts.app-key",
+      "type": "java.lang.String",
+      "description": "阿里云智能语音交互项目appKey",
+      "sourceType": "com.github.aqiu202.aliyun.tts.config.TtsToken"
+    },
+    {
+      "name": "aliyun.tts.url",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.aliyun.tts.config.TtsToken"
+    }
+  ],
+  "hints": []
+}

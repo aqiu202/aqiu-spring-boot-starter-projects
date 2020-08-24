@@ -14,7 +14,6 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.codec.Charsets;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.message.BasicHeader;
@@ -38,7 +37,7 @@ public class JPushServiceImpl implements JPushService {
     private String getToken() {
         return Base64.getEncoder().encodeToString(
                 jPushBean.getAppKey().concat(":").concat(jPushBean.getMasterSecret())
-                        .getBytes(Charsets.UTF_8));
+                        .getBytes(StandardCharsets.UTF_8));
     }
 
     @Override

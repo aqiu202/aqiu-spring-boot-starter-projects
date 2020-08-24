@@ -1,0 +1,461 @@
+{
+  "groups": [
+    {
+      "name": "captcha",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties",
+      "sourceType": "com.github.code.aqiu202.config.CaptchaAutoConfiguration",
+      "sourceMethod": "captchaProperties()"
+    },
+    {
+      "name": "captcha.background",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$BackgroundProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties"
+    },
+    {
+      "name": "captcha.border",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$BorderProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties"
+    },
+    {
+      "name": "captcha.noise",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$NoiseProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties"
+    },
+    {
+      "name": "captcha.noise.configurations",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$NoiseConfiguration",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$NoiseProperties"
+    },
+    {
+      "name": "captcha.noise.configurations.line",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$LineProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$NoiseConfiguration"
+    },
+    {
+      "name": "captcha.noise.configurations.point",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$PointProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$NoiseConfiguration"
+    },
+    {
+      "name": "captcha.noise.configurations.ripple",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$RippleProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$NoiseConfiguration"
+    },
+    {
+      "name": "captcha.noise.configurations.shadow",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$ShadowProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$NoiseConfiguration"
+    },
+    {
+      "name": "captcha.noise.configurations.shear",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$ShearProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$NoiseConfiguration"
+    },
+    {
+      "name": "captcha.noise.configurations.water",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$WaterProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$NoiseConfiguration"
+    },
+    {
+      "name": "captcha.text",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$TextProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties"
+    },
+    {
+      "name": "captcha.text.render",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$RenderProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$TextProperties"
+    },
+    {
+      "name": "captcha.text.word",
+      "type": "com.github.code.aqiu202.props.CaptchaProperties$WordProperties",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$TextProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "captcha.background.color-from",
+      "type": "java.lang.Integer",
+      "description": "背景颜色渐变-开始（RGB值），默认根据start和end的值随机产生",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$BackgroundProperties"
+    },
+    {
+      "name": "captcha.background.color-to",
+      "type": "java.lang.Integer",
+      "description": "背景颜色渐变-结束（RGB值），默认根据start和end的值随机产生",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$BackgroundProperties"
+    },
+    {
+      "name": "captcha.background.rgb-end",
+      "type": "java.lang.Integer",
+      "description": "色光的三原色的数值范围（0-255），默认255",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$BackgroundProperties",
+      "defaultValue": 255
+    },
+    {
+      "name": "captcha.background.rgb-start",
+      "type": "java.lang.Integer",
+      "description": "色光的三原色的数值范围（0-255），默认171",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$BackgroundProperties",
+      "defaultValue": 171
+    },
+    {
+      "name": "captcha.border.color",
+      "type": "java.lang.Integer",
+      "description": "边框颜色（RGB值），默认黑色",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$BorderProperties"
+    },
+    {
+      "name": "captcha.border.thickness",
+      "type": "java.lang.Integer",
+      "description": "边框厚度，默认1",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$BorderProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "captcha.has-border",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "captcha.noise.configurations.line.color",
+      "type": "java.lang.Integer",
+      "description": "线条颜色（RGB值），默认根据start和end的值随机产生",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$LineProperties"
+    },
+    {
+      "name": "captcha.noise.configurations.line.count",
+      "type": "java.lang.Integer",
+      "description": "线条的数量，默认2",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$LineProperties",
+      "defaultValue": 2
+    },
+    {
+      "name": "captcha.noise.configurations.line.rgb-end",
+      "type": "java.lang.Integer",
+      "description": "色光的三原色的数值范围（0-255），默认170",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$LineProperties",
+      "defaultValue": 170
+    },
+    {
+      "name": "captcha.noise.configurations.line.rgb-start",
+      "type": "java.lang.Integer",
+      "description": "色光的三原色的数值范围（0-255），默认86",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$LineProperties",
+      "defaultValue": 86
+    },
+    {
+      "name": "captcha.noise.configurations.point.color",
+      "type": "java.lang.Integer",
+      "description": "点颜色（RGB值），默认根据start和end的值随机产生",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$PointProperties"
+    },
+    {
+      "name": "captcha.noise.configurations.point.rgb-end",
+      "type": "java.lang.Integer",
+      "description": "色光的三原色的数值范围（0-255），默认255",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$PointProperties",
+      "defaultValue": 255
+    },
+    {
+      "name": "captcha.noise.configurations.point.point-rate",
+      "type": "java.lang.Float",
+      "description": "噪点率，默认0.025f",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$PointProperties",
+      "defaultValue": 0.025
+    },
+    {
+      "name": "captcha.noise.configurations.point.rgb-start",
+      "type": "java.lang.Integer",
+      "description": "色光的三原色的数值范围（0-255），默认0",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$PointProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "captcha.noise.configurations.ripple.edge-action",
+      "type": "java.lang.Integer",
+      "description": "边缘处理（0 ZERO, 1 CLAMP ,2 WRAP, 3 RGB_CLAMP）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RippleProperties",
+      "defaultValue": 3
+    },
+    {
+      "name": "captcha.noise.configurations.ripple.interpolation",
+      "type": "java.lang.Integer",
+      "description": "插值方式（0 NEAREST_NEIGHBOUR, 1 BILINEAR）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RippleProperties",
+      "defaultValue": 1
+    },
+    {
+      "name": "captcha.noise.configurations.ripple.wave-type",
+      "type": "java.lang.Integer",
+      "description": "波类型（0 sine,1 sawtooth, 2 triangle, 3 noise）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RippleProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "captcha.noise.configurations.ripple.x-amplitude",
+      "type": "java.lang.Float",
+      "description": "X轴振幅，默认5.0f",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RippleProperties",
+      "defaultValue": 5
+    },
+    {
+      "name": "captcha.noise.configurations.ripple.x-wavelength",
+      "type": "java.lang.Float",
+      "description": "X轴波长，默认16.0f",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RippleProperties",
+      "defaultValue": 16
+    },
+    {
+      "name": "captcha.noise.configurations.ripple.y-amplitude",
+      "type": "java.lang.Float",
+      "description": "Y轴振幅，默认5.0f",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RippleProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "captcha.noise.configurations.ripple.y-wavelength",
+      "type": "java.lang.Float",
+      "description": "Y轴波长，默认16.0f",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RippleProperties",
+      "defaultValue": 16
+    },
+    {
+      "name": "captcha.noise.configurations.shadow.add-margins",
+      "type": "java.lang.Boolean",
+      "description": "是否添加边距，默认false",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShadowProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "captcha.noise.configurations.shadow.angle",
+      "type": "java.lang.Float",
+      "description": "阴影角度，默认270f度",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShadowProperties",
+      "defaultValue": 270
+    },
+    {
+      "name": "captcha.noise.configurations.shadow.angle-random",
+      "type": "java.lang.Boolean",
+      "description": "阴影角度是否随机，默认true",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShadowProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "captcha.noise.configurations.shadow.distance",
+      "type": "java.lang.Float",
+      "description": "阴影距离，默认5",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShadowProperties",
+      "defaultValue": 5
+    },
+    {
+      "name": "captcha.noise.configurations.shadow.opacity",
+      "type": "java.lang.Float",
+      "description": "阴影透明度，默认0.5f",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShadowProperties",
+      "defaultValue": 0.5
+    },
+    {
+      "name": "captcha.noise.configurations.shadow.radius",
+      "type": "java.lang.Float",
+      "description": "阴影半径，默认10",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShadowProperties",
+      "defaultValue": 10
+    },
+    {
+      "name": "captcha.noise.configurations.shadow.shadow-color",
+      "type": "java.lang.Integer",
+      "description": "阴影颜色（RGB值），默认黑色",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShadowProperties",
+      "defaultValue": -16777216
+    },
+    {
+      "name": "captcha.noise.configurations.shadow.shadow-only",
+      "type": "java.lang.Boolean",
+      "description": "是否只显示阴影，默认false",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShadowProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "captcha.noise.configurations.shear.edge-action",
+      "type": "java.lang.Integer",
+      "description": "边缘处理（0 ZERO, 1 CLAMP ,2 WRAP, 3 RGB_CLAMP）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShearProperties",
+      "defaultValue": 3
+    },
+    {
+      "name": "captcha.noise.configurations.shear.interpolation",
+      "type": "java.lang.Integer",
+      "description": "插值方式（0 NEAREST_NEIGHBOUR, 1 BILINEAR）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShearProperties",
+      "defaultValue": 1
+    },
+    {
+      "name": "captcha.noise.configurations.shear.resize",
+      "type": "java.lang.Boolean",
+      "description": "是否可以调整大小",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShearProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "captcha.noise.configurations.shear.x-angle",
+      "type": "java.lang.Float",
+      "description": "扭曲的X角度，默认0",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShearProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "captcha.noise.configurations.shear.y-angle",
+      "type": "java.lang.Float",
+      "description": "扭曲的Y角度，默认0",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShearProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "captcha.noise.configurations.shear.x-angle-toggle",
+      "type": "java.lang.Boolean",
+      "description": "X轴角度是否正负转换",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShearProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "captcha.noise.configurations.shear.y-angle-toggle",
+      "type": "java.lang.Boolean",
+      "description": "Y轴角度是否正负转换",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$ShearProperties",
+      "defaultValue": true
+    },
+    {
+      "name": "captcha.noise.configurations.water.amplitude",
+      "type": "java.lang.Float",
+      "description": "波的振幅，默认1.5f",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WaterProperties",
+      "defaultValue": 1.5
+    },
+    {
+      "name": "captcha.noise.configurations.water.centre-x",
+      "type": "java.lang.Float",
+      "description": "水波中心的X坐标（宽度百分比），默认0.5f（中心）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WaterProperties",
+      "defaultValue": 0.5
+    },
+    {
+      "name": "captcha.noise.configurations.water.centre-y",
+      "type": "java.lang.Float",
+      "description": "水波中心的Y坐标（高度百分比），默认0.5f（中心）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WaterProperties",
+      "defaultValue": 0.5
+    },
+    {
+      "name": "captcha.noise.configurations.water.edge-action",
+      "type": "java.lang.Integer",
+      "description": "边缘处理（0 ZERO, 1 CLAMP ,2 WRAP, 3 RGB_CLAMP）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WaterProperties",
+      "defaultValue": 3
+    },
+    {
+      "name": "captcha.noise.configurations.water.interpolation",
+      "type": "java.lang.Integer",
+      "description": "插值方式（0 NEAREST_NEIGHBOUR, 1 BILINEAR）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WaterProperties",
+      "defaultValue": 1
+    },
+    {
+      "name": "captcha.noise.configurations.water.phase",
+      "type": "java.lang.Float",
+      "description": "相位，默认0",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WaterProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "captcha.noise.configurations.water.radius",
+      "type": "java.lang.Float",
+      "description": "半径，默认50",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WaterProperties",
+      "defaultValue": 50
+    },
+    {
+      "name": "captcha.noise.configurations.water.wavelength",
+      "type": "java.lang.Float",
+      "description": "波长，默认2",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WaterProperties",
+      "defaultValue": 2
+    },
+    {
+      "name": "captcha.noise.styles",
+      "type": "java.util.List<com.github.code.aqiu202.noise.impl.NoiseStyle>",
+      "description": "噪化方式配置（多种方式可组合，默认[LINE,SHEAR,SHADOW]）",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$NoiseProperties"
+    },
+    {
+      "name": "captcha.text.render.color",
+      "type": "java.lang.Integer",
+      "description": "验证码的颜色（RGB值），默认根据start和end的值随机产生",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RenderProperties"
+    },
+    {
+      "name": "captcha.text.render.rgb-end",
+      "type": "java.lang.Integer",
+      "description": "色光的三原色的数值范围（0-255），默认85",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RenderProperties",
+      "defaultValue": 85
+    },
+    {
+      "name": "captcha.text.render.font-families",
+      "type": "java.util.List<java.lang.String>",
+      "description": "字体集合，默认 [\"Arial\", \"Courier\"]",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RenderProperties",
+      "defaultValue": "[\"Arial\", \"Courier\"]"
+    },
+    {
+      "name": "captcha.text.render.font-percents-size",
+      "type": "java.lang.Float",
+      "description": "验证码字符的大小（高度百分比）默认0.65f",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RenderProperties",
+      "defaultValue": 0.65
+    },
+    {
+      "name": "captcha.text.render.margin-percents-width",
+      "type": "java.lang.Float",
+      "description": "验证码两边的空白宽度（宽度百分比）默认0.15f",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RenderProperties",
+      "defaultValue": 0.15
+    },
+    {
+      "name": "captcha.text.render.rgb-start",
+      "type": "java.lang.Integer",
+      "description": "色光的三原色的数值范围（0-255），默认0",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$RenderProperties",
+      "defaultValue": 0
+    },
+    {
+      "name": "captcha.text.word.length",
+      "type": "java.lang.Integer",
+      "description": "验证码长度，默认4",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WordProperties",
+      "defaultValue": 4
+    },
+    {
+      "name": "captcha.text.word.words",
+      "type": "java.lang.String",
+      "description": "验证码词汇集合",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties$WordProperties"
+    },
+    {
+      "name": "captcha.width",
+      "type": "java.lang.Integer",
+      "description": "验证码图片宽度，默认200",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties",
+      "defaultValue": 200
+    },
+    {
+      "name": "captcha.height",
+      "type": "java.lang.Integer",
+      "description": "验证码图片高度，默认80",
+      "sourceType": "com.github.code.aqiu202.props.CaptchaProperties",
+      "defaultValue": 80
+    }
+  ],
+  "hints": []
+}

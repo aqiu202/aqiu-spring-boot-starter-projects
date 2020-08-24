@@ -2,57 +2,56 @@
   "hints": [],
   "groups": [
     {
-      "sourceType": "com.redsoft.starters.huawei.sms.auto.HwSmsAutoConfiguration",
+      "sourceType": "com.github.aqiu202.huawei.sms.auto.HwSmsAutoConfiguration",
       "name": "huawei.sms",
-      "sourceMethod": "public com.redsoft.starters.huawei.sms.bean.HwSmsBean HwSmsBean() ",
-      "type": "com.redsoft.starters.huawei.sms.bean.HwSmsProperty"
+      "type": "com.github.aqiu202.huawei.sms.bean.HwSmsProperty"
     }
   ],
   "properties": [
     {
-      "sourceType": "com.redsoft.starters.huawei.sms.bean.HwSmsProperty",
+      "sourceType": "com.github.aqiu202.huawei.sms.bean.HwSmsProperty",
       "name": "huawei.sms.url",
       "description": "短信服务接口地址",
       "defaultValue": "https://rtcsms.cn-north-1.myhuaweicloud.com:10743/sms/batchSendSms/v1",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.redsoft.starters.huawei.sms.bean.HwSmsProperty",
+      "sourceType": "com.github.aqiu202.huawei.sms.bean.HwSmsProperty",
       "name": "huawei.sms.app-secret",
       "description": "appSecret（不能为空）",
       "defaultValue": "",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.redsoft.starters.huawei.sms.bean.HwSmsProperty",
+      "sourceType": "com.github.aqiu202.huawei.sms.bean.HwSmsProperty",
       "name": "huawei.sms.app-key",
       "description": "appKey（不能为空）",
       "defaultValue": "",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.redsoft.starters.huawei.sms.bean.HwSmsProperty",
+      "sourceType": "com.github.aqiu202.huawei.sms.bean.HwSmsProperty",
       "name": "huawei.sms.sender",
       "description": "sender",
       "defaultValue": "8819111319507",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.redsoft.starters.huawei.sms.bean.HwSmsProperty",
+      "sourceType": "com.github.aqiu202.huawei.sms.bean.HwSmsProperty",
       "name": "huawei.sms.signature",
       "description": "签名名称",
       "defaultValue": "红柿子软件",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.redsoft.starters.huawei.sms.bean.HwSmsProperty",
+      "sourceType": "com.github.aqiu202.huawei.sms.bean.HwSmsProperty",
       "name": "huawei.sms.status-call-back",
       "description": "短信状态报告接收地址",
       "defaultValue": "",
       "type": "java.lang.String"
     },
     {
-      "sourceType": "com.redsoft.starters.huawei.sms.bean.HwSmsProperty",
+      "sourceType": "com.github.aqiu202.huawei.sms.bean.HwSmsProperty",
       "name": "huawei.sms.templates",
       "description": "短信模板映射",
       "defaultValue": "{}",

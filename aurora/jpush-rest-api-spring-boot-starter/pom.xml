@@ -5,12 +5,14 @@
     <parent>
         <artifactId>aurora</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.aqiu202.aurora</groupId>
     <artifactId>jpush-rest-api-spring-boot-starter</artifactId>
+    <packaging>jar</packaging>
+    <name>jpush-rest-api-spring-boot-starter</name>
 
     <dependencies>
         <dependency>

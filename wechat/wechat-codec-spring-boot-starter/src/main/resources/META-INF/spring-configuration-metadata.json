@@ -1,0 +1,27 @@
+{
+  "groups": [
+    {
+      "name": "wx.codec",
+      "type": "com.github.aqiu202.wechat.wxcodec.bean.WxCodecProperty",
+      "sourceType": "com.github.aqiu202.wechat.wxcodec.config.WxCodecAutoConfiguration",
+      "sourceMethod": "wxCodecProperty()"
+    }
+  ],
+  "properties": [
+    {
+      "name": "wx.codec.app-id",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.wechat.wxcodec.bean.WxCodecProperty",
+      "defaultValue": "",
+      "description": "微信小程序appid"
+    },
+    {
+      "name": "wx.codec.secret",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.wechat.wxcodec.bean.WxCodecProperty",
+      "defaultValue": "",
+      "description": "微信小程序secret"
+    }
+  ],
+  "hints": []
+}

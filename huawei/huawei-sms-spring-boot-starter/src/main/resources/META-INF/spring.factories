@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.redsoft.starters.huawei.sms.auto.HwSmsAutoConfiguration
+com.github.aqiu202.huawei.sms.auto.HwSmsAutoConfiguration
