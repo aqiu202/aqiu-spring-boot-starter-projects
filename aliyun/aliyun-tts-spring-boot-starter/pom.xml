@@ -16,8 +16,7 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <aliyun-tts-sdk.version>2.1.0</aliyun-tts-sdk.version>
-        <caffeine.version>2.8.0</caffeine.version>
+        <aliyun-tts-sdk.version>2.1.9</aliyun-tts-sdk.version>
     </properties>
 
     <dependencies>
