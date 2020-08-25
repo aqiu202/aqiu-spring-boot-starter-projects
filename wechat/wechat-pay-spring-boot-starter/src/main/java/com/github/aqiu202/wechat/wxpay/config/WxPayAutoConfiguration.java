@@ -1,9 +1,9 @@
 package com.github.aqiu202.wechat.wxpay.config;
 
 
-import com.github.aqiu202.wechat.wxpay.bean.WxPayProperty;
 import com.github.aqiu202.wechat.wxpay.WXPayHelper;
 import com.github.aqiu202.wechat.wxpay.bean.MyWxPayConfig;
+import com.github.aqiu202.wechat.wxpay.bean.WxPayProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

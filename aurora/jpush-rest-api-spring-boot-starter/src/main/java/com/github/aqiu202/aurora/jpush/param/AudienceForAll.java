@@ -6,14 +6,14 @@ public class AudienceForAll extends Audience {
 
     public static final Audience DEFAULT = new AudienceForAll();
 
-    private final String value = "all";
+    private static final String VALUE_ALL = "all";
 
     private AudienceForAll() {
     }
 
     @JsonValue
     public String getValue() {
-        return value;
+        return VALUE_ALL;
     }
 
 }

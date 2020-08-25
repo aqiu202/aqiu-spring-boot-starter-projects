@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
  * <b>阿里云TTS语音合成器</b>
  * <p>调用阿里云TTS服务合成语音</p>
  * @author aqiu 2020/2/19 10:41 上午
-**/
+ **/
 public final class AliYunTtsSynthesizer implements TtsSynthesizer {
 
     private final Logger logger = LoggerFactory.getLogger(AliYunTtsSynthesizer.class);

@@ -1,15 +1,16 @@
-package com.github.code.aqiu202.config;
+package com.github.aqiu202.captcha.autoconfig;
 
-import com.github.code.aqiu202.background.BackgroundProducer;
-import com.github.code.aqiu202.border.BorderProducer;
-import com.github.code.aqiu202.captcha.CaptchaProducer;
-import com.github.code.aqiu202.captcha.impl.DefaultCaptchaProducer;
-import com.github.code.aqiu202.noise.NoiseProducer;
-import com.github.code.aqiu202.noise.OrderedNoiseProducer;
-import com.github.code.aqiu202.noise.impl.CombiningNoiseProducer;
-import com.github.code.aqiu202.props.CaptchaProperties;
-import com.github.code.aqiu202.text.TextProducer;
-import com.github.code.aqiu202.text.WordRenderer;
+
+import com.github.aqiu202.captcha.background.BackgroundProducer;
+import com.github.aqiu202.captcha.border.BorderProducer;
+import com.github.aqiu202.captcha.captcha.CaptchaProducer;
+import com.github.aqiu202.captcha.captcha.impl.DefaultCaptchaProducer;
+import com.github.aqiu202.captcha.noise.NoiseProducer;
+import com.github.aqiu202.captcha.noise.OrderedNoiseProducer;
+import com.github.aqiu202.captcha.noise.impl.CombiningNoiseProducer;
+import com.github.aqiu202.captcha.props.CaptchaProperties;
+import com.github.aqiu202.captcha.text.TextProducer;
+import com.github.aqiu202.captcha.text.WordRenderer;
 import java.util.List;
 import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;

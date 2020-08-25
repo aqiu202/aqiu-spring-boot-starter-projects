@@ -4,7 +4,7 @@ package com.github.aqiu202.api.tts.config;
  * <b>TTS语音合成通用配置</b>
  * <p>保存所有TTS语音合成的属性配置选项</p>
  * @author aqiu 2020/2/19 10:42 上午
-**/
+ **/
 public class TtsConfiguration {
 
     protected String format = "MP3";

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * <b>通用语音合成的监听器</b>
  * <p>监听TTS服务在语音合成阶段的各个事件，并作出相应处理</p>
  * @author aqiu 2020/2/19 10:46 上午
-**/
+ **/
 public class TtsListener {
 
     private final Logger logger = LoggerFactory.getLogger(TtsListener.class);

@@ -15,8 +15,10 @@ public interface SmsTemplate {
 
     void sendMsg(SmsRequest smsRequest) throws SmsException;
 
-    void sendMsg(String templateType, String phoneNo, Map<String, String> params) throws SmsException;
+    void sendMsg(String templateType, String phoneNo, Map<String, String> params)
+            throws SmsException;
 
-    void sendMsg(String templateType, Collection<String> phoneNoList, Map<String, String> params) throws SmsException;
+    void sendMsg(String templateType, Collection<String> phoneNoList, Map<String, String> params)
+            throws SmsException;
 
 }

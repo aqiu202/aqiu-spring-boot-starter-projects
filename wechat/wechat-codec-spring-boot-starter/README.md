@@ -8,7 +8,7 @@
 <dependency>
     <groupId>com.github.aqiu202.wechat</groupId>
     <artifactId>wechat-codec-spring-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 ### 用法

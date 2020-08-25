@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.github.code.aqiu202.config.CaptchaAutoConfiguration
+com.github.aqiu202.captcha.autoconfig.CaptchaAutoConfiguration

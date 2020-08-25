@@ -6,12 +6,12 @@
     <parent>
         <artifactId>starters-api</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </parent>
 
     <groupId>com.github.aqiu202.api</groupId>
     <artifactId>sms-api</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>jar</packaging>
     <name>sms-api</name>
     <description>A SMS Standards API for Java</description>

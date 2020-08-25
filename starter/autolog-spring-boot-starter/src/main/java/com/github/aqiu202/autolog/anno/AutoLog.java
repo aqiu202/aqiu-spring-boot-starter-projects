@@ -22,5 +22,5 @@ public @interface AutoLog {
      * @return 日志描述
      */
     String value() default "";
-    
+
 }

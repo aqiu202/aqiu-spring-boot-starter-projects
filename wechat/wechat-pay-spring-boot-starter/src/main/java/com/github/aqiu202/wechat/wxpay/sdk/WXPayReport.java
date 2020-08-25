@@ -117,7 +117,6 @@ public class WXPayReport {
     private static final String REPORT_URL = "http://report.mch.weixin.qq.com/wxpay/report/default";
 
 
-
     private WXPayReport(final WXPayConfig config) {
         this.config = config;
         reportMsgQueue = new LinkedBlockingQueue<>(config.getReportQueueMaxSize());

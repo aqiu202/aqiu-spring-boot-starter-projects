@@ -6,7 +6,7 @@ public enum Platform {
 
     Android(new String[]{"android"}), Ios(new String[]{"ios"}), All(new String[]{"android", "ios"});
 
-    private String[] values;
+    private final String[] values;
 
     Platform(String[] values) {
         this.values = values;

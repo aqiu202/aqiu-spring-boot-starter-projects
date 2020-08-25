@@ -14,10 +14,11 @@
 
     <groupId>com.github.aqiu202</groupId>
     <artifactId>aqiu-spring-boot-starter-projects</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
     <url>https://github.com/aqiu202/aqiu-spring-boot-starter-projects</url>
-    <description>Some Simple Starter Projects for Spring Boot Application Made by Aqiu202</description>
+    <description>Some Simple Starter Projects for Spring Boot Application Made by Aqiu202
+    </description>
 
     <licenses>
         <license>

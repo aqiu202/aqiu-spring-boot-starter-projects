@@ -4,14 +4,13 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * <pre>标准的SMS短信服务请求信息（默认实现）</pre>
  * <p>标准的SMS短信服务请求包含的所有信息（短信签名、模版类型/模版ID、手机号码、填充参数等）</p>
  * @author aqiu 2020/2/19 4:11 下午
-**/
+ **/
 public class DefaultSmsRequest implements SmsRequest, Serializable {
 
     DefaultSmsRequest(String templateType) {

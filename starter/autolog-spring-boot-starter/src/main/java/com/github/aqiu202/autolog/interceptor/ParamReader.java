@@ -8,4 +8,5 @@ import java.util.function.Function;
  */
 @FunctionalInterface
 public interface ParamReader extends Function<Object, String> {
+
 }

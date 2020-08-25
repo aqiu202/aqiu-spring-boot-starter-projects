@@ -19,7 +19,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * <pre>Debug模式过滤器，用于日志打印所有请求参数，方便在调试和对接阶段清楚的找到问题</pre>
  * @author aqiu 2020/8/19 11:12 上午
-**/
+ **/
 public class DebugLogFilter extends OncePerRequestFilter {
 
     private static final String LOG_PREFIX = "DEBUG-LOG | ";

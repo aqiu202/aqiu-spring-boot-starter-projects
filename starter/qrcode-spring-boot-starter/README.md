@@ -8,7 +8,7 @@ maven坐标：
 <dependency>
     <groupId>com.github.aqiu202</groupId>
     <artifactId>qrcode-spring-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
 </dependency>
 ```
 

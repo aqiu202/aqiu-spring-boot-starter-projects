@@ -3,7 +3,7 @@ package com.github.aqiu202.captcha.exp;
 /**
  * <b>验证码图片流写入Servlet异常</b>
  * @author aqiu
-**/
+ **/
 public class CaptchaServletException extends RuntimeException {
 
     private String text;

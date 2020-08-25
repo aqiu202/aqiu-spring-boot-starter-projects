@@ -8,7 +8,7 @@ import com.github.aqiu202.api.tts.config.TtsConfiguration;
  * <b>阿里云TTS语音合成配置</b>
  * <p>保存阿里云TTS语音合成的属性配置选项</p>
  * @author aqiu 2020/2/19 10:42 上午
-**/
+ **/
 public class AliYunSynthesizerConfig extends TtsConfiguration {
 
     private OutputFormatEnum format = OutputFormatEnum.MP3;

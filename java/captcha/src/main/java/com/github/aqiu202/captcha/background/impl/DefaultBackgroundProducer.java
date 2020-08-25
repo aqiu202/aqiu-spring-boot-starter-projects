@@ -80,8 +80,10 @@ public class DefaultBackgroundProducer implements BackgroundProducer {
      * @return an image with a gradient background added to the base image.
      */
     public BufferedImage addBackground(BufferedImage baseImage) {
-        Color leftColor = this.from == null ? ColorUtils.randomColor(this.rgbStart, this.rgbEnd) : this.from;
-        Color rightColor = this.to == null ? ColorUtils.randomColor(this.rgbStart, this.rgbEnd) : this.to;
+        Color leftColor =
+                this.from == null ? ColorUtils.randomColor(this.rgbStart, this.rgbEnd) : this.from;
+        Color rightColor =
+                this.to == null ? ColorUtils.randomColor(this.rgbStart, this.rgbEnd) : this.to;
         int width = baseImage.getWidth();
         int height = baseImage.getHeight();
 

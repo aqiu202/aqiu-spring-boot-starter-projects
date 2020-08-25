@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -22,40 +21,34 @@ public class HttpUtil {
     }
 
     public static CloseableHttpResponse get(String url, List<Header> headers)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         CloseableHttpClient client = createHttpClient();
         HttpGet req = new HttpGet(url);
         config(req);
         if (headers != null && !headers.isEmpty()) {
-            headers.forEach(header -> {
-                req.addHeader(header);
-            });
+            headers.forEach(req::addHeader);
         }
         return client.execute(req);
     }
 
     public static CloseableHttpResponse get(String url, List<Header> headers, int timeout)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         CloseableHttpClient client = createHttpClient();
         HttpGet req = new HttpGet(url);
         config(req, timeout);
         if (headers != null && !headers.isEmpty()) {
-            headers.forEach(header -> {
-                req.addHeader(header);
-            });
+            headers.forEach(req::addHeader);
         }
         return client.execute(req);
     }
 
     public static CloseableHttpResponse post(String url, List<Header> headers, HttpEntity entity)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost req = new HttpPost(url);
         config(req);
         if (headers != null && !headers.isEmpty()) {
-            headers.forEach(header -> {
-                req.addHeader(header);
-            });
+            headers.forEach(req::addHeader);
         }
         if (entity != null) {
             req.setEntity(entity);
@@ -65,14 +58,12 @@ public class HttpUtil {
 
     public static CloseableHttpResponse post(String url, List<Header> headers, HttpEntity entity,
             int timeout)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost req = new HttpPost(url);
         config(req, timeout);
         if (headers != null && !headers.isEmpty()) {
-            headers.forEach(header -> {
-                req.addHeader(header);
-            });
+            headers.forEach(req::addHeader);
         }
         if (entity != null) {
             req.setEntity(entity);
@@ -81,23 +72,23 @@ public class HttpUtil {
     }
 
     public static CloseableHttpResponse post(String url, List<Header> headers)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         return post(url, headers, null);
     }
 
     public static CloseableHttpResponse postJson(String url, List<Header> headers, String json)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         return post(url, headers, new StringEntity(json, ContentType.APPLICATION_JSON));
     }
 
     public static CloseableHttpResponse post(String url, List<Header> headers, int timeout)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         return post(url, headers, null, timeout);
     }
 
     public static CloseableHttpResponse postJson(String url, List<Header> headers, String json,
             int timeout)
-            throws ClientProtocolException, IOException {
+            throws IOException {
         return post(url, headers, new StringEntity(json, ContentType.APPLICATION_JSON), timeout);
     }
 
