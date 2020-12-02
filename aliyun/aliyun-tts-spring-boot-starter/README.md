@@ -8,7 +8,7 @@
 <dependency>
     <groupId>com.github.aqiu202.aliyun</groupId>
     <artifactId>aliyun-tts-spring-boot-starter</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
 </dependency>
 ```
 ### 用法
@@ -27,21 +27,21 @@ token是可以重复使用的但是会失效，所以我们需要缓存token（�
 public class TokenStoreConfig {
 
     //配置缓存方式 >> Guava
-    public StringTimeLimitedCache stringGuavaCache() {
+    public StringTtlCache stringGuavaCache() {
         return new StringGuavaCache();
     }
     //配置缓存方式 >> Caffeine
-    public StringTimeLimitedCache stringCaffeineCache() {
+    public StringTtlCache stringCaffeineCache() {
         return new StringCaffeineCache();
     }
     //配置缓存方式 >> Redis
-    public StringTimeLimitedCache stringRedisCache(StringRedisTemplate stringRedisTemplate) {
+    public StringTtlCache stringRedisCache(StringRedisTemplate stringRedisTemplate) {
         return new StringRedisCache(stringRedisTemplate);
     }
 
     //基于缓存，配置可缓存的TokenStore
     @Bean
-    public TokenStore cacheableTokenStore(StringTimeLimitedCache cache) {
+    public TokenStore cacheableTokenStore(StringTtlCache cache) {
         return new SimpleCacheableTokenStore(cache);
     }
 

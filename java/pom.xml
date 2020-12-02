@@ -5,7 +5,7 @@
     <parent>
         <artifactId>aqiu-spring-boot-starter-parent</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
         <relativePath>../aqiu-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -14,6 +14,10 @@
     <packaging>pom</packaging>
     <modules>
         <module>captcha</module>
+        <module>spring-aop-web</module>
+        <module>qlock-core</module>
+        <module>ttl-cache-core</module>
+        <module>id-generator-core</module>
     </modules>
 
 

@@ -8,12 +8,16 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.concurrent.TimeUnit;
+import org.springframework.core.annotation.AliasFor;
 
 
 @Documented
 @Retention(RUNTIME)
 @Target({METHOD, TYPE})
 public @interface RepeatLimiting {
+
+    @AliasFor("key")
+    String value() default "";
 
     String message() default "请不要重复提交";
 
@@ -35,6 +39,7 @@ public @interface RepeatLimiting {
      * key设置
      * @return key
      */
+    @AliasFor("value")
     String key() default "";
 
 }

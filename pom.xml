@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.3.RELEASE</version>
+        <version>2.3.6.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -14,7 +14,7 @@
 
     <groupId>com.github.aqiu202</groupId>
     <artifactId>aqiu-spring-boot-starter-projects</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>pom</packaging>
     <url>https://github.com/aqiu202/aqiu-spring-boot-starter-projects</url>
     <description>Some Simple Starter Projects for Spring Boot Application Made by Aqiu202
@@ -44,15 +44,15 @@
 
     <distributionManagement>
         <repository>
-            <id>${distribution.repository.id}</id>
+            <id>nexus-releases</id>
             <name>nexus-releases</name>
-            <url>${distribution.repository.url}</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
             <uniqueVersion>true</uniqueVersion>
         </repository>
         <snapshotRepository>
-            <id>${distribution.snapshotRepository.id}</id>
+            <id>nexus-snapshots</id>
             <name>nexus-snapshots</name>
-            <url>${distribution.snapshotRepository.url}</url>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 

@@ -5,7 +5,7 @@
 <dependency>
   <groupId>com.github.aqiu202</groupId>
   <artifactId>captcha</artifactId>
-  <version>1.0.2</version>
+  <version>1.0.3</version>
 </dependency>
 ```
 项目开源地址：[https://github.com/aqiu202/captcha](https://github.com/aqiu202/captcha)

@@ -3,7 +3,7 @@ package com.github.aqiu202.aliyun.tts.store;
 import com.alibaba.nls.client.AccessToken;
 import com.github.aqiu202.aliyun.tts.store.generator.DefaultKeyGenerator;
 import com.github.aqiu202.aliyun.tts.store.generator.KeyGenerator;
-import com.github.aqiu202.cache.data.StringTimeLimitedCache;
+import com.github.aqiu202.ttl.data.StringTtlCache;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
@@ -15,14 +15,14 @@ public class SimpleCacheableTokenStore implements CacheableTokenStore {
 
     protected final KeyGenerator keyGenerator;
 
-    protected final StringTimeLimitedCache cache;
+    protected final StringTtlCache cache;
 
-    protected SimpleCacheableTokenStore(KeyGenerator keyGenerator, StringTimeLimitedCache cache) {
+    protected SimpleCacheableTokenStore(KeyGenerator keyGenerator, StringTtlCache cache) {
         this.keyGenerator = keyGenerator;
         this.cache = cache;
     }
 
-    protected SimpleCacheableTokenStore(StringTimeLimitedCache cache) {
+    protected SimpleCacheableTokenStore(StringTtlCache cache) {
         this.keyGenerator = new DefaultKeyGenerator();
         this.cache = cache;
     }
@@ -56,7 +56,7 @@ public class SimpleCacheableTokenStore implements CacheableTokenStore {
     }
 
     @Override
-    public StringTimeLimitedCache getCache() {
+    public StringTtlCache getCache() {
         return null;
     }
 }

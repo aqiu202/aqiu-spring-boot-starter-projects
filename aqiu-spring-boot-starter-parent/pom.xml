@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.aqiu202</groupId>
         <artifactId>aqiu-spring-boot-starter-projects</artifactId>
-        <version>1.0.2</version>
+        <version>1.0.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,7 +23,10 @@
     </modules>
 
     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <guava.version>29.0-jre</guava.version>
+        <curator.version>5.1.0</curator.version>
     </properties>
 
     <dependencyManagement>
@@ -40,7 +43,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
-                <artifactId>timed-cache-spring-boot-starter</artifactId>
+                <artifactId>ttl-cache-spring-boot-starter</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -102,6 +105,31 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>spring-aop-web</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>ttl-cache-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>qlock-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>id-generator-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${curator.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
