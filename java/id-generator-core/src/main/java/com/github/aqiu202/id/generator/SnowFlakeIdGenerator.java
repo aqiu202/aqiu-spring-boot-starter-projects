@@ -83,7 +83,7 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
      * 构造函数
      */
     public SnowFlakeIdGenerator() {
-        this.workerId = this.getWordId();
+        this.workerId = this.getWorkerId();
         this.dataCenterId = this.getDataCenterId();
     }
 
@@ -174,4 +174,19 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
         return System.currentTimeMillis();
     }
 
+    public long getWorkerId() {
+        return workerId;
+    }
+
+    public void setWorkerId(long workerId) {
+        this.workerId = workerId;
+    }
+
+    public long getDataCenterId() {
+        return dataCenterId;
+    }
+
+    public void setDataCenterId(long dataCenterId) {
+        this.dataCenterId = dataCenterId;
+    }
 }
