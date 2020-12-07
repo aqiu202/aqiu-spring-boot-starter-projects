@@ -8,7 +8,7 @@ import com.github.aqiu202.id.generator.UUIDGenerator;
 import java.io.Serializable;
 
 /**
- * <pre>注解生成策略类型</pre>
+ * <pre>ID生成策略类型</pre>
  *
  * @author aqiu 2020/12/3 12:47
  **/

@@ -23,9 +23,14 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.github.aqiu202</groupId>
+            <artifactId>spring-aop-web</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>annotations</artifactId>
             <version>3.0.1</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
