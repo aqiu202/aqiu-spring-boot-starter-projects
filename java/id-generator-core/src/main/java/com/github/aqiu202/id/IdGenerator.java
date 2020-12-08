@@ -12,6 +12,6 @@ import org.springframework.lang.NonNull;
 public interface IdGenerator<T extends Serializable> {
 
     @NonNull
-    T generateId();
+    T nextId();
 
 }

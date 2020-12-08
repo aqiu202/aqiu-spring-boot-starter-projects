@@ -14,6 +14,8 @@ import org.springframework.core.type.AnnotationMetadata;
 
 public class TtlCacheConfigRegistrar implements ImportBeanDefinitionRegistrar {
 
+    public static final String SIMPLE_TTL_CACHE_BEAN_NAME = "simpleTtlStringCache";
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
             BeanDefinitionRegistry registry) {
@@ -25,6 +27,9 @@ public class TtlCacheConfigRegistrar implements ImportBeanDefinitionRegistrar {
         AnnotationAttributes attributes = AnnotationAttributes
                 .fromMap(map);
         CacheMode cacheMode = attributes.getEnum("cacheMode");
+        if(CacheMode.none.equals(cacheMode)) {
+            return;
+        }
         GenericBeanDefinition b = new GenericBeanDefinition();
         b.setAutowireCandidate(cacheMode.isAutowireCandidate());
         final Class<?> value = cacheMode.getValue();
@@ -35,7 +40,7 @@ public class TtlCacheConfigRegistrar implements ImportBeanDefinitionRegistrar {
             b.getPropertyValues().add("timeout", timeout);
             b.getPropertyValues().add("timeUnit", timeUnit);
         }
-        registry.registerBeanDefinition("simpleTtlStringCache", b);
+        registry.registerBeanDefinition(SIMPLE_TTL_CACHE_BEAN_NAME, b);
     }
 
 }

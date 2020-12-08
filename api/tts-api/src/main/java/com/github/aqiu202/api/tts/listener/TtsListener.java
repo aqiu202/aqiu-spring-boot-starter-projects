@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
  **/
 public class TtsListener {
 
-    private final Logger logger = LoggerFactory.getLogger(TtsListener.class);
+    private final Logger log = LoggerFactory.getLogger(TtsListener.class);
 
     private Consumer<ByteBuffer> handler;
     private File file;
@@ -55,19 +55,19 @@ public class TtsListener {
     }
 
     public void onComplete(TtsMessage message) {
-        logger.debug("task_id: {}, status: {}, status_text: {}", message.getTaskId(),
+        log.debug("task_id: {}, status: {}, status_text: {}", message.getTaskId(),
                 message.getStatus(), message.getStatusText());
         if (Objects.nonNull(this.file)) {
-            logger.info("语音合成完毕：{}", this.file.getAbsolutePath());
+            log.info("语音合成完毕：{}", this.file.getAbsolutePath());
         } else {
-            logger.info("语音合成完毕");
+            log.info("语音合成完毕");
         }
         this.closeStream();
 
     }
 
     public void onFail(TtsMessage message) {
-        logger.error("task_id: {}, status: {}, status_text: {}", message.getTaskId(),
+        log.error("task_id: {}, status: {}, status_text: {}", message.getTaskId(),
                 message.getStatus(), message.getStatusText());
         this.closeStream();
 
@@ -89,7 +89,7 @@ public class TtsListener {
                 this.handler.accept(message);
             }
         } catch (IOException e) {
-            logger.error("接收文件输出流失败：{}", e.getMessage());
+            log.error("接收文件输出流失败：{}", e.getMessage());
         }
     }
 
@@ -99,7 +99,7 @@ public class TtsListener {
                 this.fout.close();
             }
         } catch (IOException e1) {
-            logger.error("关闭文件输出流失败：{}", e1.getMessage());
+            log.error("关闭文件输出流失败：{}", e1.getMessage());
         }
     }
 }

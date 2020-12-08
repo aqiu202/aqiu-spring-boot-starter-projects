@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public class SimpleTokenStore implements TokenStore {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Override
     public String getToken(String accessKeyId, String accessKeySecret) {
@@ -17,7 +17,7 @@ public class SimpleTokenStore implements TokenStore {
             token.apply();
             accessToken = token.getToken();
         } catch (IOException e) {
-            logger.error("获取token失败：", e);
+            log.error("获取token失败：", e);
         }
         return accessToken;
     }

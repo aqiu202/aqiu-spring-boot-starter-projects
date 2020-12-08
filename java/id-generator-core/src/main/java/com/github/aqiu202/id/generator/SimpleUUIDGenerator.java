@@ -13,7 +13,7 @@ public class SimpleUUIDGenerator implements IdGenerator<String> {
 
     @NonNull
     @Override
-    public String generateId() {
+    public String nextId() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 }

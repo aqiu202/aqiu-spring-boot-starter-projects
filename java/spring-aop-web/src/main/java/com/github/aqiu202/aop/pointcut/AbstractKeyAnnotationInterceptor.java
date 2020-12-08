@@ -8,9 +8,12 @@ import com.github.aqiu202.aop.util.SpELUtils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import org.aopalliance.intercept.MethodInvocation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
@@ -21,6 +24,8 @@ import org.springframework.util.StringUtils;
 public abstract class AbstractKeyAnnotationInterceptor<T extends Annotation> implements
         AnnotationMethodInterceptor<T>,
         ApplicationContextAware {
+
+    private static final Logger log = LoggerFactory.getLogger(AnnotationMethodInterceptor.class);
 
     protected EvaluationFiller evaluationFiller;
 
@@ -87,9 +92,33 @@ public abstract class AbstractKeyAnnotationInterceptor<T extends Annotation> imp
         return this.intercept(invocation, t, this.generatorKey(invocation, t));
     }
 
-    public abstract String getKeyGeneratorName(T annotation);
+    protected abstract String getKeyGeneratorName(T annotation);
 
-    public abstract String getKey(T annotation);
+    protected abstract String getKey(T annotation);
 
-    public abstract Object intercept(MethodInvocation invocation, T t, String key) throws Throwable;
+    protected Object intercept(MethodInvocation invocation, T t, String key) throws Throwable {
+        this.beforeIntercept(t, key);
+        Throwable throwable = null;
+        try {
+            return this.doIntercept(invocation, t, key);
+        } catch (Throwable th) {
+            log.error("", th);
+            throwable = th;
+            throw th;
+        } finally {
+            this.afterIntercept(t, key, throwable);
+        }
+    }
+
+    protected void beforeIntercept(T t, String key) {
+
+    }
+
+    protected Object doIntercept(MethodInvocation invocation, T t, String key) throws Throwable {
+        return invocation.proceed();
+    }
+
+    protected void afterIntercept(T t, String key, @Nullable Throwable throwable) {
+
+    }
 }

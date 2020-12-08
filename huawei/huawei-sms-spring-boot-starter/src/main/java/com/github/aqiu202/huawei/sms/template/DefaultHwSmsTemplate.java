@@ -40,7 +40,7 @@ import org.springframework.util.StringUtils;
 
 public class DefaultHwSmsTemplate implements HwSmsTemplate {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
     private static final String SUCCESS = "000000";
     //无需修改,用于格式化鉴权头域,给"X-WSSE"参数赋值
     private static final String WSSE_HEADER_FORMAT = "UsernameToken Username=\"%s\",PasswordDigest=\"%s\",Nonce=\"%s\",Created=\"%s\"";
@@ -121,7 +121,7 @@ public class DefaultHwSmsTemplate implements HwSmsTemplate {
                 throw new SmsException(string);
             }
         } catch (NoSuchAlgorithmException | IOException | KeyStoreException | KeyManagementException e) {
-            logger.error("华为短信服务调用失败：", e);
+            log.error("华为短信服务调用失败：", e);
             throw new SmsException("华为短信服务调用失败", e);
         }
     }

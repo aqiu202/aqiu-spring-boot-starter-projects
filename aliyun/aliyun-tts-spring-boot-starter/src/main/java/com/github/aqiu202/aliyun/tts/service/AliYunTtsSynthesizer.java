@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  **/
 public final class AliYunTtsSynthesizer implements TtsSynthesizer {
 
-    private final Logger logger = LoggerFactory.getLogger(AliYunTtsSynthesizer.class);
+    private final Logger log = LoggerFactory.getLogger(AliYunTtsSynthesizer.class);
 
     public AliYunTtsSynthesizer(TtsToken ttsToken) {
         this(ttsToken, new DefaultClientStore());
@@ -46,7 +46,7 @@ public final class AliYunTtsSynthesizer implements TtsSynthesizer {
         if (configuration instanceof AliYunSynthesizerConfig) {
             this.process((AliYunSynthesizerConfig) configuration, listener);
         } else {
-            logger.error("语音合成配置错误");
+            log.error("语音合成配置错误");
         }
     }
 
@@ -79,7 +79,7 @@ public final class AliYunTtsSynthesizer implements TtsSynthesizer {
                 client.shutdown();
             }
         } catch (Exception e) {
-            logger.error("合成语音失败：", e);
+            log.error("合成语音失败：", e);
         } finally {
             //关闭连接
             if (null != synthesizer) {

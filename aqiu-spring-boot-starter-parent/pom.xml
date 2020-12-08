@@ -131,6 +131,16 @@
                 <artifactId>curator-recipes</artifactId>
                 <version>${curator.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>id-generator-spring-boot-starter</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>qlock-spring-boot-starter</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

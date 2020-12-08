@@ -23,7 +23,8 @@ public @interface EnableTtlCaching {
 
         redis(StringRedisCache.class, true),
         guava(StringGuavaCache.class, false),
-        caffeine(StringCaffeineCache.class, false);
+        caffeine(StringCaffeineCache.class, false),
+        none(null, false);
 
         private final Class<? extends StringTtlCache> clazz;
         private final boolean autowireCandidate;

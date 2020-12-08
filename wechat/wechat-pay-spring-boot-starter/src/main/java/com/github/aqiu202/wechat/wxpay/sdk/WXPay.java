@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 
 public class WXPay {
 
-    private static final Logger logger = LoggerFactory.getLogger(WXPay.class);
+    private static final Logger log = LoggerFactory.getLogger(WXPay.class);
 
     private final MyWxPayConfig config;
     private final SignType signType;
@@ -77,7 +77,7 @@ public class WXPay {
             reqData.put("sign_type", WXPayConstants.HMACSHA256);
         }
         reqData.put("sign", WXPayUtil.generateSignature(reqData, config.getKey(), this.signType));
-        logger.info("签名参数：{}", reqData);
+        log.info("签名参数：{}", reqData);
         return reqData;
     }
 

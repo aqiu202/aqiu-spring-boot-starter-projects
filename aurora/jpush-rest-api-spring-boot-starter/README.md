@@ -63,7 +63,7 @@ public class TestJPushService {
         try {
             jPushService.send(jparam);
         } catch (IOException e) {
-            logger.error("极光推送失败：", e);
+            log.error("极光推送失败：", e);
         }
     }
 }

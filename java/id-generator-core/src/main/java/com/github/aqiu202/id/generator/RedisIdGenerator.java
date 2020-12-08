@@ -27,7 +27,7 @@ public class RedisIdGenerator implements IdGenerator<Long> {
 
     @NonNull
     @Override
-    public Long generateId() {
+    public Long nextId() {
         return this.counter.addAndGet(this.delta);
     }
 

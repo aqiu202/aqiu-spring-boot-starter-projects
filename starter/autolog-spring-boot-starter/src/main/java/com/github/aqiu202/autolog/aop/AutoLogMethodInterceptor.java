@@ -1,8 +1,6 @@
 package com.github.aqiu202.autolog.aop;
 
-import com.github.aqiu202.aop.keygen.KeyGenerator;
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
-import com.github.aqiu202.aop.util.KeyGeneratorUtils;
 import com.github.aqiu202.aop.util.ServletRequestUtils;
 import com.github.aqiu202.autolog.anno.AutoLog;
 import com.github.aqiu202.autolog.interceptor.LogCollector;
@@ -71,7 +69,7 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
         Throwable throwable = null;
         HttpServletRequest request = ServletRequestUtils.getCurrentRequest();
         if (request == null) {
-            return invocation.proceed();
+            throw new IllegalArgumentException("请求异常");
         }
         try {
             result = invocation.proceed();
@@ -90,7 +88,8 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
                 }
             } else {
                 //使用自定义的日志采集器
-                param = this.logCollector.collect(request, autoLog, throwable, invocation.getArguments());
+                param = this.logCollector
+                        .collect(request, autoLog, throwable, invocation.getArguments());
                 //日志信息未填充，会使用默认日志采集器填充
                 if (StringUtils.isEmpty(param.getDesc())) {
                     param.setDesc(this.generatorKey(invocation, autoLog));
@@ -156,9 +155,10 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
 
     /**
      * <pre>根据方法参数生成描述</pre>
-     * @author aqiu
+     *
      * @param args 参数
      * @return 自动生成的日志描述信息
+     * @author aqiu
      **/
     private String handleParams(Method method, Object[] args) {
         String[] paramNames = this.parameterNameDiscoverer.getParameterNames(method);
@@ -177,4 +177,5 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
         return CommonUtils.stringFormat(joiner.toString(), paramMap).replace("[", "{")
                 .replace("]", "}");
     }
+
 }

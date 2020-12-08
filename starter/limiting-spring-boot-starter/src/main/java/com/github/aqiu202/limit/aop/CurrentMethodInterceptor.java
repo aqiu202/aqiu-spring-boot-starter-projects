@@ -6,10 +6,6 @@ import com.github.aqiu202.limit.anno.CurrentLimiting;
 import com.google.common.util.concurrent.RateLimiter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import org.aopalliance.intercept.MethodInvocation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
 /**
  * <pre>令牌桶算法限流</pre>
@@ -17,8 +13,6 @@ import org.springframework.util.StringUtils;
  * @author aqiu 2020/11/30 0:01
  **/
 public class CurrentMethodInterceptor extends AbstractKeyAnnotationInterceptor<CurrentLimiting> {
-
-    private static final Logger logger = LoggerFactory.getLogger(CurrentMethodInterceptor.class);
 
     private final Map<String, RateLimiter> rateLimiterMap = new ConcurrentHashMap<>();
 
@@ -30,27 +24,6 @@ public class CurrentMethodInterceptor extends AbstractKeyAnnotationInterceptor<C
     }
 
     @Override
-    public Object intercept(MethodInvocation invocation, CurrentLimiting currentLimiting, String key)
-            throws Throwable {
-        RateLimiter limiter;
-        if ((limiter = rateLimiterMap.get(key)) == null) {
-            limiter = RateLimiter.create(currentLimiting.permits());
-            rateLimiterMap.put(key, limiter);
-        }
-        if (!limiter.tryAcquire()) {
-            throw new IllegalArgumentException(currentLimiting.message());
-        }
-        Object result;
-        try {
-            result = invocation.proceed();
-        } catch (Throwable t) {
-            logger.error("", t);
-            throw t;
-        }
-        return result;
-    }
-
-    @Override
     public String getKey(CurrentLimiting annotation) {
         return annotation.key();
     }
@@ -59,4 +32,17 @@ public class CurrentMethodInterceptor extends AbstractKeyAnnotationInterceptor<C
     public String getKeyGeneratorName(CurrentLimiting annotation) {
         return annotation.keyGenerator();
     }
+
+    @Override
+    protected void beforeIntercept(CurrentLimiting currentLimiting, String key) {
+        RateLimiter limiter;
+        if ((limiter = rateLimiterMap.get(key)) == null) {
+            limiter = RateLimiter.create(currentLimiting.permits());
+            rateLimiterMap.put(key, limiter);
+        }
+        if (!limiter.tryAcquire()) {
+            throw new IllegalArgumentException(currentLimiting.message());
+        }
+    }
+
 }

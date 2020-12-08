@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 
 public class SimpleCacheableTokenStore implements CacheableTokenStore {
 
-    private final Logger logger = LoggerFactory.getLogger(getClass());
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     protected final KeyGenerator keyGenerator;
 
@@ -36,7 +36,7 @@ public class SimpleCacheableTokenStore implements CacheableTokenStore {
             try {
                 accessToken.apply();
             } catch (Exception e) {
-                logger.error("缓存获取token失败：", e);
+                log.error("缓存获取token失败：", e);
             }
             token = accessToken.getToken();
             if (Objects.nonNull(token)) {

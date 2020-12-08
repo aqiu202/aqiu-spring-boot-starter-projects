@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
  **/
 public abstract class KeyGeneratorUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(KeyGeneratorUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(KeyGeneratorUtils.class);
 
     private static final KeyGenerator defaultKeyGenerator = new SimpleKeyGenerator();
 
@@ -31,7 +31,7 @@ public abstract class KeyGeneratorUtils {
                 keyGenerator = applicationContext
                         .getBean(keyGeneratorName, KeyGenerator.class);
             } catch (BeansException e) {
-                logger.error("KeyGenerator 配置错误，没有找到名称为" + keyGeneratorName + "的KeyGenerator：",
+                log.error("KeyGenerator 配置错误，没有找到名称为" + keyGeneratorName + "的KeyGenerator：",
                         e);
                 keyGenerator = defaultKeyGenerator;
             }

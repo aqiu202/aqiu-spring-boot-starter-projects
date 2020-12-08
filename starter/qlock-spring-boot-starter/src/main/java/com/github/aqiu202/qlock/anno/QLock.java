@@ -21,7 +21,7 @@ public @interface QLock {
     @AliasFor("key")
     String value() default "";
 
-    String message() default "请不要重复提交";
+    String message() default "资源已被占用，请稍后再试";
 
     String keyGenerator() default "";
 
