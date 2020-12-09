@@ -6,7 +6,7 @@
 maven坐标 
 ```xml
 <dependency>
-    <groupId>com.redsoft.starters.own</groupId>
+    <groupId>com.github.aqiu202.starters</groupId>
     <artifactId>spring-jpa-plus-spring-boot-starter</artifactId>
 </dependency>
 ```
