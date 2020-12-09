@@ -141,6 +141,11 @@
                 <artifactId>qlock-spring-boot-starter</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>pageable-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

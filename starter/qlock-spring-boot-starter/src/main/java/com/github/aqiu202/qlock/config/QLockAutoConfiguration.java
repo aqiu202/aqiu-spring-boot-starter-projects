@@ -21,6 +21,14 @@ import org.springframework.context.annotation.Configuration;
 @AutoConfigureAfter({IdGeneratorAutoConfiguration.class})
 public class QLockAutoConfiguration {
 
+//    public static final String SIMPLE_ID_GENERATOR_FACTORY_BEAN_NAME = "simpleIdGeneratorFactoryBean";
+//
+//    @Bean(name = SIMPLE_ID_GENERATOR_FACTORY_BEAN_NAME)
+//    @ConditionalOnMissingBean(name = SIMPLE_ID_GENERATOR_FACTORY_BEAN_NAME)
+//    public IdGeneratorFactory simpleIdGeneratorFactoryBean(IdProperties idProperties) {
+//        return new SimpleIdGeneratorFactory(idProperties.getType());
+//    }
+
     @Bean
     public Advisor qLockInterceptorBean(
             @Autowired(required = false) EvaluationFiller evaluationFiller,

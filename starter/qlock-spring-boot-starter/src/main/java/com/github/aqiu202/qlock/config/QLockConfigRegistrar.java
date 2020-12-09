@@ -1,12 +1,13 @@
 package com.github.aqiu202.qlock.config;
 
 import com.github.aqiu202.cache.config.TtlCacheConfigRegistrar;
+import com.github.aqiu202.id.type.IdType;
 import com.github.aqiu202.qlock.anno.EnableQLock;
 import com.github.aqiu202.qlock.anno.EnableQLock.LockMode;
+import com.github.aqiu202.qlock.id.SimpleIdGeneratorFactory;
 import java.util.Map;
-import org.springframework.beans.factory.config.RuntimeBeanReference;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
-import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
@@ -27,10 +28,20 @@ public class QLockConfigRegistrar implements ImportBeanDefinitionRegistrar {
                 .getAnnotationAttributes(EnableQLock.class.getName(), false);
         final AnnotationAttributes annotationAttributes = AnnotationAttributes.fromMap(map);
         final LockMode lockMode = annotationAttributes.getEnum("lockMode");
-        final GenericBeanDefinition qLockBean = new GenericBeanDefinition();
-        qLockBean.setBeanClass(lockMode.getLockClass());
-        qLockBean.getPropertyValues().add("cache", new RuntimeBeanReference(TtlCacheConfigRegistrar.SIMPLE_TTL_CACHE_BEAN_NAME));
-        qLockBean.setAutowireCandidate(true);
-        registry.registerBeanDefinition(QLOCK_BEAN_NAME, qLockBean);
+        final BeanDefinitionBuilder bdb = BeanDefinitionBuilder
+                .genericBeanDefinition(lockMode.getLockClass());
+        if(lockMode.isHasIdGenerator()) {
+            final IdType idType = annotationAttributes.getEnum("idType");
+            if(!IdType.AUTO.equals(idType)) {
+                bdb.addPropertyValue("idGeneratorFactory", new SimpleIdGeneratorFactory<>(idType));
+            } else {
+                bdb.addAutowiredProperty("idGenerator");
+            }
+        }
+        final boolean otherCaching = annotationAttributes.getBoolean("otherCaching");
+        String beanName = otherCaching ? TtlLockCacheConfigRegistrar.SIMPLE_TTL_LOCK_CACHE_BEAN_NAME
+                : TtlCacheConfigRegistrar.SIMPLE_TTL_CACHE_BEAN_NAME;
+        bdb.addPropertyReference("cache", beanName);
+        registry.registerBeanDefinition(QLOCK_BEAN_NAME, bdb.getBeanDefinition());
     }
 }

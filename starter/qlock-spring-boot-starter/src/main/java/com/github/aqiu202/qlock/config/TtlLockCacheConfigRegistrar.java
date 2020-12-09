@@ -16,6 +16,8 @@ import org.springframework.core.type.AnnotationMetadata;
 
 public class TtlLockCacheConfigRegistrar implements ImportBeanDefinitionRegistrar {
 
+    public static final String SIMPLE_TTL_LOCK_CACHE_BEAN_NAME = "simpleTtlLockStringCacheBean";
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
             BeanDefinitionRegistry registry) {
@@ -28,22 +30,28 @@ public class TtlLockCacheConfigRegistrar implements ImportBeanDefinitionRegistra
                 .fromMap(map);
         LockMode lockMode = attributes.getEnum("lockMode");
         if (!LockMode.zookeeper.equals(lockMode)) {
-            if (!registry
+            final boolean otherCaching = attributes.getBoolean("otherCaching");
+            if (!otherCaching && registry
                     .containsBeanDefinition(TtlCacheConfigRegistrar.SIMPLE_TTL_CACHE_BEAN_NAME)) {
-                CacheMode cacheMode = lockMode.getCacheMode();
-                GenericBeanDefinition b = new GenericBeanDefinition();
-                b.setAutowireCandidate(cacheMode.isAutowireCandidate());
-                final Class<?> value = cacheMode.getValue();
-                b.setBeanClass(cacheMode.getValue());
-                if (AbstractTtlCache.class.isAssignableFrom(value)) {
-                    long timeout = attributes.getNumber("timeout");
-                    TimeUnit timeUnit = attributes.getEnum("timeUnit");
-                    b.getPropertyValues().add("timeout", timeout);
-                    b.getPropertyValues().add("timeUnit", timeUnit);
-                }
-                registry.registerBeanDefinition(TtlCacheConfigRegistrar.SIMPLE_TTL_CACHE_BEAN_NAME,
-                        b);
+                return;
             }
+            String beanName = otherCaching ? SIMPLE_TTL_LOCK_CACHE_BEAN_NAME
+                    : TtlCacheConfigRegistrar.SIMPLE_TTL_CACHE_BEAN_NAME;
+            CacheMode cacheMode = lockMode.getCacheMode();
+            GenericBeanDefinition bd = new GenericBeanDefinition();
+            bd.setAutowireCandidate(cacheMode.isAutowireCandidate());
+            final Class<?> value = cacheMode.getValue();
+            bd.setBeanClass(cacheMode.getValue());
+            if(!otherCaching) {
+                bd.setPrimary(true);
+            }
+            if (AbstractTtlCache.class.isAssignableFrom(value)) {
+                long timeout = attributes.getNumber("timeout");
+                TimeUnit timeUnit = attributes.getEnum("timeUnit");
+                bd.getPropertyValues().add("timeout", timeout);
+                bd.getPropertyValues().add("timeUnit", timeUnit);
+            }
+            registry.registerBeanDefinition(beanName, bd);
         }
     }
 

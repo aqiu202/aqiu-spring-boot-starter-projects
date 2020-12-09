@@ -1,4 +1,4 @@
-package com.github.aqiu202.id.prop;
+package com.github.aqiu202.id.type;
 
 import com.github.aqiu202.id.IdGenerator;
 import com.github.aqiu202.id.generator.RedisIdGenerator;
@@ -16,7 +16,8 @@ public enum IdType {
     UUID(UUIDGenerator.class),
     SIMPLE_UUID(SimpleUUIDGenerator.class),
     SNOWFLAKE(SnowFlakeIdGenerator.class),
-    REDIS(RedisIdGenerator.class);
+    REDIS(RedisIdGenerator.class),
+    AUTO(SnowFlakeIdGenerator.class);
 
     IdType(Class<? extends IdGenerator<? extends Serializable>> clazz) {
         this.clazz = clazz;

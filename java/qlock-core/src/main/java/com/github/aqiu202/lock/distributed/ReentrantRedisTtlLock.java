@@ -10,8 +10,4 @@ import com.github.aqiu202.lock.base.AbstractReentrantTtlLock;
  **/
 public class ReentrantRedisTtlLock extends AbstractReentrantTtlLock {
 
-    public ReentrantRedisTtlLock(IdGenerator<?> idGenerator) {
-        super(idGenerator);
-    }
-
 }

@@ -1,11 +1,12 @@
 package com.github.aqiu202.lock.base;
 
 import com.github.aqiu202.id.IdGenerator;
+import com.github.aqiu202.id.IdGeneratorFactory;
 import com.github.aqiu202.lock.centralize.LocaleTtlLock;
-import com.github.aqiu202.ttl.data.StringTtlCache;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.springframework.lang.Nullable;
+import org.springframework.util.Assert;
 
 /**
  * <pre>AbstractReentrantLock</pre>
@@ -14,14 +15,24 @@ import org.springframework.lang.Nullable;
  **/
 public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
 
-    protected final IdGenerator<?> idGenerator;
+    protected IdGenerator<?> idGenerator;
 
-//    public AbstractReentrantTtlLock(StringTtlCache cacheable) {
-//        this(cacheable, new SimpleUUIDGenerator());
-//    }
+    protected IdGeneratorFactory<?> idGeneratorFactory;
 
-    public AbstractReentrantTtlLock(IdGenerator<?> idGenerator) {
+    public IdGenerator<?> getIdGenerator() {
+        return idGenerator;
+    }
+
+    public void setIdGenerator(IdGenerator<?> idGenerator) {
         this.idGenerator = idGenerator;
+    }
+
+    public IdGeneratorFactory<?> getIdGeneratorFactory() {
+        return idGeneratorFactory;
+    }
+
+    public void setIdGeneratorFactory(IdGeneratorFactory<?> idGeneratorFactory) {
+        this.idGeneratorFactory = idGeneratorFactory;
     }
 
     @Override
@@ -76,11 +87,24 @@ public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
 
     @Nullable
     public Boolean doRelease(String key) {
-        return super.acquire(key);
+        return super.release(key);
     }
 
     @Nullable
     public Boolean doRelease(String key, long expired, TimeUnit timeUnit) {
-        return super.acquire(key, expired, timeUnit);
+        return super.release(key, expired, timeUnit);
+    }
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.initIdGenerator();
+        Assert.notNull(this.idGenerator, "ID Generator无法构建");
+        super.afterPropertiesSet();
+    }
+
+    protected void initIdGenerator() {
+        if (this.idGenerator == null) {
+            this.idGenerator = this.idGeneratorFactory.getIdGenerator();
+        }
     }
 }

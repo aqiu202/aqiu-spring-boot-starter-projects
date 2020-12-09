@@ -1,5 +1,6 @@
 package com.github.aqiu202.id.prop;
 
+import com.github.aqiu202.id.type.IdType;
 import java.security.SecureRandom;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;

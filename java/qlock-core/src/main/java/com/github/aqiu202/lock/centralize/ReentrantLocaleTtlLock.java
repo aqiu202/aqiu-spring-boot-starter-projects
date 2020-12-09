@@ -11,12 +11,11 @@ import com.github.aqiu202.ttl.data.StringTtlCache;
  **/
 public class ReentrantLocaleTtlLock extends AbstractReentrantTtlLock {
 
-    public ReentrantLocaleTtlLock(IdGenerator<?> idGenerator) {
-        super(idGenerator);
-    }
+    public ReentrantLocaleTtlLock() {
 
-//    public ReentrantLocaleTtlLock(StringTtlCache cacheable) {
-//        super(cacheable);
-//    }
+    }
+    public ReentrantLocaleTtlLock(IdGenerator<?> idGenerator) {
+        this.idGenerator = idGenerator;
+    }
 
 }

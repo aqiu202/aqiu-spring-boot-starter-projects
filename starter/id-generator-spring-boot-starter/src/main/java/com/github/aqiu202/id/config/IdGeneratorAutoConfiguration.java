@@ -1,17 +1,14 @@
 package com.github.aqiu202.id.config;
 
 import com.github.aqiu202.id.IdGenerator;
-import com.github.aqiu202.id.generator.RedisIdGenerator;
-import com.github.aqiu202.id.generator.SnowFlakeIdGenerator;
+import com.github.aqiu202.id.IdGeneratorFactory;
+import com.github.aqiu202.id.factory.DefaultIdGeneratorFactory;
 import com.github.aqiu202.id.prop.IdProperties;
-import com.github.aqiu202.id.prop.IdType;
-import com.github.aqiu202.id.prop.RedisIdProperties;
-import com.github.aqiu202.id.prop.SnowFlakeIdProperties;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 
 /**
  * <pre>Id Generator自动配置</pre>
@@ -22,27 +19,20 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 @EnableConfigurationProperties(IdProperties.class)
 public class IdGeneratorAutoConfiguration {
 
-    @Bean
-    public IdGenerator idGenerator(IdProperties idProperties, ApplicationContext context) {
-        final IdType type = idProperties.getType();
-        IdGenerator idGenerator;
-        if (IdType.REDIS.equals(type)) {
-            final RedisIdProperties redis = idProperties.getRedis();
-            idGenerator = new RedisIdGenerator(redis.getKey(), context.getBean(
-                    RedisConnectionFactory.class), redis.getInitValue());
-        } else {
-            try {
-                idGenerator = type.getClazz().newInstance();
-            } catch (InstantiationException | IllegalAccessException e) {
-                throw new IllegalArgumentException("ID Generator实例化失败", e);
-            }
-            if (IdType.SNOWFLAKE.equals(type)) {
-                final SnowFlakeIdProperties snowFlake = idProperties.getSnowFlake();
-                final SnowFlakeIdGenerator snowFlakeIdGenerator = (SnowFlakeIdGenerator) idGenerator;
-                snowFlakeIdGenerator.setWorkerId(snowFlake.getWorkerId());
-                snowFlakeIdGenerator.setDataCenterId(snowFlake.getDataCenterId());
-            }
-        }
-        return idGenerator;
+    public static final String ID_GENERATOR_BEAN_NAME = "idGeneratorBean";
+
+    public static final String ID_GENERATOR_FACTORY_BEAN_NAME = "idGeneratorFactoryBean";
+
+    @Bean(name = ID_GENERATOR_FACTORY_BEAN_NAME)
+    @ConditionalOnMissingBean(name = ID_GENERATOR_FACTORY_BEAN_NAME)
+    public IdGeneratorFactory idGeneratorFactory(IdProperties idProperties) {
+        return new DefaultIdGeneratorFactory(idProperties);
+    }
+
+    @Bean(name = ID_GENERATOR_BEAN_NAME)
+    @ConditionalOnMissingBean(name = ID_GENERATOR_BEAN_NAME)
+    public IdGenerator idGeneratorBean(
+            @Qualifier(ID_GENERATOR_FACTORY_BEAN_NAME) IdGeneratorFactory idGeneratorFactory) {
+        return idGeneratorFactory.getIdGenerator();
     }
 }

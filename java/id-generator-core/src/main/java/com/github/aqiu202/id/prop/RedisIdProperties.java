@@ -11,6 +11,8 @@ public class RedisIdProperties {
 
     private long initValue = 0;
 
+    private long delta = 1;
+
     public String getKey() {
         return key;
     }
@@ -25,5 +27,13 @@ public class RedisIdProperties {
 
     public void setInitValue(long initValue) {
         this.initValue = initValue;
+    }
+
+    public long getDelta() {
+        return delta;
+    }
+
+    public void setDelta(long delta) {
+        this.delta = delta;
     }
 }

@@ -1,6 +1,7 @@
 package com.github.aqiu202.qlock.anno;
 
 import com.github.aqiu202.cache.anno.EnableTtlCaching.CacheMode;
+import com.github.aqiu202.id.type.IdType;
 import com.github.aqiu202.lock.base.Lock;
 import com.github.aqiu202.lock.centralize.LocaleTtlLock;
 import com.github.aqiu202.lock.centralize.ReentrantLocaleTtlLock;
@@ -53,19 +54,24 @@ public @interface EnableQLock {
 
     enum LockMode {
         guava(CacheMode.guava, LocaleTtlLock.class),
-        guava_r(CacheMode.guava, ReentrantLocaleTtlLock.class),
+        guava_r(CacheMode.guava, ReentrantLocaleTtlLock.class, true),
         caffeine(CacheMode.caffeine, LocaleTtlLock.class),
-        caffeine_r(CacheMode.caffeine, ReentrantLocaleTtlLock.class),
+        caffeine_r(CacheMode.caffeine, ReentrantLocaleTtlLock.class, true),
         redis(CacheMode.redis, RedisTtlLock.class),
-        redis_r(CacheMode.redis, ReentrantRedisTtlLock.class),
+        redis_r(CacheMode.redis, ReentrantRedisTtlLock.class, true),
         zookeeper(CacheMode.none, ZookeeperLock.class);
 
         private final CacheMode cacheMode;
         private final Class<? extends Lock> lockClass;
+        private final boolean hasIdGenerator;
 
         LockMode(CacheMode cacheMode, Class<? extends Lock> lockClass) {
+            this(cacheMode, lockClass, false);
+        }
+       LockMode(CacheMode cacheMode, Class<? extends Lock> lockClass, boolean hasIdGenerator) {
             this.cacheMode = cacheMode;
             this.lockClass = lockClass;
+            this.hasIdGenerator = hasIdGenerator;
         }
 
         public CacheMode getCacheMode() {
@@ -75,6 +81,21 @@ public @interface EnableQLock {
         public Class<? extends Lock> getLockClass() {
             return lockClass;
         }
+
+        public boolean isHasIdGenerator() {
+            return hasIdGenerator;
+        }
+
     }
+
+    /**
+     * 是否另外注册缓存
+     * @return
+     * false (默认)使用ttl-cache-spring-boot-starter内置缓存
+     * true 重新注册ttl-cache缓存
+     */
+    boolean otherCaching() default false;
+
+    IdType idType() default IdType.AUTO;
 
 }

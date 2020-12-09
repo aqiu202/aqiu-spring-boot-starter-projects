@@ -1,6 +1,7 @@
 package com.github.aqiu202.id.generator;
 
 import com.github.aqiu202.id.IdGenerator;
+import com.github.aqiu202.id.prop.SnowFlakeIdProperties;
 import org.springframework.lang.NonNull;
 
 /**
@@ -87,6 +88,9 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
         this.dataCenterId = this.getDataCenterId();
     }
 
+    public SnowFlakeIdGenerator(SnowFlakeIdProperties properties) {
+        this.configure(properties);
+    }
     /**
      * 构造函数
      *
@@ -106,6 +110,11 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
         }
         this.workerId = workerId;
         this.dataCenterId = dataCenterId;
+    }
+
+    public void configure(SnowFlakeIdProperties properties) {
+        this.workerId = properties.getWorkerId();
+        this.dataCenterId = properties.getDataCenterId();
     }
 
     // ==============================Methods==========================================

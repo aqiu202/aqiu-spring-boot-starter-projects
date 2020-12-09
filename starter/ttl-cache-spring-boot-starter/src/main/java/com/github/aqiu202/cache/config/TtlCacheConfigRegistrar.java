@@ -6,6 +6,8 @@ import com.github.aqiu202.cache.anno.EnableTtlCaching.CacheMode;
 import com.github.aqiu202.ttl.data.impl.AbstractTtlCache;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import org.springframework.beans.MutablePropertyValues;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
@@ -14,7 +16,7 @@ import org.springframework.core.type.AnnotationMetadata;
 
 public class TtlCacheConfigRegistrar implements ImportBeanDefinitionRegistrar {
 
-    public static final String SIMPLE_TTL_CACHE_BEAN_NAME = "simpleTtlStringCache";
+    public static final String SIMPLE_TTL_CACHE_BEAN_NAME = "simpleTtlStringCacheBean";
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
@@ -30,15 +32,17 @@ public class TtlCacheConfigRegistrar implements ImportBeanDefinitionRegistrar {
         if(CacheMode.none.equals(cacheMode)) {
             return;
         }
+        final Class<?> value = cacheMode.getValue();
         GenericBeanDefinition b = new GenericBeanDefinition();
         b.setAutowireCandidate(cacheMode.isAutowireCandidate());
-        final Class<?> value = cacheMode.getValue();
-        b.setBeanClass(cacheMode.getValue());
+        b.setBeanClass(value);
+        b.setPrimary(true);
         if(AbstractTtlCache.class.isAssignableFrom(value)) {
             long timeout = attributes.getNumber("timeout");
             TimeUnit timeUnit = attributes.getEnum("timeUnit");
-            b.getPropertyValues().add("timeout", timeout);
-            b.getPropertyValues().add("timeUnit", timeUnit);
+            final MutablePropertyValues propertyValues = b.getPropertyValues();
+            propertyValues.add("timeout", timeout);
+            propertyValues.add("timeUnit", timeUnit);
         }
         registry.registerBeanDefinition(SIMPLE_TTL_CACHE_BEAN_NAME, b);
     }

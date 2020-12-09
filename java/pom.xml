@@ -18,6 +18,7 @@
         <module>qlock-core</module>
         <module>ttl-cache-core</module>
         <module>id-generator-core</module>
+        <module>pageable-core</module>
     </modules>
 
 

@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    open-in-view: false
+    database-platform: com.redsoft.starters.jpa.dialect.MySQLDialect
+logging:
+  level:
+    org:
+      hibernate:
+        tool:
+          schema:
+            internal: error
