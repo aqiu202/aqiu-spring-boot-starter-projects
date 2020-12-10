@@ -56,7 +56,7 @@ public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
     @Override
     public Boolean acquire(String key, long expired, TimeUnit timeUnit) {
         String value = String.valueOf(this.idGenerator.nextId());
-        LockValueHolder.setValue(value);
+        value = LockValueHolder.setIfAbsent(value);
         final Boolean result = this.doAcquire(key, value, expired, timeUnit);
         if (result != null && !result) {
             return Objects.equals(this.cache.get(key), value);
@@ -67,7 +67,7 @@ public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
     @Override
     public Boolean acquire(String key) {
         String value = String.valueOf(this.idGenerator.nextId());
-        LockValueHolder.setValue(value);
+        value = LockValueHolder.setIfAbsent(value);
         final Boolean result = this.doAcquire(key, value);
         if (result != null && !result) {
             return Objects.equals(this.cache.get(key), value);

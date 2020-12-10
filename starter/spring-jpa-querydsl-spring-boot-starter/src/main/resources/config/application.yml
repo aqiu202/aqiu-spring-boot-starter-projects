@@ -1,7 +1,6 @@
 spring:
   jpa:
     open-in-view: false
-    database-platform: com.github.aqiu202.starters.jpa.dialect.MySQLDialect
 logging:
   level:
     org:

@@ -1,0 +1,15 @@
+{
+  "hints": [
+    {
+      "name": "spring.jpa.properties.hibernate.dialect",
+      "providers": [
+        {
+          "name": "class-reference",
+          "parameters": {
+            "target": "org.hibernate.dialect.Dialect"
+          }
+        }
+      ]
+    }
+  ]
+}

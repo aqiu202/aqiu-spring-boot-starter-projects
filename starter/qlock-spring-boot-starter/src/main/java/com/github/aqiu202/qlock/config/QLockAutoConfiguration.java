@@ -6,6 +6,8 @@ import com.github.aqiu202.id.config.IdGeneratorAutoConfiguration;
 import com.github.aqiu202.lock.base.Lock;
 import com.github.aqiu202.qlock.anno.QLock;
 import com.github.aqiu202.qlock.aop.QLockMethodInterceptor;
+import com.github.aqiu202.qlock.aop.QLockRequestListener;
+import javax.servlet.ServletRequestListener;
 import org.springframework.aop.Advisor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
@@ -35,5 +37,10 @@ public class QLockAutoConfiguration {
             Lock lock) {
         return new AnnotationPointcutAdvisor<>(QLock.class,
                 new QLockMethodInterceptor(lock, evaluationFiller));
+    }
+
+    @Bean
+    public ServletRequestListener qLockRequestListener(){
+        return new QLockRequestListener();
     }
 }
