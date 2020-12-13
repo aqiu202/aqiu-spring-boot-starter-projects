@@ -1,10 +1,11 @@
 package com.github.aqiu202.qlock.aop;
 
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
-import com.github.aqiu202.aop.spel.EvaluationFiller;
+import com.github.aqiu202.util.spel.EvaluationFiller;
 import com.github.aqiu202.lock.base.Lock;
 import com.github.aqiu202.qlock.anno.QLock;
 import java.util.concurrent.TimeUnit;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * <pre>QLockMethodInterceptor</pre>
@@ -35,7 +36,7 @@ public class QLockMethodInterceptor extends AbstractKeyAnnotationInterceptor<QLo
     }
 
     @Override
-    protected void beforeIntercept(QLock qLock, String key) {
+    protected void beforeIntercept(MethodInvocation invocation, QLock qLock, String key) {
         long timeout = qLock.timeout();
         TimeUnit timeUnit = qLock.timeUnit();
         final Boolean getLock = this.lock.acquire(key, timeout, timeUnit);
@@ -45,7 +46,7 @@ public class QLockMethodInterceptor extends AbstractKeyAnnotationInterceptor<QLo
     }
 
     @Override
-    protected void afterIntercept(QLock qLock, String key, Throwable throwable) {
+    protected void afterIntercept(MethodInvocation invocation, QLock qLock, String key, Throwable throwable) {
         this.lock.release(key, qLock.timeout(), qLock.timeUnit());
     }
 }

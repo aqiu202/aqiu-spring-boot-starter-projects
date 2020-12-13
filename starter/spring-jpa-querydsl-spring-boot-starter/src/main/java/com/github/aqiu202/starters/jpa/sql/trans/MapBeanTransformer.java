@@ -1,6 +1,6 @@
 package com.github.aqiu202.starters.jpa.sql.trans;
 
-import com.github.aqiu202.starters.jpa.util.CommonUtils;
+import com.github.aqiu202.util.PropertyNameUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +25,7 @@ public final class MapBeanTransformer implements ResultTransformer {
             String alias = aliases[i];
             if (alias != null) {
                 alias = alias.toLowerCase();
-                result.put(CommonUtils.hump(alias), tuple[i]);
+                result.put(PropertyNameUtils.hump(alias), tuple[i]);
             }
         }
         return result;

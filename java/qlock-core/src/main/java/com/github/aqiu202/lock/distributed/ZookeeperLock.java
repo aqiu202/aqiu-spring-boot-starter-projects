@@ -7,19 +7,28 @@ import java.util.concurrent.TimeUnit;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.util.Assert;
 
 /**
  * <pre>ZookeeperLock</pre>
  *
  * @author aqiu 2020/11/24 16:49
  **/
-public class ZookeeperLock implements Lock {
+public class ZookeeperLock implements Lock, InitializingBean {
 
     private final Map<String, InterProcessLock> interProcessLockResource = new ConcurrentHashMap<>();
 
-    private final CuratorFramework curatorFramework;
+    private CuratorFramework curatorFramework;
 
-    public ZookeeperLock(CuratorFramework curatorFramework) {
+    public ZookeeperLock() {
+    }
+
+    public CuratorFramework getCuratorFramework() {
+        return curatorFramework;
+    }
+
+    public void setCuratorFramework(CuratorFramework curatorFramework) {
         this.curatorFramework = curatorFramework;
     }
 
@@ -71,4 +80,8 @@ public class ZookeeperLock implements Lock {
         return new InterProcessMutex(this.curatorFramework, key);
     }
 
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        Assert.notNull(this.curatorFramework, "CuratorFramework 不能为空");
+    }
 }

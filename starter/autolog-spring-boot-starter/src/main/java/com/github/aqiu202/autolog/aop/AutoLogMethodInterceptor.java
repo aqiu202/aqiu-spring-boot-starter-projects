@@ -1,14 +1,15 @@
 package com.github.aqiu202.autolog.aop;
 
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
-import com.github.aqiu202.aop.util.ServletRequestUtils;
+import com.github.aqiu202.util.IPUtils;
+import com.github.aqiu202.util.ServletRequestUtils;
 import com.github.aqiu202.autolog.anno.AutoLog;
 import com.github.aqiu202.autolog.interceptor.LogCollector;
 import com.github.aqiu202.autolog.interceptor.LogHandler;
 import com.github.aqiu202.autolog.interceptor.ParamReader;
 import com.github.aqiu202.autolog.result.LogRequestParam;
 import com.github.aqiu202.autolog.result.LogRequestParam.DefaultLogRequestParam;
-import com.github.aqiu202.autolog.util.CommonUtils;
+import com.github.aqiu202.util.StringUtils;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,6 @@ import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 /**
  * <pre>AutoLog日志拦截处理</pre>
@@ -95,7 +95,7 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
                     param.setDesc(this.generatorKey(invocation, autoLog));
                 }
                 if (StringUtils.isEmpty(param.getIp())) {
-                    param.setIp(CommonUtils.getIpAddress(request));
+                    param.setIp(IPUtils.getIpAddress(request));
                 }
                 if (StringUtils.isEmpty(param.getUri())) {
                     param.setUri(request.getRequestURI().replace(request.getContextPath(), ""));
@@ -128,7 +128,7 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
         // method
         String method = request.getMethod();
         // ip
-        String ip = CommonUtils.getIpAddress(request);
+        String ip = IPUtils.getIpAddress(request);
         log.info("url={}", uri);
         log.info("method={}", method);
         log.info("ip={}", ip);
@@ -174,7 +174,7 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
             joiner.add(value);
             paramMap.put(String.valueOf(i), this.paramReader.apply(o));
         }
-        return CommonUtils.stringFormat(joiner.toString(), paramMap).replace("[", "{")
+        return StringUtils.stringFormat(joiner.toString(), paramMap).replace("[", "{")
                 .replace("]", "}");
     }
 

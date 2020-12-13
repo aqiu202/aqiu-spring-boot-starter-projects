@@ -5,7 +5,7 @@
     <parent>
         <artifactId>starter</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -20,7 +20,7 @@
     <dependencies>
         <dependency>
             <groupId>com.github.aqiu202</groupId>
-            <artifactId>spring-aop-web</artifactId>
+            <artifactId>spring-aop-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>

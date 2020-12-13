@@ -31,7 +31,7 @@ public class JpaDSLSelector implements ImportSelector {
             list.add(OpenJpaAuditingConfiguration.class.getName());
         }
         if (enableRetry) {
-            list.add(RetryAspect.class.getName());
+            list.add(RetryConfiguration.class.getName());
         }
         return list.toArray(new String[0]);
     }

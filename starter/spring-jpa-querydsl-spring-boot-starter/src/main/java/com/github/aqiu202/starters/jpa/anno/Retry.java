@@ -19,4 +19,7 @@ public @interface Retry {
 
     int times() default 3;
 
+    String message() default "重试次数过多";
+
+    int delay() default 0;
 }

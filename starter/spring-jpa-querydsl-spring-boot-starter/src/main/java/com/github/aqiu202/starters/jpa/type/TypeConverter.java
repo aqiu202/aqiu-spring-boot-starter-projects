@@ -1,7 +1,7 @@
 package com.github.aqiu202.starters.jpa.type;
 
 
-import com.github.aqiu202.starters.jpa.wrap.ObjectWrapper;
+import com.github.aqiu202.util.wrap.ObjectWrapper;
 
 public interface TypeConverter {
 

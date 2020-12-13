@@ -1,6 +1,7 @@
 package com.github.aqiu202.starters.jpa.util;
 
 import com.esotericsoftware.reflectasm.FieldAccess;
+import com.github.aqiu202.util.BeanUtils;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.EntityPathBase;

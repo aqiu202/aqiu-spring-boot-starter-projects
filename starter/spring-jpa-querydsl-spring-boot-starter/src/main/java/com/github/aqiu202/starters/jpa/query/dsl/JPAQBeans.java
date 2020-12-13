@@ -16,7 +16,7 @@ package com.github.aqiu202.starters.jpa.query.dsl;
 import com.github.aqiu202.starters.jpa.type.DefaultTypeConverter;
 import com.github.aqiu202.starters.jpa.type.TypeConverter;
 import com.github.aqiu202.starters.jpa.util.JPAPathCacheUtils;
-import com.github.aqiu202.starters.jpa.wrap.ObjectWrapper;
+import com.github.aqiu202.util.wrap.ObjectWrapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Primitives;
 import com.querydsl.core.group.GroupExpression;

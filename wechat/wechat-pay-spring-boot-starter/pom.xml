@@ -5,7 +5,7 @@
     <parent>
         <artifactId>wechat</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,11 +29,6 @@
                     <groupId>commons-codec</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

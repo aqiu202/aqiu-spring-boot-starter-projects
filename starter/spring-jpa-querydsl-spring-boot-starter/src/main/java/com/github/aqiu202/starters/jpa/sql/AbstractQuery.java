@@ -4,8 +4,9 @@ import com.github.aqiu202.starters.jpa.page.PageParam;
 import com.github.aqiu202.starters.jpa.sql.trans.BeanTransformerAdapter;
 import com.github.aqiu202.starters.jpa.sql.trans.SimpleTransformer;
 import com.github.aqiu202.starters.jpa.sql.trans.inter.AnonymousResultTransformer;
-import com.github.aqiu202.starters.jpa.util.CommonUtils;
 import com.github.aqiu202.starters.jpa.util.JPAExpressionSingleton;
+import com.github.aqiu202.util.CollectionUtils;
+import com.github.aqiu202.util.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.util.StringUtils;
 
 public abstract class AbstractQuery<T> extends BaseQuery<T> {
 
@@ -272,13 +272,13 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     private void fullParams(Query query) {
         // 给条件赋上值
         if (this.isItemParams) {
-            if (CommonUtils.notEmpty(this.params)) {
+            if (CollectionUtils.notEmpty(this.params)) {
                 for (int i = 0; i < this.params.length; i++) {
                     query.setParameter(i + 1, this.params[i]);
                 }
             }
         } else {
-            if (CommonUtils.notEmpty(this.parameters)) {
+            if (CollectionUtils.notEmpty(this.parameters)) {
                 for (Map.Entry<String, ?> entry : this.parameters.entrySet()) {
                     query.setParameter(entry.getKey(), entry.getValue());
                 }

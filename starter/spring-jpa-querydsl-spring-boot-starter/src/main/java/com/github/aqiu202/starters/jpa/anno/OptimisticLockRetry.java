@@ -7,6 +7,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import javax.persistence.OptimisticLockException;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.dao.OptimisticLockingFailureException;
 
@@ -17,7 +18,8 @@ import org.springframework.dao.OptimisticLockingFailureException;
 public @interface OptimisticLockRetry {
 
     @AliasFor(annotation = Retry.class)
-    Class<? extends Throwable>[] value() default {OptimisticLockingFailureException.class};
+    Class<? extends Throwable>[] value() default {OptimisticLockException.class,
+            OptimisticLockingFailureException.class};
 
     @AliasFor(annotation = Retry.class)
     Class<? extends Throwable>[] exclude() default {};
@@ -25,4 +27,9 @@ public @interface OptimisticLockRetry {
     @AliasFor(annotation = Retry.class)
     int times() default 3;
 
+    @AliasFor(annotation = Retry.class)
+    String message() default "乐观锁重试次数过多";
+
+    @AliasFor(annotation = Retry.class)
+    int delay() default 0;
 }

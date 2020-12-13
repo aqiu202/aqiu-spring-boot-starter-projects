@@ -1,6 +1,6 @@
 package com.github.aqiu202.starters.jpa.query.dsl;
 
-import com.github.aqiu202.starters.jpa.util.CommonUtils;
+import com.github.aqiu202.util.StringUtils;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
@@ -73,22 +73,22 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
 
     public NoahBooleanBuilder notEmptyAndEq(StringExpression expression,
             @Nullable String value) {
-        return this.filterAndEq(expression, value, CommonUtils::notEmpty);
+        return this.filterAndEq(expression, value, StringUtils::notEmpty);
     }
 
     public NoahBooleanBuilder notEmptyOrEq(StringExpression expression,
             @Nullable String value) {
-        return this.filterOrEq(expression, value, CommonUtils::notEmpty);
+        return this.filterOrEq(expression, value, StringUtils::notEmpty);
     }
 
     public NoahBooleanBuilder notBlankAndEq(StringExpression expression,
             @Nullable String value) {
-        return this.filterAndEq(expression, value, CommonUtils::hasText);
+        return this.filterAndEq(expression, value, StringUtils::hasText);
     }
 
     public NoahBooleanBuilder notBlankOrEq(StringExpression expression,
             @Nullable String value) {
-        return this.filterOrEq(expression, value, CommonUtils::hasText);
+        return this.filterOrEq(expression, value, StringUtils::hasText);
     }
 
     public <T> NoahBooleanBuilder notNullAndEq(
@@ -103,22 +103,22 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
 
     public NoahBooleanBuilder notEmptyAndLike(
             StringExpression expression, @Nullable String value) {
-        return this.filterAndLike(expression, value, CommonUtils::notEmpty);
+        return this.filterAndLike(expression, value, StringUtils::notEmpty);
     }
 
     public NoahBooleanBuilder notBlankAndLike(
             StringExpression expression, @Nullable String value) {
-        return this.filterAndLike(expression, value, CommonUtils::hasText);
+        return this.filterAndLike(expression, value, StringUtils::hasText);
     }
 
     public NoahBooleanBuilder notEmptyOrLike(
             StringExpression expression, @Nullable String value) {
-        return this.filterOrLike(expression, value, CommonUtils::notEmpty);
+        return this.filterOrLike(expression, value, StringUtils::notEmpty);
     }
 
     public NoahBooleanBuilder notBlankOrLike(
             StringExpression expression, @Nullable String value) {
-        return this.filterOrLike(expression, value, CommonUtils::hasText);
+        return this.filterOrLike(expression, value, StringUtils::hasText);
     }
 
     public NoahBooleanBuilder filterAndLike(

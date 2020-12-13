@@ -1,7 +1,7 @@
 package com.github.aqiu202.ttl.data.impl;
 
 
-import com.github.aqiu202.ttl.wrap.BooleanWrapper;
+import com.github.aqiu202.util.wrap.BooleanWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.HashMap;

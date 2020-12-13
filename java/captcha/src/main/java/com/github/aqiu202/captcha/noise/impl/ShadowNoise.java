@@ -2,7 +2,7 @@ package com.github.aqiu202.captcha.noise.impl;
 
 import com.github.aqiu202.captcha.noise.abs.AbstractFilterableNoiseProducer;
 import com.github.aqiu202.captcha.props.CaptchaProperties.ShadowProperties;
-import com.github.aqiu202.captcha.util.RandomUtils;
+import com.github.aqiu202.util.RandomUtils;
 import com.jhlabs.image.ShadowFilter;
 import java.awt.image.BufferedImage;
 import javax.annotation.Nonnull;

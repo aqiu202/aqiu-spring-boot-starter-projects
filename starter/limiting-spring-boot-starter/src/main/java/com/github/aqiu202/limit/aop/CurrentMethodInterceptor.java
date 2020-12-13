@@ -1,11 +1,12 @@
 package com.github.aqiu202.limit.aop;
 
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
-import com.github.aqiu202.aop.spel.EvaluationFiller;
+import com.github.aqiu202.util.spel.EvaluationFiller;
 import com.github.aqiu202.limit.anno.CurrentLimiting;
 import com.google.common.util.concurrent.RateLimiter;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * <pre>令牌桶算法限流</pre>
@@ -34,7 +35,7 @@ public class CurrentMethodInterceptor extends AbstractKeyAnnotationInterceptor<C
     }
 
     @Override
-    protected void beforeIntercept(CurrentLimiting currentLimiting, String key) {
+    protected void beforeIntercept(MethodInvocation invocation, CurrentLimiting currentLimiting, String key) {
         RateLimiter limiter;
         if ((limiter = rateLimiterMap.get(key)) == null) {
             limiter = RateLimiter.create(currentLimiting.permits());

@@ -3,7 +3,7 @@ package com.github.aqiu202.limit.config;
 
 import com.github.aqiu202.aop.keygen.KeyGenerator;
 import com.github.aqiu202.aop.pointcut.AnnotationPointcutAdvisor;
-import com.github.aqiu202.aop.spel.EvaluationFiller;
+import com.github.aqiu202.util.spel.EvaluationFiller;
 import com.github.aqiu202.limit.anno.CurrentLimiting;
 import com.github.aqiu202.limit.anno.RepeatLimiting;
 import com.github.aqiu202.limit.anno.ThreadLimiting;
@@ -52,7 +52,7 @@ public class LimitingConfiguration {
     @Bean(KeyGenerator.DEFAULT_METHOD_KEY_GENERATOR)
     @ConditionalOnMissingBean(name = KeyGenerator.DEFAULT_METHOD_KEY_GENERATOR)
     public KeyGenerator methodKeyGenerator() {
-        return (request, target, method, params) -> {
+        return (target, method, params) -> {
             StringJoiner joiner = new StringJoiner(",");
             for (Object param : params) {
                 joiner.add(param.getClass().getName());

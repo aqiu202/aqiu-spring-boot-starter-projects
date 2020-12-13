@@ -5,7 +5,7 @@
     <parent>
         <artifactId>starter</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -22,8 +22,8 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
+            <groupId>com.github.aqiu202</groupId>
+            <artifactId>spring-aop-core</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -46,9 +46,16 @@
             <artifactId>pageable-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-configuration-processor</artifactId>
-            <optional>true</optional>
+            <groupId>com.github.aqiu202</groupId>
+            <artifactId>basic-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aqiu202</groupId>
+            <artifactId>bean-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aqiu202</groupId>
+            <artifactId>spring-utils</artifactId>
         </dependency>
     </dependencies>
 </project>

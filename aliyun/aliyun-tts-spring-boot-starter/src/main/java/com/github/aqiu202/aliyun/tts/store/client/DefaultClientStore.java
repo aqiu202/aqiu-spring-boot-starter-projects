@@ -4,8 +4,8 @@ import com.alibaba.nls.client.protocol.NlsClient;
 import com.github.aqiu202.aliyun.tts.config.TtsToken;
 import com.github.aqiu202.aliyun.tts.store.SimpleTokenStore;
 import com.github.aqiu202.aliyun.tts.store.TokenStore;
+import com.github.aqiu202.util.StringUtils;
 import java.util.Objects;
-import org.springframework.util.StringUtils;
 
 public class DefaultClientStore implements ClientStore {
 

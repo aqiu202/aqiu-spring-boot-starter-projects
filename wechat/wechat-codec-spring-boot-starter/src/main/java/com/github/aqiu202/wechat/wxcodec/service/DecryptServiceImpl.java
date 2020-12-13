@@ -4,14 +4,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.github.aqiu202.util.AESUtils;
+import com.github.aqiu202.util.MD5Utils;
+import com.github.aqiu202.util.StringUtils;
 import com.github.aqiu202.wechat.wxcodec.bean.WxCodecProperty;
-import com.github.aqiu202.wechat.wxcodec.encoder.AES;
 import com.github.aqiu202.wechat.wxcodec.encoder.WxPKCS7Encoder;
-import com.github.aqiu202.wechat.wxcodec.util.MD5;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import org.apache.commons.codec.binary.Base64;
-import org.springframework.util.StringUtils;
+import java.util.Base64;
+import java.util.Base64.Decoder;
 import org.springframework.web.client.RestTemplate;
 
 public class DecryptServiceImpl implements DecryptService {
@@ -56,10 +57,11 @@ public class DecryptServiceImpl implements DecryptService {
     public JsonNode decrypt(String encryptedData, String sessionKey, String iv) {
         String result = null;
         byte[] resultByte;
+        final Decoder decoder = Base64.getDecoder();
         try {
-            resultByte = AES
-                    .decrypt(Base64.decodeBase64(encryptedData), Base64.decodeBase64(sessionKey),
-                            Base64.decodeBase64(iv));
+            resultByte = AESUtils
+                    .decrypt(decoder.decode(encryptedData), decoder.decode(sessionKey),
+                            decoder.decode(iv));
             if (null != resultByte && resultByte.length > 0) {
                 result = new String(WxPKCS7Encoder.decode(resultByte));
             }
@@ -99,8 +101,9 @@ public class DecryptServiceImpl implements DecryptService {
      **/
     @Override
     public String decodeRefundInfo(String content, String apiKey) {
-        String key = MD5.encode(apiKey);
-        byte[] bytes = AES.decrypt(Base64.decodeBase64(content), key.getBytes());
+        final Decoder decoder = Base64.getDecoder();
+        String key = MD5Utils.encode(apiKey);
+        byte[] bytes = AESUtils.decrypt(decoder.decode(content), key.getBytes());
         if (bytes == null) {
             return null;
         }

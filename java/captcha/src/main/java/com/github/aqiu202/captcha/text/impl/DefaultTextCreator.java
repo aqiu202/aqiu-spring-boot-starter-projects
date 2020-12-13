@@ -2,7 +2,7 @@ package com.github.aqiu202.captcha.text.impl;
 
 import com.github.aqiu202.captcha.props.CaptchaProperties.WordProperties;
 import com.github.aqiu202.captcha.text.TextProducer;
-import com.github.aqiu202.captcha.util.RandomUtils;
+import com.github.aqiu202.util.RandomUtils;
 import javax.annotation.Nonnull;
 
 /**

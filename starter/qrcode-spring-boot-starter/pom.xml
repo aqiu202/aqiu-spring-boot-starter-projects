@@ -5,7 +5,7 @@
     <parent>
         <artifactId>starter</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -18,15 +18,15 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
         <!--二维码-->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>${zxing.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aqiu202</groupId>
+            <artifactId>spring-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

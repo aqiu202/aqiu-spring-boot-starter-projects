@@ -10,7 +10,7 @@ import com.github.aqiu202.lock.distributed.ReentrantRedisTtlLock;
 import com.github.aqiu202.lock.distributed.ZookeeperLock;
 import com.github.aqiu202.qlock.config.QLockAutoConfiguration;
 import com.github.aqiu202.qlock.config.QLockConfigRegistrar;
-import com.github.aqiu202.qlock.config.TtlLockCacheConfigRegistrar;
+import com.github.aqiu202.qlock.config.QLockZkCuratorSelector;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -28,7 +28,8 @@ import org.springframework.core.annotation.AliasFor;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-@Import({TtlLockCacheConfigRegistrar.class, QLockConfigRegistrar.class,
+@Import({QLockZkCuratorSelector.class,
+        QLockConfigRegistrar.class,
         QLockAutoConfiguration.class})
 public @interface EnableQLock {
 
@@ -68,7 +69,8 @@ public @interface EnableQLock {
         LockMode(CacheMode cacheMode, Class<? extends Lock> lockClass) {
             this(cacheMode, lockClass, false);
         }
-       LockMode(CacheMode cacheMode, Class<? extends Lock> lockClass, boolean hasIdGenerator) {
+
+        LockMode(CacheMode cacheMode, Class<? extends Lock> lockClass, boolean hasIdGenerator) {
             this.cacheMode = cacheMode;
             this.lockClass = lockClass;
             this.hasIdGenerator = hasIdGenerator;
@@ -90,9 +92,8 @@ public @interface EnableQLock {
 
     /**
      * 是否另外注册缓存
-     * @return
-     * false (默认)使用ttl-cache-spring-boot-starter内置缓存
-     * true 重新注册ttl-cache缓存
+     *
+     * @return false (默认)使用ttl-cache-spring-boot-starter内置缓存 true 重新注册ttl-cache缓存
      */
     boolean otherCaching() default false;
 

@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.github.aqiu202</groupId>
         <artifactId>aqiu-spring-boot-starter-projects</artifactId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -23,10 +23,12 @@
     </modules>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
         <guava.version>29.0-jre</guava.version>
         <curator.version>5.1.0</curator.version>
+        <reflectasm.version>1.11.9</reflectasm.version>
+        <jsr-305.version>3.0.2</jsr-305.version>
     </properties>
 
     <dependencyManagement>
@@ -108,7 +110,7 @@
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
-                <artifactId>spring-aop-web</artifactId>
+                <artifactId>spring-aop-core</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
             <dependency>
@@ -143,10 +145,63 @@
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
+                <artifactId>zk-curator-spring-boot-starter</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>zk-curator-core</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
                 <artifactId>pageable-core</artifactId>
                 <version>${project.parent.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>spring-utils</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.esotericsoftware</groupId>
+                <artifactId>reflectasm</artifactId>
+                <version>${reflectasm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>basic-utils</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>bean-utils</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>codec-utils</artifactId>
+                <version>${project.parent.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>3.0.2</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>${jsr-305.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
 </project>

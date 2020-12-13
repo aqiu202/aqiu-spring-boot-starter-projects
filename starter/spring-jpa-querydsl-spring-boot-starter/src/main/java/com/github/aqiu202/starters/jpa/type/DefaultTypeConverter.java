@@ -1,6 +1,6 @@
 package com.github.aqiu202.starters.jpa.type;
 
-import com.github.aqiu202.starters.jpa.wrap.ObjectWrapper;
+import com.github.aqiu202.util.wrap.ObjectWrapper;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Date;

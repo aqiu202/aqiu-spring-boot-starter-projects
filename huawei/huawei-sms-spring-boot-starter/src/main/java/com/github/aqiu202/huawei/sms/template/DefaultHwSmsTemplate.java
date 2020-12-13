@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.aqiu202.api.sms.exp.SmsException;
 import com.github.aqiu202.api.sms.param.SmsRequest;
 import com.github.aqiu202.huawei.sms.bean.HwSmsProperty;
+import com.github.aqiu202.util.StringUtils;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
@@ -36,7 +37,6 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 public class DefaultHwSmsTemplate implements HwSmsTemplate {
 

@@ -1,12 +1,13 @@
 package com.github.aqiu202.starters.jpa.sql.trans;
 
-import com.github.aqiu202.starters.jpa.bean.JavaBeanMethod;
-import com.github.aqiu202.starters.jpa.wrap.ObjectWrapper;
 import com.github.aqiu202.starters.jpa.sql.trans.inter.ChangeableTransformer;
 import com.github.aqiu202.starters.jpa.type.DefaultTypeConverter;
 import com.github.aqiu202.starters.jpa.type.TypeConverter;
-import com.github.aqiu202.starters.jpa.util.BeanUtils;
-import com.github.aqiu202.starters.jpa.util.CommonUtils;
+import com.github.aqiu202.util.BeanUtils;
+import com.github.aqiu202.util.PropertyNameUtils;
+import com.github.aqiu202.util.TypeUtils;
+import com.github.aqiu202.util.bean.JavaBeanMethod;
+import com.github.aqiu202.util.wrap.ObjectWrapper;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public final class BeanTransformerAdapter<T> implements ChangeableTransformer<T>
                 if (method != null) {
                     Class<?> type = method.getType();
                     ObjectWrapper wrapper;
-                    if (value != null && CommonUtils.notAssignableFrom(type, value.getClass())) {
+                    if (value != null && TypeUtils.notAssignableFrom(type, value.getClass())) {
                         wrapper = new ObjectWrapper(value);
                         typeConverter.convert(wrapper, type);
                         value = wrapper.get();
@@ -122,7 +123,7 @@ public final class BeanTransformerAdapter<T> implements ChangeableTransformer<T>
         }
         for (JavaBeanMethod method : ms) {
             String fieldName = method.getFieldName();
-            String underscoredName = CommonUtils.underline(fieldName);
+            String underscoredName = PropertyNameUtils.underline(fieldName);
             if (fieldName.length() != underscoredName.length()) {
                 this.methodMappings.put(underscoredName, method);
             }

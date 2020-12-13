@@ -2,8 +2,8 @@ package com.github.aqiu202.captcha.noise.impl;
 
 import com.github.aqiu202.captcha.noise.SimpleNoiseProducer;
 import com.github.aqiu202.captcha.props.CaptchaProperties.LineProperties;
-import com.github.aqiu202.captcha.util.ColorUtils;
-import com.github.aqiu202.captcha.util.RandomUtils;
+import com.github.aqiu202.util.ColorUtils;
+import com.github.aqiu202.util.RandomUtils;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;

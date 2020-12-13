@@ -1,14 +1,12 @@
 package com.github.aqiu202.limit.aop;
 
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
-import com.github.aqiu202.aop.spel.EvaluationFiller;
+import com.github.aqiu202.util.spel.EvaluationFiller;
 import com.github.aqiu202.limit.anno.ThreadLimiting;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
+import org.aopalliance.intercept.MethodInvocation;
 
 /**
  * <pre>并发线程数限流</pre>
@@ -38,10 +36,10 @@ public class ThreadMethodInterceptor extends AbstractKeyAnnotationInterceptor<Th
     }
 
     @Override
-    protected void beforeIntercept(ThreadLimiting threadLimiting, String key) {
+    protected void beforeIntercept(MethodInvocation invocation, ThreadLimiting threadLimiting, String key) {
         Semaphore semaphore;
         if ((semaphore = semaphoreMap.get(key)) == null) {
-            semaphore = new Semaphore(threadLimiting.threads(), true);
+            semaphore = new Semaphore(threadLimiting.threads());
             semaphoreMap.put(key, semaphore);
         }
         if (!semaphore.tryAcquire()) {
@@ -50,7 +48,7 @@ public class ThreadMethodInterceptor extends AbstractKeyAnnotationInterceptor<Th
     }
 
     @Override
-    protected void afterIntercept(ThreadLimiting threadLimiting, String key, Throwable throwable) {
+    protected void afterIntercept(MethodInvocation invocation, ThreadLimiting threadLimiting, String key, Throwable throwable) {
         Semaphore semaphore = semaphoreMap.get(key);
         if (semaphore != null) {
             semaphore.release();

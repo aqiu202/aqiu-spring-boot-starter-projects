@@ -2,8 +2,8 @@ package com.github.aqiu202.captcha.text.impl;
 
 import com.github.aqiu202.captcha.props.CaptchaProperties.RenderProperties;
 import com.github.aqiu202.captcha.text.WordRenderer;
-import com.github.aqiu202.captcha.util.ColorUtils;
-import com.github.aqiu202.captcha.util.RandomUtils;
+import com.github.aqiu202.util.ColorUtils;
+import com.github.aqiu202.util.RandomUtils;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;

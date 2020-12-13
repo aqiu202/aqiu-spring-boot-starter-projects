@@ -2,7 +2,7 @@ package com.github.aqiu202.captcha.background.impl;
 
 import com.github.aqiu202.captcha.background.BackgroundProducer;
 import com.github.aqiu202.captcha.props.CaptchaProperties.BackgroundProperties;
-import com.github.aqiu202.captcha.util.ColorUtils;
+import com.github.aqiu202.util.ColorUtils;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;

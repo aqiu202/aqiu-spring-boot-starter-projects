@@ -5,7 +5,7 @@
     <parent>
         <artifactId>java</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.3</version>
+        <version>1.0.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -25,17 +25,15 @@
             <artifactId>filters</artifactId>
             <version>${jhlabs.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305 -->
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>${jsr305.version}</version>
-        </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>${servlet-api.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aqiu202</groupId>
+            <artifactId>basic-utils</artifactId>
         </dependency>
     </dependencies>
 
