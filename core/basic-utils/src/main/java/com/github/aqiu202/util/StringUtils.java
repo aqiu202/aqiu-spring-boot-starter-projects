@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
  **/
 public abstract class StringUtils {
 
-    private final static Logger log = LoggerFactory.getLogger(StringUtils.class);
+    private static final Logger log = LoggerFactory.getLogger(StringUtils.class);
 
     /**
      * 占位符前缀: "{"

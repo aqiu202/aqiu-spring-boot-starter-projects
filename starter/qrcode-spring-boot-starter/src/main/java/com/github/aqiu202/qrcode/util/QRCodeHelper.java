@@ -31,7 +31,7 @@ import javax.imageio.ImageIO;
  */
 public final class QRCodeHelper {
 
-    private final static QrCodeProperties DEFAULT_CONFIGURATION = new QrCodeProperties();
+    private static final QrCodeProperties DEFAULT_CONFIGURATION = new QrCodeProperties();
 
     /**
      * 生成二维码

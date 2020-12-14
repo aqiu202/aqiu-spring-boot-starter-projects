@@ -331,7 +331,7 @@ public class WXPayUtil {
         return new StringHandlerBuilder(result);
     }
 
-    public final static class MapHandlerBuilder extends Responseable {
+    public static final class MapHandlerBuilder extends Responseable {
 
         private final Map<String, String> data;
 
@@ -346,7 +346,7 @@ public class WXPayUtil {
 
     }
 
-    public final static class StringHandlerBuilder extends Responseable {
+    public static final class StringHandlerBuilder extends Responseable {
 
         private final String data;
 

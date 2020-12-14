@@ -7,42 +7,42 @@ public class BaseSqlBuilder implements SqlBuilder {
 
     private final StringBuilder builder;
 
-    private final static char empty = ' ';
-    private final static char split = ',';
-    private final static String splitStr = ",";
+    private static final char empty = ' ';
+    private static final char split = ',';
+    private static final String splitStr = ",";
 
-    private final static String HANDLE_STR_SELECT = "SELECT";
-    private final static String HANDLE_STR_UPDATE = "UPDATE";
-    private final static String HANDLE_STR_DELETE = "DELETE";
+    private static final String HANDLE_STR_SELECT = "SELECT";
+    private static final String HANDLE_STR_UPDATE = "UPDATE";
+    private static final String HANDLE_STR_DELETE = "DELETE";
 
-    private final static String SQL_STR_FROM = "FROM";
-    private final static String SQL_STR_LEFT_JOIN = "LEFT JOIN";
-    private final static String SQL_STR_RIGHT_JOIN = "RIGHT JOIN";
-    private final static String SQL_STR_INNER_JOIN = "INNER JOIN";
-    private final static String SQL_STR_WHERE = "WHERE";
-    private final static String SQL_STR_ON = "ON";
-    private final static String SQL_STR_AND = "AND";
-    private final static String SQL_STR_OR = "OR";
-    private final static String SQL_STR_AS = "AS";
-    private final static String SQL_STR_HAVING = "HAVING";
-    private final static String SQL_STR_GROUP_BY = "GROUP BY";
-    private final static String SQL_STR_LIKE = "LIKE";
-    private final static String SQL_STR_CONCAT = "CONCAT";
-    private final static String SQL_STR_SET = "SET";
-    private final static char SQL_STR_EQ = '=';
-    private final static char SQL_STR_GT = '>';
-    private final static char SQL_STR_LT = '<';
-    private final static String SQL_STR_LIKE_DLI = "'%'";
-    private final static char SQL_CHAR_LIKE_DLI = '%';
-    private final static char SQL_CHAR_QUOT = '\'';
-    private final static String SQL_STR_NEQ = "!=";
-    private final static String SQL_STR_LE = "<=";
-    private final static String SQL_STR_GE = ">=";
-    private final static String SQL_STR_IN = "IN";
-    private final static char SQL_STR_NAME_PARAM_PREFIX = ':';
-    private final static char SQL_STR_INDEX_PARAM_PREFIX = '?';
-    private final static String SQL_STR_NAME_PARAM_PREFIX_S = ":";
-    private final static String SQL_STR_INDEX_PARAM_PREFIX_S = "?";
+    private static final String SQL_STR_FROM = "FROM";
+    private static final String SQL_STR_LEFT_JOIN = "LEFT JOIN";
+    private static final String SQL_STR_RIGHT_JOIN = "RIGHT JOIN";
+    private static final String SQL_STR_INNER_JOIN = "INNER JOIN";
+    private static final String SQL_STR_WHERE = "WHERE";
+    private static final String SQL_STR_ON = "ON";
+    private static final String SQL_STR_AND = "AND";
+    private static final String SQL_STR_OR = "OR";
+    private static final String SQL_STR_AS = "AS";
+    private static final String SQL_STR_HAVING = "HAVING";
+    private static final String SQL_STR_GROUP_BY = "GROUP BY";
+    private static final String SQL_STR_LIKE = "LIKE";
+    private static final String SQL_STR_CONCAT = "CONCAT";
+    private static final String SQL_STR_SET = "SET";
+    private static final char SQL_STR_EQ = '=';
+    private static final char SQL_STR_GT = '>';
+    private static final char SQL_STR_LT = '<';
+    private static final String SQL_STR_LIKE_DLI = "'%'";
+    private static final char SQL_CHAR_LIKE_DLI = '%';
+    private static final char SQL_CHAR_QUOT = '\'';
+    private static final String SQL_STR_NEQ = "!=";
+    private static final String SQL_STR_LE = "<=";
+    private static final String SQL_STR_GE = ">=";
+    private static final String SQL_STR_IN = "IN";
+    private static final char SQL_STR_NAME_PARAM_PREFIX = ':';
+    private static final char SQL_STR_INDEX_PARAM_PREFIX = '?';
+    private static final String SQL_STR_NAME_PARAM_PREFIX_S = ":";
+    private static final String SQL_STR_INDEX_PARAM_PREFIX_S = "?";
 
     private BaseSqlBuilder(StringBuilder builder) {
         this.builder = builder;
