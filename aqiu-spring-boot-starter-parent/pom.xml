@@ -13,7 +13,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>../java</module>
+        <module>../core</module>
         <module>../starter</module>
         <module>../api</module>
         <module>../aurora</module>

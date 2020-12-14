@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <artifactId>java</artifactId>
+        <artifactId>core</artifactId>
         <groupId>com.github.aqiu202</groupId>
         <version>1.0.4</version>
     </parent>
