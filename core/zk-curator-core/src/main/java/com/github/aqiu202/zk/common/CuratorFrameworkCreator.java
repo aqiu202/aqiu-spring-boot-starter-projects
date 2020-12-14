@@ -22,7 +22,9 @@ public abstract class CuratorFrameworkCreator {
             RetryPolicy retryPolicy) {
         final Builder builder = CuratorFrameworkFactory.builder()
                 .retryPolicy(retryPolicy)
-                .connectString(properties.getConnectString());
+                .connectString(properties.getConnectString())
+                .sessionTimeoutMs(properties.getSessionTimeout())
+                .connectionTimeoutMs(properties.getConnectionTimeout());
         final List<AuthInfoProperties> auth = properties.getAuth();
         if (!auth.isEmpty()) {
             builder.authorization(

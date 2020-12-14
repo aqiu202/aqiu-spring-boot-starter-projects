@@ -26,7 +26,7 @@ public @interface CurrentLimiting {
 
     String message() default "服务器繁忙，请稍后再试";
 
-    String keyGenerator() default KeyGenerator.DEFAULT_METHOD_KEY_GENERATOR;
+    String keyGenerator() default "";
 
     /**
      * key设置

@@ -46,7 +46,9 @@ public class KenGeneratorConfig {
     //配置通过token生成key的规则（防重复提交默认还会添加sessionID标识，详情查看SimpleKeyGenerator类）
     @Bean(name = "keyGeneratorWithToken")
     public KeyGenerator keyGeneratorWithToken() {
-        return (request, target, method, params) -> {
+        return (target, method, params) -> {
+            HttpServletRequest request = ServletRequestUtils
+                    .getCurrentRequest();
             StringJoiner joiner = new StringJoiner(",");
             for (Object param : params) {
                 joiner.add(param.getClass().getName());
@@ -58,19 +60,9 @@ public class KenGeneratorConfig {
         };
     }
 
-    //配置通过方法生成key的规则（已内置名称为methodKeyGenerator的方法生成规则，自定义的配置会覆盖该规则）
-    //并发数的限制和令牌桶算法的限流方式默认使用该规则生成key
-    @Bean(name = KeyGenerator.DEFAULT_METHOD_KEY_GENERATOR)
-    public KeyGenerator methodKeyGenerator() {
-        return (request, target, method, params) -> {
-           StringJoiner joiner = new StringJoiner(",");
-           for (Object param : params) {
-               joiner.add(param.getClass().getName());
-           }
-           return target.getClass().getName().concat(":").concat(method.getName()).concat(":")
-                   .concat(joiner.toString());
-        };
-    }
+    //配置通过方法生成key的规则（已内置名称为sessionMethodKeyGenerator的方法生成规则，自定义的配置会覆盖该规则）
+    //防重复提交默认使用SessionMethodKeyGenerator规则生成key
+    //并发数的限制和令牌桶算法的限流方式默认使用MethodKeyGenerator规则生成key
 
 }
 ```
@@ -110,7 +102,7 @@ public class UploadController {
 
 }
 ```
-3.进阶：spEl扩展，通过EvaluationFiller扩展自定义全局SpEl变量
+3.进阶：SpEl扩展，通过EvaluationFiller扩展自定义全局SpEl变量
 ```java
 public class SpElConfiguration {
     @Bean

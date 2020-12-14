@@ -30,6 +30,11 @@
             <groupId>com.github.aqiu202</groupId>
             <artifactId>qlock-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
 </project>

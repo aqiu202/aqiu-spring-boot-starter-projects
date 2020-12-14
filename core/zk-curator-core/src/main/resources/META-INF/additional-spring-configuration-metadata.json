@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "curator",
+      "type": "com.github.aqiu202.zk.prop.CuratorProperties",
+      "sourceType": "com.github.aqiu202.zk.prop.CuratorProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "curator.auth",
+      "type": "java.util.List<com.github.aqiu202.zk.prop.AuthInfoProperties>",
+      "sourceType": "com.github.aqiu202.zk.prop.CuratorProperties"
+    },
+    {
+      "name": "curator.base-sleep-time",
+      "type": "java.lang.Integer",
+      "sourceType": "com.github.aqiu202.zk.prop.CuratorProperties"
+    },
+    {
+      "name": "curator.connect-string",
+      "type": "java.lang.String",
+      "sourceType": "com.github.aqiu202.zk.prop.CuratorProperties"
+    },
+    {
+      "name": "curator.connection-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.github.aqiu202.zk.prop.CuratorProperties"
+    },
+    {
+      "name": "curator.max-retries",
+      "type": "java.lang.Integer",
+      "sourceType": "com.github.aqiu202.zk.prop.CuratorProperties"
+    },
+    {
+      "name": "curator.max-sleep-time",
+      "type": "java.lang.Integer",
+      "sourceType": "com.github.aqiu202.zk.prop.CuratorProperties"
+    },
+    {
+      "name": "curator.session-timeout",
+      "type": "java.lang.Integer",
+      "sourceType": "com.github.aqiu202.zk.prop.CuratorProperties"
+    }
+  ],
+  "hints": []
+}

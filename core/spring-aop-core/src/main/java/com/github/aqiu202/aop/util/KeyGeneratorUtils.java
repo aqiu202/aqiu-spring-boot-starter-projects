@@ -1,7 +1,7 @@
 package com.github.aqiu202.aop.util;
 
 import com.github.aqiu202.aop.keygen.KeyGenerator;
-import com.github.aqiu202.aop.keygen.impl.SimpleKeyGenerator;
+import com.github.aqiu202.aop.keygen.impl.MethodKeyGenerator;
 import com.github.aqiu202.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ public abstract class KeyGeneratorUtils {
 
     private static final Logger log = LoggerFactory.getLogger(KeyGeneratorUtils.class);
 
-    private static final KeyGenerator defaultKeyGenerator = new SimpleKeyGenerator();
+    private static final KeyGenerator defaultKeyGenerator = new MethodKeyGenerator();
 
     @NonNull
     public static KeyGenerator getKeyGenerator(String keyGeneratorName,

@@ -12,6 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.util.concurrent.TimeUnit;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.annotation.AliasFor;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -43,7 +44,10 @@ public @interface EnableTtlCaching {
         }
     }
 
+    @AliasFor("cacheMode")
+    CacheMode value() default CacheMode.caffeine;
 
+    @AliasFor("value")
     CacheMode cacheMode() default CacheMode.caffeine;
 
     /**
