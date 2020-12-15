@@ -6,9 +6,6 @@ import com.github.aqiu202.id.type.IdType;
 import com.github.aqiu202.qlock.anno.EnableQLock;
 import com.github.aqiu202.qlock.anno.EnableQLock.LockMode;
 import com.github.aqiu202.qlock.id.SimpleIdGeneratorFactory;
-import com.github.aqiu202.ttl.data.StringTtlCache;
-import com.github.aqiu202.ttl.data.impl.AbstractTtlCache;
-import com.github.aqiu202.ttl.data.str.StringRedisCache;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -16,8 +13,6 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
 
 /**
  * <pre>QLockRegistrar</pre>
@@ -27,6 +22,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 public class QLockConfigRegistrar implements ImportBeanDefinitionRegistrar {
 
     public static final String QLOCK_BEAN_NAME = "qLock";
+    public static final String QLOCK_STRING_TTL_CACHE_BEAN_NAME = "qLockStringTtlCache";
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
@@ -39,7 +35,8 @@ public class QLockConfigRegistrar implements ImportBeanDefinitionRegistrar {
         if (lockMode.isHasIdGenerator()) {
             final IdType idType = attributes.getEnum("idType");
             if (!IdType.AUTO.equals(idType)) {
-                bdb.addPropertyValue("idGeneratorFactory", new SimpleIdGeneratorFactory<>(idType));
+                bdb.addPropertyValue("idGeneratorFactory",
+                        new SimpleIdGeneratorFactory<>((BeanFactory) registry, idType));
             } else {
                 bdb.addAutowiredProperty("idGenerator");
             }
@@ -51,40 +48,13 @@ public class QLockConfigRegistrar implements ImportBeanDefinitionRegistrar {
             long timeout = attributes.getNumber("timeout");
             TimeUnit timeUnit = attributes.getEnum("timeUnit");
             final CacheMode cacheMode = lockMode.getCacheMode();
-            if (otherCaching) {
-                bdb.addPropertyValue("cache",
-                        this.createOtherCache(((BeanFactory) registry),
-                                cacheMode.getStringCacheClass(), timeout,
-                                timeUnit));
-            } else {
-                String beanName = TtlCacheConfigRegistrar.SIMPLE_STRING_TTL_CACHE_BEAN_NAME;
-                TtlCacheConfigRegistrar.registerStringTtlCacheBean(registry, beanName,
-                        cacheMode.getStringCacheClass(), timeout, timeUnit);
-                bdb.addPropertyReference("cache", beanName);
-            }
+            String beanName = otherCaching ? QLOCK_STRING_TTL_CACHE_BEAN_NAME
+                    : TtlCacheConfigRegistrar.SIMPLE_STRING_TTL_CACHE_BEAN_NAME;
+            TtlCacheConfigRegistrar.registerStringTtlCacheBean(registry, beanName,
+                    cacheMode.getStringCacheClass(), timeout, timeUnit);
+            bdb.addPropertyReference("cache", beanName);
         }
         registry.registerBeanDefinition(QLOCK_BEAN_NAME, bdb.getBeanDefinition());
-    }
-
-    private StringTtlCache createOtherCache(BeanFactory beanFactory,
-            Class<? extends StringTtlCache> type,
-            long timeout, TimeUnit timeUnit) {
-        try {
-            StringTtlCache cache = type.newInstance();
-            if (cache instanceof AbstractTtlCache) {
-                AbstractTtlCache abstractTtlCache = (AbstractTtlCache) cache;
-                abstractTtlCache.setTimeout(timeout);
-                abstractTtlCache.setTimeUnit(timeUnit);
-            }
-            if (cache instanceof StringRedisCache) {
-                final StringRedisCache redisCache = (StringRedisCache) cache;
-                redisCache.setCache(new StringRedisTemplate(beanFactory.getBean(
-                        RedisConnectionFactory.class)));
-            }
-            return cache;
-        } catch (InstantiationException | IllegalAccessException e) {
-            throw new IllegalArgumentException("初始化StringTtlCache失败", e);
-        }
     }
 
 }

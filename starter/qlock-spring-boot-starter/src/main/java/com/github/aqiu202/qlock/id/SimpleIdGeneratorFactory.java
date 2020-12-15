@@ -5,8 +5,7 @@ import com.github.aqiu202.id.IdGeneratorFactory;
 import com.github.aqiu202.id.generator.RedisIdGenerator;
 import com.github.aqiu202.id.type.IdType;
 import java.io.Serializable;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.lang.NonNull;
 
@@ -15,20 +14,15 @@ import org.springframework.lang.NonNull;
  *
  * @author aqiu 2020/12/10 1:50
  **/
-public class SimpleIdGeneratorFactory<T extends Serializable> implements IdGeneratorFactory<T>,
-        ApplicationContextAware {
+public class SimpleIdGeneratorFactory<T extends Serializable> implements IdGeneratorFactory<T> {
 
-    private ApplicationContext applicationContext;
+    private final BeanFactory beanFactory;
 
     private final IdType idType;
 
-    public SimpleIdGeneratorFactory(IdType idType) {
+    public SimpleIdGeneratorFactory(BeanFactory beanFactory, IdType idType) {
+        this.beanFactory = beanFactory;
         this.idType = idType;
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
     }
 
     @NonNull
@@ -44,7 +38,7 @@ public class SimpleIdGeneratorFactory<T extends Serializable> implements IdGener
             final RedisIdGenerator redisIdGenerator = (RedisIdGenerator) idGenerator;
             redisIdGenerator.setKey(this.getClass().getName());
             redisIdGenerator.setConnectionFactory(
-                    this.applicationContext.getBean(RedisConnectionFactory.class));
+                    this.beanFactory.getBean(RedisConnectionFactory.class));
             redisIdGenerator.afterPropertiesSet();
         }
         return idGenerator;
