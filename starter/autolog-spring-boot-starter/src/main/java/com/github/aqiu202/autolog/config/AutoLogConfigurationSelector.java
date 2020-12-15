@@ -14,12 +14,11 @@ public class AutoLogConfigurationSelector implements ImportSelector {
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
         Map<String, Object> map = importingClassMetadata.getAnnotationAttributes(
-                EnableAutoLog.class.getName(), false);
+                EnableAutoLog.class.getName());
         if (map == null) {
             return new String[0];
         }
-        AnnotationAttributes attributes = AnnotationAttributes
-                .fromMap(map);
+        AnnotationAttributes attributes = AnnotationAttributes.fromMap(map);
         List<String> beanNames = new ArrayList<>();
         if (attributes.getBoolean("enable")) {
             beanNames.add(AutoLogConfiguration.class.getName());

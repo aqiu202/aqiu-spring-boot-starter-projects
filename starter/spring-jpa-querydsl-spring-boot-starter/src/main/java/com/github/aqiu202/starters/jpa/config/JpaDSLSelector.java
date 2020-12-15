@@ -14,12 +14,11 @@ public class JpaDSLSelector implements ImportSelector {
     @Override
     public String[] selectImports(AnnotationMetadata importingClassMetadata) {
         Map<String, Object> map = importingClassMetadata.getAnnotationAttributes(
-                EnableBaseJpaRepositories.class.getName(), false);
+                EnableBaseJpaRepositories.class.getName());
         if (map == null) {
             return new String[0];
         }
-        AnnotationAttributes attributes = AnnotationAttributes
-                .fromMap(map);
+        AnnotationAttributes attributes = AnnotationAttributes.fromMap(map);
         List<String> list = new ArrayList<>();
         boolean enableExecutors = attributes.getBoolean("enableExecutors");
         boolean enableRetry = attributes.getBoolean("enableRetry");

@@ -25,12 +25,11 @@ public class TtlCacheConfigRegistrar implements ImportBeanDefinitionRegistrar {
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
             BeanDefinitionRegistry registry) {
         Map<String, Object> map = importingClassMetadata.getAnnotationAttributes(
-                EnableTtlCaching.class.getName(), false);
+                EnableTtlCaching.class.getName());
         if (map == null) {
             return;
         }
-        AnnotationAttributes attributes = AnnotationAttributes
-                .fromMap(map);
+        AnnotationAttributes attributes = AnnotationAttributes.fromMap(map);
         CacheMode cacheMode = attributes.getEnum("cacheMode");
         if (CacheMode.none.equals(cacheMode)) {
             return;
