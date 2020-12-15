@@ -3,14 +3,19 @@ package com.github.aqiu202.ttl.data.impl;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.lang.NonNull;
+import org.springframework.util.Assert;
 
-public class RedisCache<K, V> extends AbstractTtlCache<K, V> {
+public class RedisCache<K, V> extends AbstractTtlCache<K, V> implements InitializingBean {
 
-    private final RedisTemplate<K, V> cache;
+    private RedisTemplate<K, V> cache;
 
-    public RedisCache(@NonNull RedisTemplate<K, V> cache) {
+    public RedisCache() {
+    }
+
+    public void setCache(RedisTemplate<K, V> cache) {
         this.cache = cache;
     }
 
@@ -48,4 +53,8 @@ public class RedisCache<K, V> extends AbstractTtlCache<K, V> {
         return this.cache.delete(key);
     }
 
+    @Override
+    public void afterPropertiesSet() {
+        Assert.notNull(this.cache, "RedisTemplate不能为空");
+    }
 }

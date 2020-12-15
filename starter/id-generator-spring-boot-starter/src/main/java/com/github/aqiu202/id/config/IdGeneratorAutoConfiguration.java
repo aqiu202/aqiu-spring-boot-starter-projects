@@ -19,9 +19,9 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(IdProperties.class)
 public class IdGeneratorAutoConfiguration {
 
-    public static final String ID_GENERATOR_BEAN_NAME = "idGeneratorBean";
+    public static final String ID_GENERATOR_BEAN_NAME = "idGenerator";
 
-    public static final String ID_GENERATOR_FACTORY_BEAN_NAME = "idGeneratorFactoryBean";
+    public static final String ID_GENERATOR_FACTORY_BEAN_NAME = "idGeneratorFactory";
 
     @Bean(name = ID_GENERATOR_FACTORY_BEAN_NAME)
     @ConditionalOnMissingBean(name = ID_GENERATOR_FACTORY_BEAN_NAME)
@@ -31,7 +31,7 @@ public class IdGeneratorAutoConfiguration {
 
     @Bean(name = ID_GENERATOR_BEAN_NAME)
     @ConditionalOnMissingBean(name = ID_GENERATOR_BEAN_NAME)
-    public IdGenerator idGeneratorBean(
+    public IdGenerator idGenerator(
             @Qualifier(ID_GENERATOR_FACTORY_BEAN_NAME) IdGeneratorFactory idGeneratorFactory) {
         return idGeneratorFactory.getIdGenerator();
     }

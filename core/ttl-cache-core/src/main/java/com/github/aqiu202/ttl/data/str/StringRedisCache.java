@@ -8,8 +8,4 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 public class StringRedisCache extends RedisCache<String, String> implements
         StringTtlCache {
 
-    public StringRedisCache(
-            RedisConnectionFactory connectionFactory) {
-        super(new StringRedisTemplate(connectionFactory));
-    }
 }

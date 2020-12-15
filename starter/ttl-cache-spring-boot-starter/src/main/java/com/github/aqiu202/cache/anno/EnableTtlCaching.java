@@ -2,6 +2,10 @@ package com.github.aqiu202.cache.anno;
 
 import com.github.aqiu202.cache.config.TtlCacheConfigRegistrar;
 import com.github.aqiu202.ttl.data.StringTtlCache;
+import com.github.aqiu202.ttl.data.TtlCache;
+import com.github.aqiu202.ttl.data.impl.CaffeineCache;
+import com.github.aqiu202.ttl.data.impl.GuavaCache;
+import com.github.aqiu202.ttl.data.impl.RedisCache;
 import com.github.aqiu202.ttl.data.str.StringCaffeineCache;
 import com.github.aqiu202.ttl.data.str.StringGuavaCache;
 import com.github.aqiu202.ttl.data.str.StringRedisCache;
@@ -22,26 +26,28 @@ public @interface EnableTtlCaching {
 
     enum CacheMode {
 
-        redis(StringRedisCache.class, true),
-        guava(StringGuavaCache.class, false),
-        caffeine(StringCaffeineCache.class, false),
-        none(null, false);
+        redis(RedisCache.class, StringRedisCache.class),
+        guava(GuavaCache.class, StringGuavaCache.class),
+        caffeine(CaffeineCache.class, StringCaffeineCache.class),
+        none(null, null);
 
-        private final Class<? extends StringTtlCache> clazz;
-        private final boolean autowireCandidate;
+        private final Class<? extends StringTtlCache> stringCacheClass;
+        private final Class<? extends TtlCache> cacheClass;
 
-        CacheMode(Class<? extends StringTtlCache> clazz, boolean autowireCandidate) {
-            this.clazz = clazz;
-            this.autowireCandidate = autowireCandidate;
+        CacheMode(Class<? extends TtlCache> cacheClass,
+                Class<? extends StringTtlCache> stringCacheClass) {
+            this.cacheClass = cacheClass;
+            this.stringCacheClass = stringCacheClass;
         }
 
-        public Class<?> getValue() {
-            return this.clazz;
+        public Class<? extends StringTtlCache> getStringCacheClass() {
+            return this.stringCacheClass;
         }
 
-        public boolean isAutowireCandidate() {
-            return this.autowireCandidate;
+        public Class<? extends TtlCache> getCacheClass() {
+            return this.cacheClass;
         }
+
     }
 
     @AliasFor("cacheMode")
