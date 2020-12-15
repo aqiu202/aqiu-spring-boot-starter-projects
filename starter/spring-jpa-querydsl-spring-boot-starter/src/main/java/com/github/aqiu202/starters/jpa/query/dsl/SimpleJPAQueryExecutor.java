@@ -1,11 +1,13 @@
 package com.github.aqiu202.starters.jpa.query.dsl;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.dml.InsertClause;
 import com.querydsl.core.types.EntityPath;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.JPADeleteClause;
+import com.querydsl.jpa.impl.JPAInsertClause;
 import com.querydsl.jpa.impl.JPAUpdateClause;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,7 +46,8 @@ public class SimpleJPAQueryExecutor implements JPAQueryExecutor {
         this.templates = null;
     }
 
-    public SimpleJPAQueryExecutor(@Nullable JPQLTemplates templates, Provider<EntityManager> entityManager) {
+    public SimpleJPAQueryExecutor(@Nullable JPQLTemplates templates,
+            Provider<EntityManager> entityManager) {
         this.entityManager = entityManager;
         this.templates = templates;
     }
@@ -109,6 +112,14 @@ public class SimpleJPAQueryExecutor implements JPAQueryExecutor {
             return new JPAUpdateClause(entityManager.get(), path, templates);
         } else {
             return new JPAUpdateClause(entityManager.get(), path);
+        }
+    }
+
+    public InsertClause<?> insert(EntityPath<?> path) {
+        if (templates != null) {
+            return new JPAInsertClause(entityManager.get(), path, templates);
+        } else {
+            return new JPAInsertClause(entityManager.get(), path);
         }
     }
 

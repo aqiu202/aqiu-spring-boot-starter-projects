@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.6.RELEASE</version>
+        <version>2.4.0</version>
         <relativePath/>
     </parent>
 
@@ -14,7 +14,7 @@
 
     <groupId>com.github.aqiu202</groupId>
     <artifactId>aqiu-spring-boot-starter-projects</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
     <packaging>pom</packaging>
     <url>https://github.com/aqiu202/aqiu-spring-boot-starter-projects</url>
     <description>Some Simple Starter Projects for Spring Boot Application Made by Aqiu202

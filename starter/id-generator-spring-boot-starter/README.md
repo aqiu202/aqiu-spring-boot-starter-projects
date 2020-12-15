@@ -6,7 +6,7 @@
 <dependency>
   <groupId>com.github.aqiu202</groupId>
   <artifactId>id-generator-spring-boot-starter</artifactId>
-  <version>1.0.4</version>
+  <version>1.0.5</version>
 </dependency>
 ```
 

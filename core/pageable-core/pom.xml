@@ -7,7 +7,7 @@
     <parent>
         <artifactId>core</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.4</version>
+        <version>1.0.5</version>
     </parent>
 
     <artifactId>pageable-core</artifactId>
