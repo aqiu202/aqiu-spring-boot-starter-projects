@@ -4,6 +4,7 @@ import com.github.aqiu202.util.spel.EvaluationFiller;
 import java.lang.reflect.Method;
 import org.springframework.context.expression.MethodBasedEvaluationContext;
 import org.springframework.core.DefaultParameterNameDiscoverer;
+import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 
@@ -15,6 +16,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 public abstract class SpELUtils {
 
     private static final ExpressionParser parser = new SpelExpressionParser();
+    private static final ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
     public static boolean isSpEL(String value) {
         return value.replace("\\#", "").contains("#");
@@ -23,7 +25,7 @@ public abstract class SpELUtils {
     public static String handleSpEl(String key, Object target, Method method, Object[] parameters,
             EvaluationFiller evaluationFiller) {
         MethodBasedEvaluationContext context = new MethodBasedEvaluationContext(null,
-                method, parameters, new DefaultParameterNameDiscoverer());
+                method, parameters, parameterNameDiscoverer);
         context.setVariable("_method",
                 target.getClass().getName().concat(".").concat(method.getName()));
         if (evaluationFiller != null) {
