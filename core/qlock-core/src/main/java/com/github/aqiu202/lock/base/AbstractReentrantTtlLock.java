@@ -35,6 +35,10 @@ public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
         this.idGeneratorFactory = idGeneratorFactory;
     }
 
+    public void setLockValueHolderStrategy(LockValueHolderStrategy strategy) {
+        LockValueHolder.strategy = strategy;
+    }
+
     @Override
     public Boolean release(String key, long expired, TimeUnit timeUnit) {
         final String value = this.cache.get(key);

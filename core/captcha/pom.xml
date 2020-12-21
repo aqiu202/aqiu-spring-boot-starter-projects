@@ -10,12 +10,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>captcha</artifactId>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
     <name>captcha</name>
 
     <properties>
         <jhlabs.version>2.0.235-1</jhlabs.version>
-        <jsr305.version>3.0.2</jsr305.version>
     </properties>
 
     <dependencies>

@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>aqiu-spring-boot-starter-parent</artifactId>
+    <version>1.0.5.1</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -28,7 +29,29 @@
         <guava.version>29.0-jre</guava.version>
         <curator.version>5.1.0</curator.version>
         <reflectasm.version>1.11.9</reflectasm.version>
-        <jsr-305.version>3.0.2</jsr-305.version>
+        <jsr305.version>3.0.2</jsr305.version>
+        <qlock.version>1.0.5.1</qlock.version>
+        <sms-api.version>1.0.5</sms-api.version>
+        <tts-api.version>1.0.5</tts-api.version>
+        <ttl-cache.version>1.0.5</ttl-cache.version>
+        <qrcode.version>1.0.5</qrcode.version>
+        <limiting.version>1.0.5</limiting.version>
+        <captcha.version>1.0.5</captcha.version>
+        <autolog.version>1.0.5</autolog.version>
+        <jpush-rest-api.version>1.0.5</jpush-rest-api.version>
+        <aliyun-sms.version>1.0.5</aliyun-sms.version>
+        <aliyun-tts.version>1.0.5</aliyun-tts.version>
+        <huawei-sms.version>1.0.5</huawei-sms.version>
+        <wechat-codec.version>1.0.5</wechat-codec.version>
+        <wechat-pay.version>1.0.5</wechat-pay.version>
+        <aop-core.version>1.0.5</aop-core.version>
+        <id-generator.version>1.0.5</id-generator.version>
+        <zk-curator.version>1.0.5</zk-curator.version>
+        <spring-utils.version>1.0.5</spring-utils.version>
+        <bean-utils.version>1.0.5</bean-utils.version>
+        <basic-utils.version>1.0.5</basic-utils.version>
+        <codec-utils.version>1.0.5</codec-utils.version>
+        <pageable-core.version>1.0.5</pageable-core.version>
     </properties>
 
     <dependencyManagement>
@@ -36,72 +59,77 @@
             <dependency>
                 <groupId>com.github.aqiu202.api</groupId>
                 <artifactId>sms-api</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${sms-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202.api</groupId>
                 <artifactId>tts-api</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${tts-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>ttl-cache-core</artifactId>
+                <version>${ttl-cache.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>ttl-cache-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${ttl-cache.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>qrcode-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${qrcode.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>limiting-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${limiting.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>captcha</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${captcha.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>captcha-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${captcha.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>autolog-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${autolog.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202.aurora</groupId>
                 <artifactId>jpush-rest-api-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${jpush-rest-api.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202.aliyun</groupId>
                 <artifactId>aliyun-sms-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${aliyun-sms.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202.aliyun</groupId>
                 <artifactId>aliyun-tts-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${aliyun-tts.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202.huawei</groupId>
                 <artifactId>huawei-sms-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${huawei-sms.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202.wechat</groupId>
                 <artifactId>wechat-codec-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${wechat-codec.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202.wechat</groupId>
                 <artifactId>wechat-pay-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${wechat-pay.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -111,22 +139,22 @@
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>spring-aop-core</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.aqiu202</groupId>
-                <artifactId>ttl-cache-core</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${aop-core.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>qlock-core</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${qlock.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>id-generator-core</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${id-generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>id-generator-spring-boot-starter</artifactId>
+                <version>${id-generator.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.curator</groupId>
@@ -135,33 +163,28 @@
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
-                <artifactId>id-generator-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.github.aqiu202</groupId>
                 <artifactId>qlock-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${qlock.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>zk-curator-spring-boot-starter</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${zk-curator.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>zk-curator-core</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${zk-curator.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>pageable-core</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${pageable-core.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>spring-utils</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${spring-utils.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.esotericsoftware</groupId>
@@ -171,22 +194,22 @@
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>basic-utils</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${basic-utils.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>bean-utils</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${bean-utils.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>codec-utils</artifactId>
-                <version>${project.parent.version}</version>
+                <version>${codec-utils.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
-                <version>3.0.2</version>
+                <version>${jsr305.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -195,7 +218,7 @@
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
-            <version>${jsr-305.version}</version>
+            <version>${jsr305.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

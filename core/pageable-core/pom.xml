@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>pageable-core</artifactId>
+    <version>1.0.5</version>
     <name>pageable-core</name>
 
     <properties>

@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>qlock-spring-boot-starter</artifactId>
+    <version>1.0.5.1</version>
 
     <dependencies>
         <dependency>

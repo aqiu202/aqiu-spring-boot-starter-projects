@@ -10,36 +10,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-jpa-querydsl-spring-boot-starter</artifactId>
-    <packaging>jar</packaging>
-
-    <properties>
-        <reflectasm.version>1.11.9</reflectasm.version>
-    </properties>
-
+    <version>1.0.5</version>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.aqiu202</groupId>
-            <artifactId>spring-aop-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
         <!-- querydsl -->
         <dependency>
             <groupId>com.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.esotericsoftware/reflectasm -->
         <dependency>
-            <groupId>com.esotericsoftware</groupId>
-            <artifactId>reflectasm</artifactId>
-            <version>${reflectasm.version}</version>
+            <groupId>com.github.aqiu202</groupId>
+            <artifactId>spring-aop-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>
@@ -54,8 +38,11 @@
             <artifactId>bean-utils</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.aqiu202</groupId>
-            <artifactId>spring-utils</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <packaging>jar</packaging>
 </project>

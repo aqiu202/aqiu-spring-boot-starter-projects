@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>captcha-spring-boot-starter</artifactId>
+    <version>1.0.5</version>
     <packaging>jar</packaging>
     <name>captcha-spring-boot-starter</name>
 

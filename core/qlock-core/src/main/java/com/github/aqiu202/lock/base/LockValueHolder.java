@@ -11,21 +11,25 @@ public abstract class LockValueHolder {
 
     private static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
 
+    private static final ThreadLocal<String> inheritableThreadLocal = new InheritableThreadLocal<>();
+
+    static LockValueHolderStrategy strategy = LockValueHolderStrategy.thread;
+
     public static String setIfAbsent(String value) {
         String old = getValue();
-        if(old == null) {
-            threadLocal.set(value);
+        if (old == null) {
+            setValue(value);
             return value;
         }
         return old;
     }
 
     public static void setValue(String value) {
-        threadLocal.set(value);
+        getHolder().set(value);
     }
 
     public static String getValue() {
-        return threadLocal.get();
+        return getHolder().get();
     }
 
     public static boolean hasValue() {
@@ -33,6 +37,14 @@ public abstract class LockValueHolder {
     }
 
     public static void remove() {
-        threadLocal.remove();
+        getHolder().remove();
     }
+
+    private static ThreadLocal<String> getHolder() {
+        if (strategy == LockValueHolderStrategy.inheritable_thread) {
+            return inheritableThreadLocal;
+        }
+        return threadLocal;
+    }
+
 }

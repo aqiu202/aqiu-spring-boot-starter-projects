@@ -11,6 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>core</artifactId>
+    <version>1.0.5</version>
     <packaging>pom</packaging>
     <modules>
         <module>captcha</module>
