@@ -4,7 +4,8 @@ import com.github.aqiu202.cache.anno.EnableTtlCaching.CacheMode;
 import com.github.aqiu202.cache.config.TtlCacheConfigRegistrar;
 import com.github.aqiu202.id.type.IdType;
 import com.github.aqiu202.lock.base.AbstractReentrantTtlLock;
-import com.github.aqiu202.lock.base.LockValueHolderStrategy;
+import com.github.aqiu202.lock.base.LockValueStrategyMode;
+import com.github.aqiu202.lock.base.LockValueThreadStrategy;
 import com.github.aqiu202.qlock.anno.EnableQLock;
 import com.github.aqiu202.qlock.anno.EnableQLock.LockMode;
 import com.github.aqiu202.qlock.id.SimpleIdGeneratorFactory;
@@ -56,9 +57,9 @@ public class QLockConfigRegistrar implements ImportBeanDefinitionRegistrar {
                     cacheMode.getStringCacheClass(), timeout, timeUnit);
             bdb.addPropertyReference("cache", beanName);
             if(AbstractReentrantTtlLock.class.isAssignableFrom(lockMode.getLockClass())) {
-                final LockValueHolderStrategy lockValueHolderStrategy = attributes
-                        .getEnum("lockValueHolderStrategy");
-                bdb.addPropertyValue("lockValueHolderStrategy", lockValueHolderStrategy);
+                final LockValueStrategyMode mode = attributes
+                        .getEnum("lockValueStrategyMode");
+                bdb.addPropertyValue("lockValueStrategyMode", mode);
             }
         }
         registry.registerBeanDefinition(QLOCK_BEAN_NAME, bdb.getBeanDefinition());

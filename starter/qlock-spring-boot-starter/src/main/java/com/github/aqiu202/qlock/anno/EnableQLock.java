@@ -3,7 +3,8 @@ package com.github.aqiu202.qlock.anno;
 import com.github.aqiu202.cache.anno.EnableTtlCaching.CacheMode;
 import com.github.aqiu202.id.type.IdType;
 import com.github.aqiu202.lock.base.Lock;
-import com.github.aqiu202.lock.base.LockValueHolderStrategy;
+import com.github.aqiu202.lock.base.LockValueStrategyMode;
+import com.github.aqiu202.lock.base.LockValueThreadStrategy;
 import com.github.aqiu202.lock.centralize.LocaleTtlLock;
 import com.github.aqiu202.lock.centralize.ReentrantLocaleTtlLock;
 import com.github.aqiu202.lock.distributed.RedisTtlLock;
@@ -54,7 +55,7 @@ public @interface EnableQLock {
      */
     TimeUnit timeUnit() default TimeUnit.SECONDS;
 
-    LockValueHolderStrategy lockValueHolderStrategy() default LockValueHolderStrategy.thread;
+    LockValueStrategyMode lockValueStrategyMode() default LockValueStrategyMode.thread;
 
     enum LockMode {
         guava(CacheMode.guava, LocaleTtlLock.class),

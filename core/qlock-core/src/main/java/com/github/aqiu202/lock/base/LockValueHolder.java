@@ -9,11 +9,10 @@ import java.util.Objects;
  **/
 public abstract class LockValueHolder {
 
-    private static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
+    private static volatile LockValueStrategy strategy;
 
-    private static final ThreadLocal<String> inheritableThreadLocal = new InheritableThreadLocal<>();
+    static LockValueStrategyMode mode = LockValueStrategyMode.thread;
 
-    static LockValueHolderStrategy strategy = LockValueHolderStrategy.thread;
 
     public static String setIfAbsent(String value) {
         String old = getValue();
@@ -25,11 +24,11 @@ public abstract class LockValueHolder {
     }
 
     public static void setValue(String value) {
-        getHolder().set(value);
+        getStrategy().setValue(value);
     }
 
     public static String getValue() {
-        return getHolder().get();
+        return getStrategy().getValue();
     }
 
     public static boolean hasValue() {
@@ -37,14 +36,25 @@ public abstract class LockValueHolder {
     }
 
     public static void remove() {
-        getHolder().remove();
+        getStrategy().remove();
     }
 
-    private static ThreadLocal<String> getHolder() {
-        if (strategy == LockValueHolderStrategy.inheritable_thread) {
-            return inheritableThreadLocal;
+    private static LockValueStrategy getStrategy() {
+        if (strategy == null) {
+            synchronized (LockValueHolder.class) {
+                if (strategy == null) {
+                    strategy = switchStrategy(mode);
+                }
+            }
         }
-        return threadLocal;
+        return strategy;
+    }
+
+    private static LockValueStrategy switchStrategy(LockValueStrategyMode mode) {
+        if (mode == LockValueStrategyMode.inheritable_thread) {
+            return new LockValueInheritableThreadStrategy();
+        }
+        return new LockValueThreadStrategy();
     }
 
 }

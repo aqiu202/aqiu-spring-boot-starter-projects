@@ -35,8 +35,8 @@ public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
         this.idGeneratorFactory = idGeneratorFactory;
     }
 
-    public void setLockValueHolderStrategy(LockValueHolderStrategy strategy) {
-        LockValueHolder.strategy = strategy;
+    public void setLockValueStrategyMode(LockValueStrategyMode mode) {
+        LockValueHolder.mode = mode;
     }
 
     @Override
