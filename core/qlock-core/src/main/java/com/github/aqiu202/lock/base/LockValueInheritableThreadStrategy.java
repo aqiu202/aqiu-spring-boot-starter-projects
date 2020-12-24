@@ -7,7 +7,7 @@ package com.github.aqiu202.lock.base;
  **/
 public class LockValueInheritableThreadStrategy extends AbstractLockValueThreadStrategy {
 
-    private final ThreadLocal<String> threadLocal = new ThreadLocal<>();
+    private final ThreadLocal<String> threadLocal = new InheritableThreadLocal<>();
 
     @Override
     public ThreadLocal<String> getThreadLocal() {

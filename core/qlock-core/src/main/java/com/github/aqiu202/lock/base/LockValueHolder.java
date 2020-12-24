@@ -51,10 +51,13 @@ public abstract class LockValueHolder {
     }
 
     private static LockValueStrategy switchStrategy(LockValueStrategyMode mode) {
-        if (mode == LockValueStrategyMode.inheritable_thread) {
-            return new LockValueInheritableThreadStrategy();
+        switch (mode) {
+            case inheritable_thread:
+                return new LockValueInheritableThreadStrategy();
+            case thread:
+            default:
+                return new LockValueThreadStrategy();
         }
-        return new LockValueThreadStrategy();
     }
 
 }
