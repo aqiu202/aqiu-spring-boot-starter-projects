@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>aqiu-spring-boot-starter-parent</artifactId>
-    <version>1.0.5.1</version>
+    <version>1.0.5.2</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -30,7 +30,7 @@
         <curator.version>5.1.0</curator.version>
         <reflectasm.version>1.11.9</reflectasm.version>
         <jsr305.version>3.0.2</jsr305.version>
-        <qlock.version>1.0.5.1</qlock.version>
+        <qlock.version>1.0.5.2</qlock.version>
         <sms-api.version>1.0.5</sms-api.version>
         <tts-api.version>1.0.5</tts-api.version>
         <ttl-cache.version>1.0.5</ttl-cache.version>

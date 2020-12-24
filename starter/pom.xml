@@ -5,13 +5,13 @@
     <parent>
         <artifactId>aqiu-spring-boot-starter-parent</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.5</version>
+        <version>1.0.5.2</version>
         <relativePath>../aqiu-spring-boot-starter-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>starter</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.5.1</version>
     <packaging>pom</packaging>
     <modules>
         <module>autolog-spring-boot-starter</module>
