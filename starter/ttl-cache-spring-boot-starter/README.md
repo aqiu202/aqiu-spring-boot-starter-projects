@@ -4,7 +4,7 @@
 <dependency>
   <groupId>com.github.aqiu202</groupId>
   <artifactId>ttl-cache-spring-boot-starter</artifactId>
-  <version>1.0.5</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 ### 配置

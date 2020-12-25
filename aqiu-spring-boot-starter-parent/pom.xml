@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.github.aqiu202</groupId>
         <artifactId>aqiu-spring-boot-starter-projects</artifactId>
-        <version>1.0.5</version>
+        <version>1.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>aqiu-spring-boot-starter-parent</artifactId>
-    <version>1.0.5.2</version>
+    <version>1.1.0</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -30,28 +30,28 @@
         <curator.version>5.1.0</curator.version>
         <reflectasm.version>1.11.9</reflectasm.version>
         <jsr305.version>3.0.2</jsr305.version>
-        <qlock.version>1.0.5.2</qlock.version>
-        <sms-api.version>1.0.5</sms-api.version>
-        <tts-api.version>1.0.5</tts-api.version>
-        <ttl-cache.version>1.0.5</ttl-cache.version>
-        <qrcode.version>1.0.5</qrcode.version>
-        <limiting.version>1.0.5</limiting.version>
-        <captcha.version>1.0.5</captcha.version>
-        <autolog.version>1.0.5</autolog.version>
-        <jpush-rest-api.version>1.0.5</jpush-rest-api.version>
-        <aliyun-sms.version>1.0.5</aliyun-sms.version>
-        <aliyun-tts.version>1.0.5</aliyun-tts.version>
-        <huawei-sms.version>1.0.5</huawei-sms.version>
-        <wechat-codec.version>1.0.5</wechat-codec.version>
-        <wechat-pay.version>1.0.5</wechat-pay.version>
-        <aop-core.version>1.0.5</aop-core.version>
-        <id-generator.version>1.0.5</id-generator.version>
-        <zk-curator.version>1.0.5</zk-curator.version>
-        <spring-utils.version>1.0.5</spring-utils.version>
-        <bean-utils.version>1.0.5</bean-utils.version>
-        <basic-utils.version>1.0.5</basic-utils.version>
-        <codec-utils.version>1.0.5</codec-utils.version>
-        <pageable-core.version>1.0.5</pageable-core.version>
+        <qlock.version>1.1.0</qlock.version>
+        <sms-api.version>1.1.0</sms-api.version>
+        <tts-api.version>1.1.0</tts-api.version>
+        <ttl-cache.version>1.1.0</ttl-cache.version>
+        <qrcode.version>1.1.0</qrcode.version>
+        <limiting.version>1.1.0</limiting.version>
+        <captcha.version>1.1.0</captcha.version>
+        <autolog.version>1.1.0</autolog.version>
+        <jpush-rest-api.version>1.1.0</jpush-rest-api.version>
+        <aliyun-sms.version>1.1.0</aliyun-sms.version>
+        <aliyun-tts.version>1.1.0</aliyun-tts.version>
+        <huawei-sms.version>1.1.0</huawei-sms.version>
+        <wechat-codec.version>1.1.0</wechat-codec.version>
+        <wechat-pay.version>1.1.0</wechat-pay.version>
+        <aop-core.version>1.1.0</aop-core.version>
+        <id-generator.version>1.1.0</id-generator.version>
+        <zk-curator.version>1.1.0</zk-curator.version>
+        <spring-utils.version>1.1.0</spring-utils.version>
+        <bean-utils.version>1.1.0</bean-utils.version>
+        <basic-utils.version>1.1.0</basic-utils.version>
+        <codec-utils.version>1.1.0</codec-utils.version>
+        <pageable-core.version>1.1.0</pageable-core.version>
     </properties>
 
     <dependencyManagement>

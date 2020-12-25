@@ -5,13 +5,13 @@
     <parent>
         <artifactId>wechat</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.0.5</version>
+        <version>1.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.aqiu202.wechat</groupId>
     <artifactId>wechat-codec-spring-boot-starter</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
     <packaging>jar</packaging>
     <name>wechat-codec-spring-boot-starter</name>
 

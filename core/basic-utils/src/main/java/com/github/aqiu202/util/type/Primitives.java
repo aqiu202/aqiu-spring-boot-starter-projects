@@ -48,8 +48,8 @@ public final class Primitives {
     }
 
     static {
-        Map<Class<?>, Class<?>> primToWrap = new LinkedHashMap(16);
-        Map<Class<?>, Class<?>> wrapToPrim = new LinkedHashMap(16);
+        Map<Class<?>, Class<?>> primToWrap = new LinkedHashMap<>(16);
+        Map<Class<?>, Class<?>> wrapToPrim = new LinkedHashMap<>(16);
         add(primToWrap, wrapToPrim, Boolean.TYPE, Boolean.class);
         add(primToWrap, wrapToPrim, Byte.TYPE, Byte.class);
         add(primToWrap, wrapToPrim, Character.TYPE, Character.class);

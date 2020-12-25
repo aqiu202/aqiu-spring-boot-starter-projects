@@ -8,7 +8,7 @@
 <dependency>
     <groupId>com.github.aqiu202.aliyun</groupId>
     <artifactId>aliyun-tts-spring-boot-starter</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 ### 用法
