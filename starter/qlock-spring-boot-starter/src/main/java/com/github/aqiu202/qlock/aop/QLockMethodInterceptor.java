@@ -1,6 +1,7 @@
 package com.github.aqiu202.qlock.aop;
 
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
+import com.github.aqiu202.lock.base.ResourceLockedException;
 import com.github.aqiu202.util.spel.EvaluationFiller;
 import com.github.aqiu202.lock.base.Lock;
 import com.github.aqiu202.qlock.anno.QLock;
@@ -41,7 +42,7 @@ public class QLockMethodInterceptor extends AbstractKeyAnnotationInterceptor<QLo
         TimeUnit timeUnit = qLock.timeUnit();
         final Boolean getLock = this.lock.acquire(key, timeout, timeUnit);
         if (!getLock) {
-            throw new IllegalArgumentException(qLock.message());
+            throw new ResourceLockedException(qLock.message());
         }
     }
 

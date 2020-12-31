@@ -3,6 +3,7 @@ package com.github.aqiu202.limit.aop;
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
 import com.github.aqiu202.limit.anno.RepeatLimiting;
 import com.github.aqiu202.lock.base.Lock;
+import com.github.aqiu202.lock.base.ResourceLockedException;
 import com.github.aqiu202.util.spel.EvaluationFiller;
 import java.util.concurrent.TimeUnit;
 import org.aopalliance.intercept.MethodInvocation;
@@ -42,7 +43,7 @@ public class RepeatMethodInterceptor extends AbstractKeyAnnotationInterceptor<Re
         TimeUnit timeUnit = repeatLimiting.timeUnit();
         final Boolean getLock = this.lock.acquire(key, timeout, timeUnit);
         if (!getLock) {
-            throw new IllegalArgumentException(repeatLimiting.message());
+            throw new ResourceLockedException(repeatLimiting.message());
         }
     }
 

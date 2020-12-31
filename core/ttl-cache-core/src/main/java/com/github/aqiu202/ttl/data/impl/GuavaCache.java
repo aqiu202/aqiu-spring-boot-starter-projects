@@ -65,15 +65,21 @@ public class GuavaCache<K, V> extends AbstractTtlCache<K, V> {
     private Cache<K, V> getCache(long expired, TimeUnit timeUnit) {
         if (this.inDefaultCache(expired)) {
             if (Objects.isNull(this.defaultCache)) {
-                this.defaultCache = this.newCacheInstance(this.timeout, this.timeUnit);
+                synchronized (this) {
+                    if (Objects.isNull(this.defaultCache)) {
+                        this.defaultCache = this.newCacheInstance(this.timeout, this.timeUnit);
+                    }
+                }
             }
             return this.defaultCache;
         }
         long key = this.convertToSeconds(expired, timeUnit);
         Cache<K, V> cache = this.cacheMap.get(key);
         if (Objects.isNull(cache)) {
-            cache = this.newCacheInstance(expired, timeUnit);
-            this.cacheMap.put(key, cache);
+            synchronized (this) {
+                cache = this.newCacheInstance(expired, timeUnit);
+                this.cacheMap.put(key, cache);
+            }
         }
         return cache;
     }
