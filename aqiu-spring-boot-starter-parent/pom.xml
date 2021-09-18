@@ -5,12 +5,12 @@
     <parent>
         <groupId>com.github.aqiu202</groupId>
         <artifactId>aqiu-spring-boot-starter-projects</artifactId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>aqiu-spring-boot-starter-parent</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.4</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -51,7 +51,7 @@
         <bean-utils.version>1.1.0</bean-utils.version>
         <basic-utils.version>1.1.0</basic-utils.version>
         <codec-utils.version>1.1.0</codec-utils.version>
-        <pageable-core.version>1.1.0</pageable-core.version>
+        <pageable-core.version>1.1.1</pageable-core.version>
         <jpa-querydsl.version>1.1.2</jpa-querydsl.version>
     </properties>
 

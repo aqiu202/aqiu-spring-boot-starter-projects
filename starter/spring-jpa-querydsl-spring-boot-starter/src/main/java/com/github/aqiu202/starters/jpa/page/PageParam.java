@@ -75,4 +75,9 @@ public class PageParam extends com.noah.base.page.PageParam implements Pageable 
         return this;
     }
 
+    @Override
+    public Pageable withPage(int pageNumber) {
+        return PageParam.of(pageNumber, getPageSize(), getSort());
+    }
+
 }
