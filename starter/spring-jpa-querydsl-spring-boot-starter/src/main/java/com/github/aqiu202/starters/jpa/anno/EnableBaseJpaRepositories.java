@@ -70,7 +70,7 @@ public @interface EnableBaseJpaRepositories {
 
     boolean enableExecutors() default true;
 
-    boolean enableRetry() default true;
+    boolean enableRetry() default false;
 
-    boolean enableAuditing() default true;
+    boolean enableAuditing() default false;
 }

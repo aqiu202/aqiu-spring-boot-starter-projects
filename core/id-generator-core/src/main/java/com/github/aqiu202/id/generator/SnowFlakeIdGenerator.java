@@ -124,6 +124,7 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
      *
      * @return SnowflakeId
      */
+    @Override
     @NonNull
     public synchronized Long nextId() {
         long timestamp = timeGen();

@@ -47,7 +47,7 @@ public class RetryMethodInterceptor extends SimpleAnnotationInterceptor<Retry> {
             return this.hasAssignableFrom(value, throwable.getClass());
         }
         if (exclude.length > 0) {
-            return !this.notAssignableFrom(exclude, throwable.getClass());
+            return !this.hasAssignableFrom(exclude, throwable.getClass());
         }
         return true;
     }
@@ -67,9 +67,5 @@ public class RetryMethodInterceptor extends SimpleAnnotationInterceptor<Retry> {
         }
         return false;
     }
-
-    private boolean notAssignableFrom(Class<? extends Throwable>[] cls,
-            Class<? extends Throwable> clz) {
-        return !hasAssignableFrom(cls, clz);
-    }
+    
 }

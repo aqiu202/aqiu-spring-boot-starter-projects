@@ -115,6 +115,7 @@ public class SimpleJPAQueryExecutor implements JPAQueryExecutor {
         }
     }
 
+    @Override
     public InsertClause<?> insert(EntityPath<?> path) {
         if (templates != null) {
             return new JPAInsertClause(entityManager.get(), path, templates);
@@ -132,6 +133,7 @@ public class SimpleJPAQueryExecutor implements JPAQueryExecutor {
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     @Transactional
     public <T> T save(T entity) {
@@ -155,6 +157,7 @@ public class SimpleJPAQueryExecutor implements JPAQueryExecutor {
         }
     }
 
+    @Override
     @Transactional
     public <T> T saveAndFlush(T entity) {
         T result = save(entity);
@@ -162,6 +165,7 @@ public class SimpleJPAQueryExecutor implements JPAQueryExecutor {
         return result;
     }
 
+    @Override
     @Transactional
     public <T> List<T> save(Iterable<T> entities) {
         List<T> result = new ArrayList<>();
