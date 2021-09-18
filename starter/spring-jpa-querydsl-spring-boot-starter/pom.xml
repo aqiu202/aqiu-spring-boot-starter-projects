@@ -5,12 +5,13 @@
     <parent>
         <artifactId>starter</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.1.0</version>
+        <version>1.1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-jpa-querydsl-spring-boot-starter</artifactId>
-    <version>1.1.1</version>
+    <version>1.1.2</version>
+    <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -23,15 +24,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>
-            <artifactId>spring-aop-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.aqiu202</groupId>
             <artifactId>pageable-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.aqiu202</groupId>
-            <artifactId>basic-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>
@@ -44,5 +37,4 @@
         </dependency>
     </dependencies>
 
-    <packaging>jar</packaging>
 </project>

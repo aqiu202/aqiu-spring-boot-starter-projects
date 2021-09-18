@@ -21,16 +21,12 @@ public class JpaDSLSelector implements ImportSelector {
         AnnotationAttributes attributes = AnnotationAttributes.fromMap(map);
         List<String> list = new ArrayList<>();
         boolean enableExecutors = attributes.getBoolean("enableExecutors");
-        boolean enableRetry = attributes.getBoolean("enableRetry");
         if (enableExecutors) {
             list.add(QueryDslAutoConfiguration.class.getName());
         }
         final boolean enableAuditing = attributes.getBoolean("enableAuditing");
         if (enableAuditing) {
             list.add(OpenJpaAuditingConfiguration.class.getName());
-        }
-        if (enableRetry) {
-            list.add(RetryConfiguration.class.getName());
         }
         return list.toArray(new String[0]);
     }

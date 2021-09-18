@@ -24,6 +24,6 @@ public final class NativeSqlQuery<T> extends AbstractQuery<T> {
 
     @Override
     protected String getCountSql(String sql) {
-        return "SELECT count(*) FROM (" + sql + ") _c";
+        return "SELECT count(*) FROM (" + sql + ")";
     }
 }
