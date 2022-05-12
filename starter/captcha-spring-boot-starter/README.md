@@ -5,7 +5,7 @@
 <dependency>
   <groupId>com.github.aqiu202</groupId>
   <artifactId>captcha-spring-boot-starter</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 项目开源地址：[https://github.com/aqiu202/captcha-spring-boot-starter](https://github.com/aqiu202/captcha-spring-boot-starter)

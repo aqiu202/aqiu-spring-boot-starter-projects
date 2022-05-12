@@ -61,4 +61,10 @@ public class PageParam implements PageableInput {
         this.page = 1;
         return this;
     }
+
+    @Override
+    public PageableInput setPage(int pageNumber) {
+        this.page = pageNumber;
+        return this;
+    }
 }

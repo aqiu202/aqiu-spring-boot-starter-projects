@@ -20,16 +20,9 @@ import com.github.aqiu202.util.wrap.ObjectWrapper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.primitives.Primitives;
 import com.querydsl.core.group.GroupExpression;
-import com.querydsl.core.types.Expression;
-import com.querydsl.core.types.ExpressionException;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.FactoryExpression;
-import com.querydsl.core.types.FactoryExpressionBase;
-import com.querydsl.core.types.Operation;
-import com.querydsl.core.types.Ops;
-import com.querydsl.core.types.Path;
-import com.querydsl.core.types.Visitor;
+import com.querydsl.core.types.*;
 import com.querydsl.core.types.dsl.EntityPathBase;
+
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -42,6 +35,7 @@ import java.util.Map;
 
 /**
  * JPA QueryDsl 结果自定义类型转换类
+ *
  * @author aqiu 2019-10-06 20:24
  **/
 public class JPAQBeans<T> extends FactoryExpressionBase<T> {
@@ -84,7 +78,7 @@ public class JPAQBeans<T> extends FactoryExpressionBase<T> {
      * @param bindings    bindings
      */
     protected JPAQBeans(Class<? extends T> type, boolean fieldAccess,
-            Map<String, ? extends Expression<?>> bindings) {
+                        Map<String, ? extends Expression<?>> bindings) {
         super(type);
         this.bindings = ImmutableMap.copyOf(bindings);
         this.fieldAccess = fieldAccess;
@@ -238,7 +232,8 @@ public class JPAQBeans<T> extends FactoryExpressionBase<T> {
                 }
             }
             return rv;
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                 NoSuchMethodException e) {
             throw new ExpressionException(e.getMessage(), e);
         }
     }
@@ -252,8 +247,8 @@ public class JPAQBeans<T> extends FactoryExpressionBase<T> {
         return value;
     }
 
-    private <S> S create(Class<S> type) throws IllegalAccessException, InstantiationException {
-        return type.newInstance();
+    private <S> S create(Class<S> type) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        return type.getConstructor().newInstance();
     }
 
     public Expression<T> as(Path<T> alias) {

@@ -7,6 +7,8 @@ import com.github.aqiu202.autolog.config.AutoLogConfigurationSelector;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -18,6 +20,8 @@ import org.springframework.context.annotation.Import;
 @Target(TYPE)
 @Import(AutoLogConfigurationSelector.class)
 public @interface EnableAutoLog {
+
+    AdviceMode mode() default AdviceMode.PROXY;
 
     boolean enable() default true;
 

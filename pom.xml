@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.1</version>
+        <version>2.6.7</version>
         <relativePath/>
     </parent>
 
@@ -14,7 +14,7 @@
 
     <groupId>com.github.aqiu202</groupId>
     <artifactId>aqiu-spring-boot-starter-projects</artifactId>
-    <version>1.1.0</version>
+    <version>1.2.0</version>
     <packaging>pom</packaging>
     <url>https://github.com/aqiu202/aqiu-spring-boot-starter-projects</url>
     <description>Some Simple Starter Projects for Spring Boot Application Made by Aqiu202
@@ -42,17 +42,30 @@
         </developer>
     </developers>
 
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>nexus-releases</id>-->
+<!--            <name>nexus-releases</name>-->
+<!--            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>-->
+<!--            <uniqueVersion>true</uniqueVersion>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>nexus-snapshots</id>-->
+<!--            <name>nexus-snapshots</name>-->
+<!--            <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
     <distributionManagement>
         <repository>
             <id>nexus-releases</id>
-            <name>nexus-releases</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <name>releases</name>
+            <url>http://47.105.108.6:10000/repository/maven-releases/</url>
             <uniqueVersion>true</uniqueVersion>
         </repository>
         <snapshotRepository>
             <id>nexus-snapshots</id>
-            <name>nexus-snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <name>snapshots</name>
+            <url>http://47.105.108.6:10000/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -65,6 +78,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -77,7 +91,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.4.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -87,19 +101,20 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-gpg-plugin</artifactId>-->
+            <!--                <version>1.6</version>-->
+            <!--                <version>3.0.1</version>-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        <phase>verify</phase>-->
+            <!--                        <goals>-->
+            <!--                            <goal>sign</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
 

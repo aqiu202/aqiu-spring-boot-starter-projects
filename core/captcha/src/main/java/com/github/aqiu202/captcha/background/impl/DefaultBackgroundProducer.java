@@ -3,6 +3,7 @@ package com.github.aqiu202.captcha.background.impl;
 import com.github.aqiu202.captcha.background.BackgroundProducer;
 import com.github.aqiu202.captcha.props.CaptchaProperties.BackgroundProperties;
 import com.github.aqiu202.util.ColorUtils;
+
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
@@ -11,11 +12,6 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.annotation.Nonnull;
 
-/**
- * Default implementation of {@link BackgroundProducer}, adds a gradient
- * background to an image. The gradient color is diagonal and made of Color From
- * (top left) and Color To (bottom right).
- */
 public class DefaultBackgroundProducer implements BackgroundProducer {
 
     private Color from;

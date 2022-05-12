@@ -20,4 +20,6 @@ public interface PageableInput {
     PageableInput previousOrFirst();
 
     PageableInput first();
+
+    PageableInput setPage(int pageNumber);
 }
