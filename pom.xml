@@ -42,36 +42,37 @@
         </developer>
     </developers>
 
+    <modules>
+        <module>aqiu-spring-boot-starter-parent</module>
+    </modules>
+
 <!--    <distributionManagement>-->
 <!--        <repository>-->
-<!--            <id>nexus-releases</id>-->
-<!--            <name>nexus-releases</name>-->
-<!--            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>-->
+<!--            <id>redsoft-releases</id>-->
+<!--            <name>releases</name>-->
+<!--            <url>http://47.105.108.6:10000/repository/maven-releases/</url>-->
 <!--            <uniqueVersion>true</uniqueVersion>-->
 <!--        </repository>-->
 <!--        <snapshotRepository>-->
-<!--            <id>nexus-snapshots</id>-->
-<!--            <name>nexus-snapshots</name>-->
-<!--            <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
+<!--            <id>redsoft-snapshots</id>-->
+<!--            <name>snapshots</name>-->
+<!--            <url>http://47.105.108.6:10000/repository/maven-snapshots/</url>-->
 <!--        </snapshotRepository>-->
 <!--    </distributionManagement>-->
+
     <distributionManagement>
         <repository>
             <id>nexus-releases</id>
-            <name>releases</name>
-            <url>http://47.105.108.6:10000/repository/maven-releases/</url>
+            <name>nexus-releases</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
             <uniqueVersion>true</uniqueVersion>
         </repository>
         <snapshotRepository>
             <id>nexus-snapshots</id>
-            <name>snapshots</name>
-            <url>http://47.105.108.6:10000/repository/maven-snapshots/</url>
+            <name>nexus-snapshots</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
-
-    <modules>
-        <module>aqiu-spring-boot-starter-parent</module>
-    </modules>
 
     <build>
         <plugins>
@@ -101,20 +102,19 @@
                     </execution>
                 </executions>
             </plugin>
-            <!--            <plugin>-->
-            <!--                <groupId>org.apache.maven.plugins</groupId>-->
-            <!--                <artifactId>maven-gpg-plugin</artifactId>-->
-            <!--                <version>1.6</version>-->
-            <!--                <version>3.0.1</version>-->
-            <!--                <executions>-->
-            <!--                    <execution>-->
-            <!--                        <phase>verify</phase>-->
-            <!--                        <goals>-->
-            <!--                            <goal>sign</goal>-->
-            <!--                        </goals>-->
-            <!--                    </execution>-->
-            <!--                </executions>-->
-            <!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 

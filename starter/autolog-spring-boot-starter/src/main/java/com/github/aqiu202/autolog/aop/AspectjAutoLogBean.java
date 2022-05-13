@@ -37,16 +37,16 @@ import java.util.StringJoiner;
  * @author aqiu 2018年10月24日 下午3:54:16
  */
 @Aspect
-public class AopLogger implements SPelKeyHandler {
+public class AspectjAutoLogBean implements SPelKeyHandler {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AopLogger.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AspectjAutoLogBean.class);
 
 
     private final ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
     private final ParamReader paramReader;
 
-    public AopLogger(AutoLogConfigurationBean cb) {
+    public AspectjAutoLogBean(AutoLogConfigurationBean cb) {
         this.paramReader = cb.getParamReader();
         this.logCollector = cb.getLogCollector();
         this.logHandler = cb.getLogHandler();
