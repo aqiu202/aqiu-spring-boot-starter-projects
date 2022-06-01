@@ -19,6 +19,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
@@ -121,7 +123,7 @@ public final class QRCodeHelper {
                 URL url = new URL(logo);
                 inputStream = url.openStream();
             } else {
-                inputStream = new FileInputStream(logo);
+                inputStream = Files.newInputStream(Paths.get(logo));
             }
             Image src = ImageIO.read(inputStream);
             int width = src.getWidth(null);

@@ -25,6 +25,16 @@
             <version>${zxing.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>android-core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>android-integration</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
             <groupId>com.github.aqiu202</groupId>
             <artifactId>spring-utils</artifactId>
         </dependency>
