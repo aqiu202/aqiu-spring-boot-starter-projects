@@ -91,11 +91,13 @@ public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
 
     @Nullable
     public Boolean doRelease(String key) {
+        LockValueHolder.remove();
         return super.release(key);
     }
 
     @Nullable
     public Boolean doRelease(String key, long expired, TimeUnit timeUnit) {
+        LockValueHolder.remove();
         return super.release(key, expired, timeUnit);
     }
 
