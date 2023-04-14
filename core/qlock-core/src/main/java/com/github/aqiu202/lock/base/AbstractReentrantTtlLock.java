@@ -17,7 +17,7 @@ public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
 
     protected IdGenerator<?> idGenerator;
 
-    protected IdGeneratorFactory<?> idGeneratorFactory;
+    protected IdGeneratorFactory idGeneratorFactory;
 
     public IdGenerator<?> getIdGenerator() {
         return idGenerator;
@@ -27,11 +27,11 @@ public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
         this.idGenerator = idGenerator;
     }
 
-    public IdGeneratorFactory<?> getIdGeneratorFactory() {
+    public IdGeneratorFactory getIdGeneratorFactory() {
         return idGeneratorFactory;
     }
 
-    public void setIdGeneratorFactory(IdGeneratorFactory<?> idGeneratorFactory) {
+    public void setIdGeneratorFactory(IdGeneratorFactory idGeneratorFactory) {
         this.idGeneratorFactory = idGeneratorFactory;
     }
 

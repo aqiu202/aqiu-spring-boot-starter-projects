@@ -53,7 +53,7 @@ public abstract class StringUtils {
      * @return 替换后的字符串
      */
     public static String stringFormat(String text, Map<String, Object> parameter) {
-        return stringFormat(text, parameter, "");
+        return stringFormatWithNull(text, parameter, "");
     }
 
     /**
@@ -68,7 +68,7 @@ public abstract class StringUtils {
         for (int i = 0; i < parameter.length; i++) {
             map.put(i + 1, parameter[i]);
         }
-        return stringFormat(text, map, "");
+        return stringFormatWithNull(text, map, "");
     }
 
     /**
@@ -79,7 +79,7 @@ public abstract class StringUtils {
      * @param nullValueReplacement 空值的默认值
      * @return 替换后的字符串
      */
-    public static String stringFormat(String text, Map<String, Object> parameter,
+    public static String stringFormatWithNull(String text, Map<?, ?> parameter,
             String nullValueReplacement) {
         if (isEmpty(text) || CollectionUtils.isEmpty(parameter)) {
             return replaceNullParam(text, nullValueReplacement);

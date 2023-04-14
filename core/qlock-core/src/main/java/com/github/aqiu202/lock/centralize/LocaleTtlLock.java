@@ -3,10 +3,10 @@ package com.github.aqiu202.lock.centralize;
 
 import com.github.aqiu202.lock.base.CacheLock;
 import com.github.aqiu202.ttl.data.StringTtlCache;
-import java.util.concurrent.TimeUnit;
-import org.checkerframework.checker.initialization.qual.Initialized;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>集中式缓存实现的锁</pre>
@@ -18,6 +18,10 @@ public class LocaleTtlLock implements CacheLock, InitializingBean {
     protected StringTtlCache cache;
 
     public LocaleTtlLock() {
+    }
+
+    public LocaleTtlLock(StringTtlCache cache) {
+        this.cache = cache;
     }
 
     public void setCache(StringTtlCache cache) {

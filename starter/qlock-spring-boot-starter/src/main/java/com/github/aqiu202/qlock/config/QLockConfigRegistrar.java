@@ -5,17 +5,17 @@ import com.github.aqiu202.cache.config.TtlCacheConfigRegistrar;
 import com.github.aqiu202.id.type.IdType;
 import com.github.aqiu202.lock.base.AbstractReentrantTtlLock;
 import com.github.aqiu202.lock.base.LockValueStrategyMode;
-import com.github.aqiu202.lock.base.LockValueThreadStrategy;
 import com.github.aqiu202.qlock.anno.EnableQLock;
 import com.github.aqiu202.qlock.anno.EnableQLock.LockMode;
 import com.github.aqiu202.qlock.id.SimpleIdGeneratorFactory;
-import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.AnnotationMetadata;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>QLockRegistrar</pre>
@@ -29,7 +29,7 @@ public class QLockConfigRegistrar implements ImportBeanDefinitionRegistrar {
 
     @Override
     public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata,
-            BeanDefinitionRegistry registry) {
+                                        BeanDefinitionRegistry registry) {
         final AnnotationAttributes attributes = AnnotationAttributes.fromMap(importingClassMetadata
                 .getAnnotationAttributes(EnableQLock.class.getName()));
         final LockMode lockMode = attributes.getEnum("lockMode");
@@ -39,7 +39,7 @@ public class QLockConfigRegistrar implements ImportBeanDefinitionRegistrar {
             final IdType idType = attributes.getEnum("idType");
             if (!IdType.AUTO.equals(idType)) {
                 bdb.addPropertyValue("idGeneratorFactory",
-                        new SimpleIdGeneratorFactory<>((BeanFactory) registry, idType));
+                        new SimpleIdGeneratorFactory((BeanFactory) registry, idType));
             } else {
                 bdb.addAutowiredProperty("idGenerator");
             }
@@ -56,7 +56,7 @@ public class QLockConfigRegistrar implements ImportBeanDefinitionRegistrar {
             TtlCacheConfigRegistrar.registerStringTtlCacheBean(registry, beanName,
                     cacheMode.getStringCacheClass(), timeout, timeUnit);
             bdb.addPropertyReference("cache", beanName);
-            if(AbstractReentrantTtlLock.class.isAssignableFrom(lockMode.getLockClass())) {
+            if (AbstractReentrantTtlLock.class.isAssignableFrom(lockMode.getLockClass())) {
                 final LockValueStrategyMode mode = attributes
                         .getEnum("lockValueStrategyMode");
                 bdb.addPropertyValue("lockValueStrategyMode", mode);

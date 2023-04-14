@@ -10,10 +10,10 @@ import org.springframework.lang.NonNull;
  * @author aqiu 2020/12/2 10:12
  **/
 @FunctionalInterface
-public interface IdGeneratorFactory<T extends Serializable> {
+public interface IdGeneratorFactory {
 
     @NonNull
-    IdGenerator<T> getIdGenerator();
+    IdGenerator<?> getIdGenerator();
 
     default IdType getIdType() {
         return IdType.AUTO;

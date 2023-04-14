@@ -1,8 +1,11 @@
 package com.github.aqiu202.aop.pointcut;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
 import org.springframework.core.annotation.AnnotatedElementUtils;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Method;
+import java.util.function.BiPredicate;
 
 /**
  * <pre>ClassOrMethodAnnotationPointcut</pre>
@@ -18,9 +21,9 @@ public class ClassOrMethodAnnotationPointcut<T extends Annotation> extends
 
     @Override
     public boolean matches(Method method, Class<?> aClass) {
-        return AnnotatedElementUtils.isAnnotated(aClass, this.annotationType) ||
-                AnnotatedElementUtils.isAnnotated(method, this.annotationType);
-//        return AnnotationUtils.getAnnotation(aClass, this.annotationType) != null ||
-//                AnnotationUtils.getAnnotation(method, this.annotationType) != null;
+        BiPredicate<AnnotatedElement, Class<T>> assertFun = this.isCheckInherited() ?
+                AnnotatedElementUtils::hasAnnotation : AnnotatedElement::isAnnotationPresent;
+        return assertFun.test(aClass, this.annotationType) ||
+                assertFun.test(method, this.annotationType);
     }
 }

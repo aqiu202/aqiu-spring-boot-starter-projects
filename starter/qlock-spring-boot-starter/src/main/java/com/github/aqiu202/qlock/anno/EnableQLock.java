@@ -4,23 +4,20 @@ import com.github.aqiu202.cache.anno.EnableTtlCaching.CacheMode;
 import com.github.aqiu202.id.type.IdType;
 import com.github.aqiu202.lock.base.Lock;
 import com.github.aqiu202.lock.base.LockValueStrategyMode;
-import com.github.aqiu202.lock.base.LockValueThreadStrategy;
 import com.github.aqiu202.lock.centralize.LocaleTtlLock;
 import com.github.aqiu202.lock.centralize.ReentrantLocaleTtlLock;
 import com.github.aqiu202.lock.distributed.RedisTtlLock;
 import com.github.aqiu202.lock.distributed.ReentrantRedisTtlLock;
+import com.github.aqiu202.lock.distributed.ReentrantZookeeperLock;
 import com.github.aqiu202.lock.distributed.ZookeeperLock;
 import com.github.aqiu202.qlock.config.QLockAutoConfiguration;
 import com.github.aqiu202.qlock.config.QLockConfigRegistrar;
 import com.github.aqiu202.qlock.config.QLockZkCuratorSelector;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.util.concurrent.TimeUnit;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
+
+import java.lang.annotation.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>EnableQLock</pre>
@@ -59,12 +56,13 @@ public @interface EnableQLock {
 
     enum LockMode {
         guava(CacheMode.guava, LocaleTtlLock.class),
-        guava_r(CacheMode.guava, ReentrantLocaleTtlLock.class, true),
+        guava_reentrant(CacheMode.guava, ReentrantLocaleTtlLock.class, true),
         caffeine(CacheMode.caffeine, LocaleTtlLock.class),
-        caffeine_r(CacheMode.caffeine, ReentrantLocaleTtlLock.class, true),
+        caffeine_reentrant(CacheMode.caffeine, ReentrantLocaleTtlLock.class, true),
         redis(CacheMode.redis, RedisTtlLock.class),
-        redis_r(CacheMode.redis, ReentrantRedisTtlLock.class, true),
-        zookeeper(CacheMode.none, ZookeeperLock.class);
+        redis_reentrant(CacheMode.redis, ReentrantRedisTtlLock.class, true),
+        zookeeper(CacheMode.none, ZookeeperLock.class),
+        zookeeper_reentrant(CacheMode.none, ReentrantZookeeperLock.class);
 
         private final CacheMode cacheMode;
         private final Class<? extends Lock> lockClass;
