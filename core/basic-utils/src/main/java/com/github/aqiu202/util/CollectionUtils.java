@@ -22,15 +22,15 @@ public abstract class CollectionUtils {
         return array == null || array.length == 0;
     }
 
-    public static boolean notEmpty(Collection<?> collection) {
+    public static boolean isNotEmpty(Collection<?> collection) {
         return !isEmpty(collection);
     }
 
-    public static boolean notEmpty(Map<?, ?> map) {
+    public static boolean isNotEmpty(Map<?, ?> map) {
         return !isEmpty(map);
     }
 
-    public static boolean notEmpty(Object[] array) {
+    public static boolean isNotEmpty(Object[] array) {
         return !isEmpty(array);
     }
 

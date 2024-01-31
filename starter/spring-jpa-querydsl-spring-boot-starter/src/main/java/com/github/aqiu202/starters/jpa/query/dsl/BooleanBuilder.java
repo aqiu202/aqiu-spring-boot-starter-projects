@@ -1,7 +1,6 @@
 package com.github.aqiu202.starters.jpa.query.dsl;
 
 import com.github.aqiu202.util.StringUtils;
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Visitor;
@@ -9,18 +8,19 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.ComparableExpression;
 import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.core.types.dsl.StringExpression;
+
+import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BiFunction;
-import javax.annotation.Nullable;
 
 /**
  * <pre>自定义JPA查询条件构造Builder</pre>
  *
  * @author aqiu 2020/11/17 13:13
  **/
-public class NoahBooleanBuilder implements Predicate, Cloneable {
+public class BooleanBuilder implements Predicate, Cloneable {
 
     @Nullable
     private Predicate predicate;
@@ -28,7 +28,7 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
     /**
      * Create an empty BooleanBuilder
      */
-    public NoahBooleanBuilder() {
+    public BooleanBuilder() {
     }
 
     /**
@@ -36,16 +36,16 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
      *
      * @param initial initial value
      */
-    public NoahBooleanBuilder(Predicate initial) {
+    public BooleanBuilder(Predicate initial) {
         predicate = (Predicate) ExpressionUtils.extract(initial);
     }
 
-    public static NoahBooleanBuilder builder(Predicate initial) {
-        return new NoahBooleanBuilder(initial);
+    public static BooleanBuilder builder(Predicate initial) {
+        return new BooleanBuilder(initial);
     }
 
-    public static NoahBooleanBuilder builder() {
-        return new NoahBooleanBuilder();
+    public static BooleanBuilder builder() {
+        return new BooleanBuilder();
     }
 
     @Override
@@ -57,71 +57,71 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
         }
     }
 
-    public <T extends Comparable<?>> NoahBooleanBuilder notNullAndCompare(
+    public <T extends Comparable<?>> BooleanBuilder notNullAndCompare(
             ComparableExpression<T> expression,
             @Nullable T value,
             BiFunction<ComparableExpression<T>, T, BooleanExpression> compareFun) {
         return this.filterAndCompare(expression, value, Objects::nonNull, compareFun);
     }
 
-    public <T extends Comparable<?>> NoahBooleanBuilder notNullOrCompare(
+    public <T extends Comparable<?>> BooleanBuilder notNullOrCompare(
             ComparableExpression<T> expression,
             @Nullable T value,
             BiFunction<ComparableExpression<T>, T, BooleanExpression> compareFun) {
         return this.filterOrCompare(expression, value, Objects::nonNull, compareFun);
     }
 
-    public NoahBooleanBuilder notEmptyAndEq(StringExpression expression,
-            @Nullable String value) {
-        return this.filterAndEq(expression, value, StringUtils::notEmpty);
+    public BooleanBuilder notEmptyAndEq(StringExpression expression,
+                                        @Nullable String value) {
+        return this.filterAndEq(expression, value, StringUtils::isNotEmpty);
     }
 
-    public NoahBooleanBuilder notEmptyOrEq(StringExpression expression,
-            @Nullable String value) {
-        return this.filterOrEq(expression, value, StringUtils::notEmpty);
+    public BooleanBuilder notEmptyOrEq(StringExpression expression,
+                                       @Nullable String value) {
+        return this.filterOrEq(expression, value, StringUtils::isNotEmpty);
     }
 
-    public NoahBooleanBuilder notBlankAndEq(StringExpression expression,
-            @Nullable String value) {
+    public BooleanBuilder notBlankAndEq(StringExpression expression,
+                                        @Nullable String value) {
         return this.filterAndEq(expression, value, StringUtils::hasText);
     }
 
-    public NoahBooleanBuilder notBlankOrEq(StringExpression expression,
-            @Nullable String value) {
+    public BooleanBuilder notBlankOrEq(StringExpression expression,
+                                       @Nullable String value) {
         return this.filterOrEq(expression, value, StringUtils::hasText);
     }
 
-    public <T> NoahBooleanBuilder notNullAndEq(
+    public <T> BooleanBuilder notNullAndEq(
             SimpleExpression<T> expression, @Nullable T value) {
         return this.filterAndEq(expression, value, Objects::nonNull);
     }
 
-    public <T> NoahBooleanBuilder notNullOrEq(
+    public <T> BooleanBuilder notNullOrEq(
             SimpleExpression<T> expression, @Nullable T value) {
         return this.filterOrEq(expression, value, Objects::nonNull);
     }
 
-    public NoahBooleanBuilder notEmptyAndLike(
+    public BooleanBuilder notEmptyAndLike(
             StringExpression expression, @Nullable String value) {
-        return this.filterAndLike(expression, value, StringUtils::notEmpty);
+        return this.filterAndLike(expression, value, StringUtils::isNotEmpty);
     }
 
-    public NoahBooleanBuilder notBlankAndLike(
+    public BooleanBuilder notBlankAndLike(
             StringExpression expression, @Nullable String value) {
         return this.filterAndLike(expression, value, StringUtils::hasText);
     }
 
-    public NoahBooleanBuilder notEmptyOrLike(
+    public BooleanBuilder notEmptyOrLike(
             StringExpression expression, @Nullable String value) {
-        return this.filterOrLike(expression, value, StringUtils::notEmpty);
+        return this.filterOrLike(expression, value, StringUtils::isNotEmpty);
     }
 
-    public NoahBooleanBuilder notBlankOrLike(
+    public BooleanBuilder notBlankOrLike(
             StringExpression expression, @Nullable String value) {
         return this.filterOrLike(expression, value, StringUtils::hasText);
     }
 
-    public NoahBooleanBuilder filterAndLike(
+    public BooleanBuilder filterAndLike(
             StringExpression expression, @Nullable String value,
             java.util.function.Predicate<String> predicate) {
         Optional.ofNullable(value).filter(predicate)
@@ -129,7 +129,7 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
         return this;
     }
 
-    public NoahBooleanBuilder filterOrLike(
+    public BooleanBuilder filterOrLike(
             StringExpression expression, @Nullable String value,
             java.util.function.Predicate<String> predicate) {
         Optional.ofNullable(value).filter(predicate)
@@ -137,102 +137,102 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
         return this;
     }
 
-    public <T> NoahBooleanBuilder filterAndEq(
+    public <T> BooleanBuilder filterAndEq(
             SimpleExpression<T> expression, @Nullable T value,
             java.util.function.Predicate<T> predicate) {
         return this.filterAndHandle(expression, value, predicate, SimpleExpression::eq);
     }
 
-    public <T> NoahBooleanBuilder filterOrEq(
+    public <T> BooleanBuilder filterOrEq(
             SimpleExpression<T> expression, @Nullable T value,
             java.util.function.Predicate<T> predicate) {
         return this.filterOrHandle(expression, value, predicate, SimpleExpression::eq);
     }
 
-    public <T extends Comparable<?>> NoahBooleanBuilder filterAndCompare(
+    public <T extends Comparable<?>> BooleanBuilder filterAndCompare(
             ComparableExpression<T> expression, @Nullable T value,
             java.util.function.Predicate<T> predicate,
             BiFunction<ComparableExpression<T>, T, BooleanExpression> compareFun) {
         return this.filterThenCompare(expression, value, predicate, compareFun,
-                NoahBooleanBuilder::and);
+                BooleanBuilder::and);
     }
 
-    public <T extends Comparable<?>> NoahBooleanBuilder filterOrCompare(
+    public <T extends Comparable<?>> BooleanBuilder filterOrCompare(
             ComparableExpression<T> expression, @Nullable T value,
             java.util.function.Predicate<T> predicate,
             BiFunction<ComparableExpression<T>, T, BooleanExpression> compareFun) {
         return this.filterThenCompare(expression, value, predicate, compareFun,
-                NoahBooleanBuilder::or);
+                BooleanBuilder::or);
     }
 
-    public <T> NoahBooleanBuilder filterAndHandle(
+    public <T> BooleanBuilder filterAndHandle(
             SimpleExpression<T> expression, @Nullable T value,
             java.util.function.Predicate<T> predicate,
             BiFunction<SimpleExpression<T>, T, BooleanExpression> compareFun) {
         return this.filterThenHandle(expression, value, predicate, compareFun,
-                NoahBooleanBuilder::and);
+                BooleanBuilder::and);
     }
 
-    public <T> NoahBooleanBuilder filterAndHandle(
+    public <T> BooleanBuilder filterAndHandle(
             SimpleExpression<T> expression, @Nullable Collection<T> value,
             java.util.function.Predicate<Collection<T>> predicate,
             BiFunction<SimpleExpression<T>, Collection<T>, BooleanExpression> compareFun) {
         return this.filterThenHandle(expression, value, predicate, compareFun,
-                NoahBooleanBuilder::and);
+                BooleanBuilder::and);
     }
 
-    public <T> NoahBooleanBuilder filterOrHandle(
+    public <T> BooleanBuilder filterOrHandle(
             SimpleExpression<T> expression, @Nullable T value,
             java.util.function.Predicate<T> predicate,
             BiFunction<SimpleExpression<T>, T, BooleanExpression> compareFun) {
         return this.filterThenHandle(expression, value, predicate, compareFun,
-                NoahBooleanBuilder::or);
+                BooleanBuilder::or);
     }
 
-    public <T extends Comparable<?>> NoahBooleanBuilder filterThenCompare(
+    public <T extends Comparable<?>> BooleanBuilder filterThenCompare(
             ComparableExpression<T> expression, @Nullable T value,
             java.util.function.Predicate<T> predicate,
             BiFunction<ComparableExpression<T>, T, BooleanExpression> compareFun,
-            BiFunction<NoahBooleanBuilder, Predicate, NoahBooleanBuilder> function) {
+            BiFunction<BooleanBuilder, Predicate, BooleanBuilder> function) {
         Optional.ofNullable(value).filter(predicate)
                 .ifPresent(v -> function.apply(this, compareFun.apply(expression, v)));
         return this;
     }
 
-    public <T> NoahBooleanBuilder filterThenHandle(
+    public <T> BooleanBuilder filterThenHandle(
             SimpleExpression<T> expression, @Nullable T value,
             java.util.function.Predicate<T> predicate,
             BiFunction<SimpleExpression<T>, T, BooleanExpression> compareFun,
-            BiFunction<NoahBooleanBuilder, Predicate, NoahBooleanBuilder> function) {
+            BiFunction<BooleanBuilder, Predicate, BooleanBuilder> function) {
         Optional.ofNullable(value).filter(predicate)
                 .ifPresent(v -> function.apply(this, compareFun.apply(expression, v)));
         return this;
     }
 
-    public <T> NoahBooleanBuilder filterThenHandle(
+    public <T> BooleanBuilder filterThenHandle(
             SimpleExpression<T> expression, @Nullable Collection<T> value,
             java.util.function.Predicate<Collection<T>> predicate,
             BiFunction<SimpleExpression<T>, Collection<T>, BooleanExpression> compareFun,
-            BiFunction<NoahBooleanBuilder, Predicate, NoahBooleanBuilder> function) {
+            BiFunction<BooleanBuilder, Predicate, BooleanBuilder> function) {
         Optional.ofNullable(value).filter(predicate)
                 .ifPresent(v -> function.apply(this, compareFun.apply(expression, v)));
         return this;
     }
 
-    public <T extends Comparable<?>> NoahBooleanBuilder notNullAndBetween(
+    public <T extends Comparable<?>> BooleanBuilder notNullAndBetween(
             ComparableExpression<T> expression, @Nullable T value1, @Nullable T value2) {
-        return this.notNullThenBetween(expression, value1, value2, NoahBooleanBuilder::and);
+        return this.notNullThenBetween(expression, value1, value2, BooleanBuilder::and);
     }
 
-    public <T extends Comparable<?>> NoahBooleanBuilder notNullOrBetween(
+    public <T extends Comparable<?>> BooleanBuilder notNullOrBetween(
             ComparableExpression<T> expression, @Nullable T value1, @Nullable T value2) {
-        return this.notNullThenBetween(expression, value1, value2, NoahBooleanBuilder::or);
+        return this.notNullThenBetween(expression, value1, value2, BooleanBuilder::or);
     }
 
 
-    public <T extends Comparable<?>> NoahBooleanBuilder notNullThenBetween(
+    public <T extends Comparable<?>> BooleanBuilder notNullThenBetween(
             ComparableExpression<T> expression, @Nullable T value1, @Nullable T value2,
-            BiFunction<NoahBooleanBuilder, Predicate, NoahBooleanBuilder> function) {
+            BiFunction<BooleanBuilder, Predicate, BooleanBuilder> function) {
         if (value1 != null && value2 != null) {
             function.apply(this, expression.between(value1, value2));
         } else if (value1 != null) {
@@ -249,7 +249,7 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
      * @param right right hand side of {@code and} operation
      * @return the current object
      */
-    public NoahBooleanBuilder and(@Nullable Predicate right) {
+    public BooleanBuilder and(@Nullable Predicate right) {
         if (right != null) {
             if (predicate == null) {
                 predicate = right;
@@ -271,7 +271,7 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
      * @param args union of predicates
      * @return the current object
      */
-    public NoahBooleanBuilder andAnyOf(Predicate... args) {
+    public BooleanBuilder andAnyOf(Predicate... args) {
         if (args.length > 0) {
             and(ExpressionUtils.anyOf(args));
         }
@@ -284,21 +284,21 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
      * @param right predicate to be negated
      * @return the current object
      */
-    public NoahBooleanBuilder andNot(Predicate right) {
+    public BooleanBuilder andNot(Predicate right) {
         return and(right.not());
     }
 
     @Override
-    public NoahBooleanBuilder clone() throws CloneNotSupportedException {
-        return (NoahBooleanBuilder) super.clone();
+    public BooleanBuilder clone() throws CloneNotSupportedException {
+        return (BooleanBuilder) super.clone();
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == this) {
             return true;
-        } else if (o instanceof BooleanBuilder) {
-            return Objects.equals(((BooleanBuilder) o).getValue(), predicate);
+        } else if (o instanceof com.querydsl.core.BooleanBuilder) {
+            return Objects.equals(((com.querydsl.core.BooleanBuilder) o).getValue(), predicate);
         } else {
             return false;
         }
@@ -324,7 +324,7 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
     }
 
     @Override
-    public NoahBooleanBuilder not() {
+    public BooleanBuilder not() {
         if (predicate != null) {
             predicate = predicate.not();
         }
@@ -337,7 +337,7 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
      * @param right right hand side of {@code or} operation
      * @return the current object
      */
-    public NoahBooleanBuilder or(@Nullable Predicate right) {
+    public BooleanBuilder or(@Nullable Predicate right) {
         if (right != null) {
             if (predicate == null) {
                 predicate = right;
@@ -355,7 +355,7 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
      * @param args intersection of predicates
      * @return the current object
      */
-    public NoahBooleanBuilder orAllOf(Predicate... args) {
+    public BooleanBuilder orAllOf(Predicate... args) {
         if (args.length > 0) {
             or(ExpressionUtils.allOf(args));
         }
@@ -368,7 +368,7 @@ public class NoahBooleanBuilder implements Predicate, Cloneable {
      * @param right predicate to be negated
      * @return the current object
      */
-    public NoahBooleanBuilder orNot(Predicate right) {
+    public BooleanBuilder orNot(Predicate right) {
         return or(right.not());
     }
 

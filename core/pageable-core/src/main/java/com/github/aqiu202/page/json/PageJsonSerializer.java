@@ -1,10 +1,11 @@
-package com.noah.base.json;
+package com.github.aqiu202.page.json;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.noah.base.page.PageableOutput;
+import com.github.aqiu202.page.PageableOutput;
+
 import java.io.IOException;
 
 /**

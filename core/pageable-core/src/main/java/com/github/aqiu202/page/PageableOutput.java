@@ -1,7 +1,7 @@
-package com.noah.base.page;
+package com.github.aqiu202.page;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.noah.base.json.PageJsonSerializer;
+import com.github.aqiu202.page.json.PageJsonSerializer;
 import java.util.List;
 
 /**

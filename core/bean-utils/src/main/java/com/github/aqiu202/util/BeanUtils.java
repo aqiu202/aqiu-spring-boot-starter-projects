@@ -83,12 +83,12 @@ public abstract class BeanUtils {
                     method.setWriteIndex(methodAccess
                             .getIndex(method.getWriteMethodName(), method.getType()));
                 } catch (Exception e) {
-                    method.setWriteIndex(-1);
+                    log.warn("setter方法：{}未找到:{}", method.getWriteMethodName(), e.getMessage());
                 }
                 try {
                     method.setReadIndex(methodAccess.getIndex(method.getReadMethodName(), 0));
                 } catch (Exception e) {
-                    method.setReadIndex(-1);
+                    log.warn("getter方法：{}未找到:{}", method.getReadMethodName(), e.getMessage());
                 }
             }
             methodsCache.putIfAbsent(clz.getName(), methods);
@@ -144,7 +144,7 @@ public abstract class BeanUtils {
         try {
             ma.invoke(obj, method, args);
         } catch (RuntimeException e) {
-            log.error("", e);
+            log.error("反射调用方法异常", e);
         }
     }
 

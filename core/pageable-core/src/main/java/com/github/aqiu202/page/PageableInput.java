@@ -1,4 +1,4 @@
-package com.noah.base.page;
+package com.github.aqiu202.page;
 
 /**
  * <pre>分页参数</pre>

@@ -11,7 +11,7 @@ import java.util.Optional;
  *
  * @author aqiu 2018/11/26 2:44 PM
  **/
-public class PageParam extends com.noah.base.page.PageParam implements Pageable {
+public class PageParam extends com.github.aqiu202.page.PageParam implements Pageable {
 
     @Nullable
     private final Sort sort;

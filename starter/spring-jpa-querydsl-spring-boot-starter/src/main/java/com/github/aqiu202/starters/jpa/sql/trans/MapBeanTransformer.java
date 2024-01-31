@@ -1,9 +1,10 @@
 package com.github.aqiu202.starters.jpa.sql.trans;
 
-import com.github.aqiu202.util.PropertyNameUtils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.github.aqiu202.util.StringUtils;
 import org.hibernate.transform.ResultTransformer;
 
 public final class MapBeanTransformer implements ResultTransformer {
@@ -25,7 +26,7 @@ public final class MapBeanTransformer implements ResultTransformer {
             String alias = aliases[i];
             if (alias != null) {
                 alias = alias.toLowerCase();
-                result.put(PropertyNameUtils.hump(alias), tuple[i]);
+                result.put(StringUtils.underlineToCamel(alias), tuple[i]);
             }
         }
         return result;

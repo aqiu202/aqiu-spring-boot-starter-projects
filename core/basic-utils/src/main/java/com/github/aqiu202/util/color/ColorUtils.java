@@ -1,4 +1,6 @@
-package com.github.aqiu202.util;
+package com.github.aqiu202.util.color;
+
+import com.github.aqiu202.util.RandomUtils;
 
 import java.awt.Color;
 

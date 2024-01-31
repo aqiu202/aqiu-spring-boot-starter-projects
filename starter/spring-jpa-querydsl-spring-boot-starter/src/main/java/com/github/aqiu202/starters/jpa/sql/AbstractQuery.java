@@ -272,13 +272,13 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     private void fullParams(Query query) {
         // 给条件赋上值
         if (this.isItemParams) {
-            if (CollectionUtils.notEmpty(this.params)) {
+            if (CollectionUtils.isNotEmpty(this.params)) {
                 for (int i = 0; i < this.params.length; i++) {
                     query.setParameter(i + 1, this.params[i]);
                 }
             }
         } else {
-            if (CollectionUtils.notEmpty(this.parameters)) {
+            if (CollectionUtils.isNotEmpty(this.parameters)) {
                 for (Map.Entry<String, ?> entry : this.parameters.entrySet()) {
                     query.setParameter(entry.getKey(), entry.getValue());
                 }
