@@ -420,6 +420,40 @@ public abstract class ReflectionUtils {
         return methodName + "(" + parameterNames + ")";
     }
 
+    // 获取方法描述符的方法
+    public static String getMethodDescriptor(Method method) {
+        StringBuilder descriptor = new StringBuilder("(");
+
+        // 获取方法参数类型
+        Class<?>[] parameterTypes = method.getParameterTypes();
+        for (Class<?> parameterType : parameterTypes) {
+            descriptor.append(getTypeDescriptor(parameterType));
+        }
+
+        // 添加返回类型
+        descriptor.append(")");
+        descriptor.append(getTypeDescriptor(method.getReturnType()));
+
+        return descriptor.toString();
+    }
+
+    // 获取类型描述符的方法
+    public static String getTypeDescriptor(Class<?> type) {
+        if (type.isPrimitive()) {
+            // 如果是基本数据类型，直接返回对应的描述符
+            if (type == int.class) {
+                return "I";
+            } else if (type == void.class) {
+                return "V";
+            } // 其他基本数据类型类似...
+        } else if (type.isArray()) {
+            // 如果是数组类型，返回数组类型的描述符
+            return "[" + getTypeDescriptor(type.getComponentType());
+        }
+        // 对象类型直接返回 "L" + 类名 + ";"
+        return "L" + type.getName().replace('.', '/') + ";";
+    }
+
     public static class ClassFields {
         private final Map<String, Field> fieldMap = new HashMap<>();
         private final List<Field> fields;

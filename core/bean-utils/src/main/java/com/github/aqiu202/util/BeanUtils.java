@@ -148,4 +148,8 @@ public abstract class BeanUtils {
         }
     }
 
+    public static void main(String[] args) {
+
+    }
+
 }

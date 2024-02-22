@@ -22,6 +22,7 @@
         <module>id-generator-spring-boot-starter</module>
         <module>spring-jpa-querydsl-spring-boot-starter</module>
         <module>zk-curator-spring-boot-starter</module>
+        <module>excel-spring-boot-starter</module>
     </modules>
 
     <dependencies>
