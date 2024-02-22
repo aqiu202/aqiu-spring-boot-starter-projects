@@ -20,14 +20,14 @@ public class ExcelAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(SheetWriteConfiguration.class)
-    @ConfigurationProperties(prefix = "excel.configuration.write")
+    @ConfigurationProperties(prefix = "excel.write")
     public SheetWriteConfiguration sheetWriteConfiguration() {
         return new SheetWriteConfiguration();
     }
 
     @Bean
     @ConditionalOnMissingBean(SheetReadConfiguration.class)
-    @ConfigurationProperties(prefix = "excel.configuration.read")
+    @ConfigurationProperties(prefix = "excel.read")
     public SheetReadConfiguration sheetReadConfiguration() {
         return new SheetReadConfiguration();
     }
