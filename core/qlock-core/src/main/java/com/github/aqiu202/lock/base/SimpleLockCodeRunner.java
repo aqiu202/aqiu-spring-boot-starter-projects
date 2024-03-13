@@ -4,8 +4,8 @@ public class SimpleLockCodeRunner extends AbstractLockCodeRunner<String> {
 
     private final String key;
 
-    public SimpleLockCodeRunner(Lock lock, String key) {
-        super(lock);
+    public SimpleLockCodeRunner(KeyLock keyLock, String key) {
+        super(keyLock);
         this.key = key;
     }
 

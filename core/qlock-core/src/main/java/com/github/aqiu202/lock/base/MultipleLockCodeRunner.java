@@ -6,8 +6,8 @@ public class MultipleLockCodeRunner extends AbstractLockCodeRunner<Collection<St
 
     private final Collection<String> keys;
 
-    public MultipleLockCodeRunner(Lock lock, Collection<String> keys) {
-        super(lock);
+    public MultipleLockCodeRunner(KeyLock keyLock, Collection<String> keys) {
+        super(keyLock);
         this.keys = keys;
     }
 
@@ -18,9 +18,9 @@ public class MultipleLockCodeRunner extends AbstractLockCodeRunner<Collection<St
 
     @Override
     protected void getLock(Collection<String> keys) {
-        Lock lock = this.getLock();
+        KeyLock keyLock = this.getLock();
         for (String key : keys) {
-            Boolean getLock = lock.acquire(key);
+            Boolean getLock = keyLock.acquire(key);
             if (getLock == null || !getLock) {
                 throw new ResourceLockedException("资源已被锁定，无法访问");
             }
@@ -29,9 +29,9 @@ public class MultipleLockCodeRunner extends AbstractLockCodeRunner<Collection<St
 
     @Override
     protected void releaseKey(Collection<String> keys) {
-        Lock lock = this.getLock();
+        KeyLock keyLock = this.getLock();
         for (String key : keys) {
-            lock.release(key);
+            keyLock.release(key);
         }
     }
 }

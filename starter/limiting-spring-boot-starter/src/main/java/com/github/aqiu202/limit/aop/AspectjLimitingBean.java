@@ -8,7 +8,7 @@ import com.github.aqiu202.limit.anno.CurrentLimiting;
 import com.github.aqiu202.limit.anno.RepeatLimiting;
 import com.github.aqiu202.limit.anno.ThreadLimiting;
 import com.github.aqiu202.limit.key.SessionMethodKeyGenerator;
-import com.github.aqiu202.lock.base.Lock;
+import com.github.aqiu202.lock.base.KeyLock;
 import com.github.aqiu202.util.ServletRequestUtils;
 import com.github.aqiu202.util.StringUtils;
 import com.github.aqiu202.util.spel.EvaluationFiller;
@@ -43,14 +43,14 @@ public class AspectjLimitingBean implements SPelKeyHandler, ApplicationContextAw
     private final MethodKeyGenerator methodKeyGenerator = new MethodKeyGenerator();
     private final Map<String, Semaphore> semaphoreMap = new ConcurrentHashMap<>();
     private final Map<String, RateLimiter> rateLimiterMap = new ConcurrentHashMap<>();
-    private final Lock lock;
+    private final KeyLock keyLock;
     private final EvaluationFiller evaluationFiller;
 
     private final ExpressionParser parser = new SpelExpressionParser();
     private ApplicationContext applicationContext;
 
-    public AspectjLimitingBean(Lock lock, EvaluationFiller evaluationFiller) {
-        this.lock = lock;
+    public AspectjLimitingBean(KeyLock keyLock, EvaluationFiller evaluationFiller) {
+        this.keyLock = keyLock;
         this.evaluationFiller = evaluationFiller;
     }
 
@@ -120,7 +120,7 @@ public class AspectjLimitingBean implements SPelKeyHandler, ApplicationContextAw
         } else {
             key = this.processKey(key, target, m, params, this.evaluationFiller);
         }
-        Boolean unlocked = lock.acquire(key, timeout, timeUnit);
+        Boolean unlocked = keyLock.acquire(key, timeout, timeUnit);
         if (!unlocked) {
             throw new IllegalArgumentException(repeatLimiting.message());
         }
@@ -134,7 +134,7 @@ public class AspectjLimitingBean implements SPelKeyHandler, ApplicationContextAw
             throw throwable;
         } finally {
             if (error != null) {
-                lock.release(key, timeout, timeUnit);
+                keyLock.release(key, timeout, timeUnit);
             }
         }
         return result;

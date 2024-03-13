@@ -1,6 +1,6 @@
-package com.github.aqiu202.lock.distributed;
+package com.github.aqiu202.lock.zk;
 
-import com.github.aqiu202.lock.base.Lock;
+import com.github.aqiu202.lock.base.KeyLock;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 
@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-public abstract class AbstractZookeeperLock implements Lock {
+public abstract class AbstractZookeeperKeyLock implements KeyLock {
 
     private final Map<String, InterProcessLock> interProcessLockResource = new ConcurrentHashMap<>();
 
     protected CuratorFramework curatorFramework;
 
-    protected AbstractZookeeperLock() {
+    protected AbstractZookeeperKeyLock() {
     }
 
     public CuratorFramework getCuratorFramework() {

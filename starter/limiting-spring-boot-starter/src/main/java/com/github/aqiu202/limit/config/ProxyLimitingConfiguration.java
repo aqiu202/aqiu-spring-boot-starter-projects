@@ -8,7 +8,7 @@ import com.github.aqiu202.limit.anno.ThreadLimiting;
 import com.github.aqiu202.limit.aop.CurrentMethodInterceptor;
 import com.github.aqiu202.limit.aop.RepeatMethodInterceptor;
 import com.github.aqiu202.limit.aop.ThreadMethodInterceptor;
-import com.github.aqiu202.lock.base.CacheLock;
+import com.github.aqiu202.lock.cache.CacheKeyLock;
 import com.github.aqiu202.util.spel.EvaluationFiller;
 import org.springframework.aop.Advisor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class ProxyLimitingConfiguration {
     public static final String CURRENT_LIMITING_BEAN_NAME = "currentLimitingBean";
 
     @Bean
-    public RepeatMethodInterceptor repeatMethodInterceptor(CacheLock cacheLock,
+    public RepeatMethodInterceptor repeatMethodInterceptor(CacheKeyLock cacheLock,
                                                            @Autowired(required = false) EvaluationFiller evaluationFiller) {
         return new RepeatMethodInterceptor(cacheLock, evaluationFiller);
     }

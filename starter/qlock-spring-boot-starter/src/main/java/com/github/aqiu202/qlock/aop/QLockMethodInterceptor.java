@@ -1,9 +1,9 @@
 package com.github.aqiu202.qlock.aop;
 
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
+import com.github.aqiu202.lock.base.KeyLock;
 import com.github.aqiu202.lock.base.ResourceLockedException;
 import com.github.aqiu202.util.spel.EvaluationFiller;
-import com.github.aqiu202.lock.base.Lock;
 import com.github.aqiu202.qlock.anno.QLock;
 import java.util.concurrent.TimeUnit;
 import org.aopalliance.intercept.MethodInvocation;
@@ -15,15 +15,15 @@ import org.aopalliance.intercept.MethodInvocation;
  **/
 public class QLockMethodInterceptor extends AbstractKeyAnnotationInterceptor<QLock> {
 
-    private final Lock lock;
+    private final KeyLock keyLock;
 
-    public QLockMethodInterceptor(Lock lock) {
-        this.lock = lock;
+    public QLockMethodInterceptor(KeyLock keyLock) {
+        this.keyLock = keyLock;
     }
 
-    public QLockMethodInterceptor(Lock lock, EvaluationFiller evaluationFiller) {
+    public QLockMethodInterceptor(KeyLock keyLock, EvaluationFiller evaluationFiller) {
         super(evaluationFiller);
-        this.lock = lock;
+        this.keyLock = keyLock;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class QLockMethodInterceptor extends AbstractKeyAnnotationInterceptor<QLo
     protected void beforeIntercept(MethodInvocation invocation, QLock qLock, String key) {
         long timeout = qLock.timeout();
         TimeUnit timeUnit = qLock.timeUnit();
-        final Boolean getLock = this.lock.acquire(key, timeout, timeUnit);
+        final Boolean getLock = this.keyLock.acquire(key, timeout, timeUnit);
         if (!getLock) {
             throw new ResourceLockedException(qLock.message());
         }
@@ -48,6 +48,6 @@ public class QLockMethodInterceptor extends AbstractKeyAnnotationInterceptor<QLo
 
     @Override
     protected void afterIntercept(MethodInvocation invocation, QLock qLock, String key, Throwable throwable) {
-        this.lock.release(key, qLock.timeout(), qLock.timeUnit());
+        this.keyLock.release(key, qLock.timeout(), qLock.timeUnit());
     }
 }

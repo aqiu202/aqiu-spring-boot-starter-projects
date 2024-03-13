@@ -4,10 +4,10 @@ import java.util.concurrent.Callable;
 
 public abstract class AbstractLockCodeRunner<K> {
 
-    private final Lock lock;
+    private final KeyLock keyLock;
 
-    protected AbstractLockCodeRunner(Lock lock) {
-        this.lock = lock;
+    protected AbstractLockCodeRunner(KeyLock keyLock) {
+        this.keyLock = keyLock;
     }
 
     public <T> T tryRun(Callable<T> callable) {
@@ -50,8 +50,8 @@ public abstract class AbstractLockCodeRunner<K> {
         return result;
     }
 
-    public Lock getLock() {
-        return lock;
+    public KeyLock getLock() {
+        return keyLock;
     }
 
     protected abstract K getKey();

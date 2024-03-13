@@ -2,18 +2,19 @@ package com.github.aqiu202.lock.base;
 
 import com.github.aqiu202.id.IdGenerator;
 import com.github.aqiu202.id.IdGeneratorFactory;
-import com.github.aqiu202.lock.centralize.LocaleTtlLock;
+import com.github.aqiu202.lock.cache.SimpleCacheKeyLock;
+
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * <pre>AbstractReentrantLock</pre>
+ * <pre>基于缓存的简单可重入锁的实现</pre>
  *
  * @author aqiu 2020/12/2 15:57
  **/
-public abstract class AbstractReentrantTtlLock extends LocaleTtlLock {
+public class ReentrantCacheKeyLock extends SimpleCacheKeyLock {
 
     protected IdGenerator<?> idGenerator;
 

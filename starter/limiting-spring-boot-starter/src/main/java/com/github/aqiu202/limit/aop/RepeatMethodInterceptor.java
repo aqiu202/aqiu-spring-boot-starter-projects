@@ -2,7 +2,7 @@ package com.github.aqiu202.limit.aop;
 
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
 import com.github.aqiu202.limit.anno.RepeatLimiting;
-import com.github.aqiu202.lock.base.Lock;
+import com.github.aqiu202.lock.base.KeyLock;
 import com.github.aqiu202.lock.base.ResourceLockedException;
 import com.github.aqiu202.util.spel.EvaluationFiller;
 import java.util.concurrent.TimeUnit;
@@ -15,15 +15,15 @@ import org.aopalliance.intercept.MethodInvocation;
  **/
 public class RepeatMethodInterceptor extends AbstractKeyAnnotationInterceptor<RepeatLimiting> {
 
-    private final Lock lock;
+    private final KeyLock keyLock;
 
-    public RepeatMethodInterceptor(Lock lock) {
-        this.lock = lock;
+    public RepeatMethodInterceptor(KeyLock keyLock) {
+        this.keyLock = keyLock;
     }
 
-    public RepeatMethodInterceptor(Lock lock, EvaluationFiller evaluationFiller) {
+    public RepeatMethodInterceptor(KeyLock keyLock, EvaluationFiller evaluationFiller) {
         super(evaluationFiller);
-        this.lock = lock;
+        this.keyLock = keyLock;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class RepeatMethodInterceptor extends AbstractKeyAnnotationInterceptor<Re
             String key) {
         long timeout = repeatLimiting.timeout();
         TimeUnit timeUnit = repeatLimiting.timeUnit();
-        final Boolean getLock = this.lock.acquire(key, timeout, timeUnit);
+        final Boolean getLock = this.keyLock.acquire(key, timeout, timeUnit);
         if (!getLock) {
             throw new ResourceLockedException(repeatLimiting.message());
         }
@@ -51,7 +51,7 @@ public class RepeatMethodInterceptor extends AbstractKeyAnnotationInterceptor<Re
     protected Object onError(MethodInvocation invocation, RepeatLimiting repeatLimiting, String key,
             Throwable throwable) throws Throwable {
         //只有等到过期或者出现异常才释放锁，不会主动释放锁
-        this.lock.release(key, repeatLimiting.timeout(), repeatLimiting.timeUnit());
+        this.keyLock.release(key, repeatLimiting.timeout(), repeatLimiting.timeUnit());
         throw throwable;
     }
 }

@@ -1,14 +1,15 @@
-package com.github.aqiu202.lock.base;
+package com.github.aqiu202.lock.cache;
 
+import com.github.aqiu202.lock.base.KeyLock;
 import com.github.aqiu202.ttl.data.StringTtlCache;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <pre>CacheLock</pre>
+ * <pre>CacheKeyLock</pre>
  *
  * @author aqiu 2020/12/1 13:24
  **/
-public interface CacheLock extends Lock {
+public interface CacheKeyLock extends KeyLock {
 
     String STRING_VALUE = "1";
 

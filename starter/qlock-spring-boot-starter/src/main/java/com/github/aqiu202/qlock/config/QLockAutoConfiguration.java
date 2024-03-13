@@ -2,7 +2,7 @@ package com.github.aqiu202.qlock.config;
 
 import com.github.aqiu202.aop.pointcut.AnnotationPointcutAdvisor;
 import com.github.aqiu202.lock.base.DefaultLockCodeExecutor;
-import com.github.aqiu202.lock.base.Lock;
+import com.github.aqiu202.lock.base.KeyLock;
 import com.github.aqiu202.lock.base.LockCodeExecutor;
 import com.github.aqiu202.qlock.anno.QLock;
 import com.github.aqiu202.qlock.aop.QLockMethodInterceptor;
@@ -26,15 +26,15 @@ public class QLockAutoConfiguration {
 
     @Bean
     public Advisor qLockInterceptorBean(
-            @Autowired(required = false) EvaluationFiller evaluationFiller, Lock lock) {
+            @Autowired(required = false) EvaluationFiller evaluationFiller, KeyLock keyLock) {
         return new AnnotationPointcutAdvisor<>(QLock.class,
-                new QLockMethodInterceptor(lock, evaluationFiller));
+                new QLockMethodInterceptor(keyLock, evaluationFiller));
     }
 
     @Bean
     @ConditionalOnMissingBean(value = LockCodeExecutor.class)
-    public LockCodeExecutor lockCodeExecutor(Lock lock) {
-        return new DefaultLockCodeExecutor(lock);
+    public LockCodeExecutor lockCodeExecutor(KeyLock keyLock) {
+        return new DefaultLockCodeExecutor(keyLock);
     }
 
     @Bean

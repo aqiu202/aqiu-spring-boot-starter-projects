@@ -1,7 +1,6 @@
-package com.github.aqiu202.lock.centralize;
+package com.github.aqiu202.lock.cache;
 
 
-import com.github.aqiu202.lock.base.CacheLock;
 import com.github.aqiu202.ttl.data.StringTtlCache;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.Assert;
@@ -9,18 +8,18 @@ import org.springframework.util.Assert;
 import java.util.concurrent.TimeUnit;
 
 /**
- * <pre>集中式缓存实现的锁</pre>
+ * <pre>基于缓存实现的锁</pre>
  *
  * @author aqiu
  **/
-public class LocaleTtlLock implements CacheLock, InitializingBean {
+public class SimpleCacheKeyLock implements CacheKeyLock, InitializingBean {
 
     protected StringTtlCache cache;
 
-    public LocaleTtlLock() {
+    public SimpleCacheKeyLock() {
     }
 
-    public LocaleTtlLock(StringTtlCache cache) {
+    public SimpleCacheKeyLock(StringTtlCache cache) {
         this.cache = cache;
     }
 

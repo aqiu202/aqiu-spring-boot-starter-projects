@@ -1,15 +1,14 @@
-package com.github.aqiu202.lock.distributed;
+package com.github.aqiu202.lock.zk;
 
 import org.apache.curator.framework.recipes.locks.InterProcessLock;
 import org.apache.curator.framework.recipes.locks.InterProcessSemaphoreMutex;
 
 /**
- * <pre>ZookeeperLock</pre>
+ * <pre>Zookeeper互斥锁</pre>
  *
  * @author aqiu 2020/11/24 16:49
  **/
-public class ZookeeperLock extends AbstractZookeeperLock {
-
+public class ZookeeperKeyLock extends AbstractZookeeperKeyLock {
 
     @Override
     protected InterProcessLock createLock(String key) {

@@ -1,7 +1,7 @@
 package com.github.aqiu202.lock.base;
 
 
-import com.github.aqiu202.lock.centralize.LocaleTtlLock;
+import com.github.aqiu202.lock.cache.SimpleCacheKeyLock;
 import com.github.aqiu202.ttl.data.str.StringCaffeineCache;
 
 import java.util.Collection;
@@ -13,27 +13,27 @@ import java.util.Collection;
  **/
 public class DefaultLockCodeExecutor implements LockCodeExecutor {
 
-    private Lock lock;
+    private KeyLock keyLock;
 
     public DefaultLockCodeExecutor() {
-        this(new LocaleTtlLock(new StringCaffeineCache()));
+        this(new SimpleCacheKeyLock(new StringCaffeineCache()));
     }
 
-    public DefaultLockCodeExecutor(Lock lock) {
-        this.lock = lock;
+    public DefaultLockCodeExecutor(KeyLock keyLock) {
+        this.keyLock = keyLock;
     }
 
-    public void setLock(Lock lock) {
-        this.lock = lock;
+    public void setLock(KeyLock keyLock) {
+        this.keyLock = keyLock;
     }
 
     @Override
     public SimpleLockCodeRunner key(String key) {
-        return new SimpleLockCodeRunner(this.lock, key);
+        return new SimpleLockCodeRunner(this.keyLock, key);
     }
 
     @Override
     public MultipleLockCodeRunner keys(Collection<String> keys) {
-        return new MultipleLockCodeRunner(this.lock, keys);
+        return new MultipleLockCodeRunner(this.keyLock, keys);
     }
 }
