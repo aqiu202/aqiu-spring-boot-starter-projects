@@ -29,8 +29,8 @@ public class ProxyBeanProperty implements BeanProperty {
     }
 
     @Override
-    public Class<?> getPropertyType() {
-        return this.getProxy().getPropertyType();
+    public Class<?> getValueType() {
+        return this.getProxy().getValueType();
     }
 
     @Override

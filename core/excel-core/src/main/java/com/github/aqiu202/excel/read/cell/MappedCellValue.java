@@ -1,12 +1,12 @@
 package com.github.aqiu202.excel.read.cell;
 
-import com.github.aqiu202.excel.prop.MappedProperty;
+import com.github.aqiu202.excel.meta.TableMeta;
 
 public interface MappedCellValue {
 
-    MappedProperty getMappedProperty();
+    TableMeta getTableMeta();
 
-    CellValue<?> getCellValue();
+    CellVal<?> getCellValue();
 
-    void setCellValue(CellValue<?> cellValue);
+    void setCellValue(CellVal<?> cellVal);
 }

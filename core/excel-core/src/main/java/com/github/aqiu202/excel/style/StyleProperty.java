@@ -8,6 +8,8 @@ import java.util.Objects;
 public class StyleProperty {
     private HorizontalAlignment alignment = HorizontalAlignment.CENTER;
     private VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
+    private Short dataFormat;
+    private Boolean locked;
 
     @NestedConfigurationProperty
     private FontProperty font = new FontProperty();
@@ -22,40 +24,63 @@ public class StyleProperty {
         return alignment;
     }
 
-    public void setAlignment(HorizontalAlignment alignment) {
+    public StyleProperty setAlignment(HorizontalAlignment alignment) {
         this.alignment = alignment;
+        return this;
     }
 
     public VerticalAlignment getVerticalAlignment() {
         return verticalAlignment;
     }
 
-    public void setVerticalAlignment(VerticalAlignment verticalAlignment) {
+    public StyleProperty setVerticalAlignment(VerticalAlignment verticalAlignment) {
         this.verticalAlignment = verticalAlignment;
+        return this;
     }
 
     public FontProperty getFont() {
         return font;
     }
 
-    public void setFont(FontProperty font) {
+    public StyleProperty setFont(FontProperty font) {
         this.font = font;
+        return this;
     }
 
     public BorderProperty getBorder() {
         return border;
     }
 
-    public void setBorder(BorderProperty border) {
+    public StyleProperty setBorder(BorderProperty border) {
         this.border = border;
+        return this;
     }
 
     public ColorProperty getBackground() {
         return background;
     }
 
-    public void setBackground(ColorProperty background) {
+    public StyleProperty setBackground(ColorProperty background) {
         this.background = background;
+        return this;
+    }
+
+    public Short getDataFormat() {
+        return dataFormat;
+    }
+
+    public StyleProperty setDataFormat(Short dataFormat) {
+        this.dataFormat = dataFormat;
+        return this;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public StyleProperty setLocked(Boolean locked) {
+        this.locked = locked;
+        return this;
     }
 
     public void apply(CellStyle cellStyle, Font font) {
@@ -76,6 +101,27 @@ public class StyleProperty {
             if (this.border != null) {
                 this.border.apply(cellStyle);
             }
+            if (this.dataFormat != null) {
+                cellStyle.setDataFormat(this.dataFormat);
+            }
+            if (this.locked != null) {
+                cellStyle.setLocked(this.locked);
+            }
+        }
+    }
+
+    public void from(CellStyle cellStyle) {
+        if (cellStyle != null) {
+            this.setAlignment(cellStyle.getAlignment());
+            this.setVerticalAlignment(cellStyle.getVerticalAlignment());
+            if (this.background != null) {
+                this.background.setIndex(cellStyle.getFillForegroundColor());
+            }
+            if (this.border != null) {
+                this.border.from(cellStyle);
+            }
+            this.dataFormat = cellStyle.getDataFormat();
+            this.locked = cellStyle.getLocked();
         }
     }
 
@@ -84,11 +130,11 @@ public class StyleProperty {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StyleProperty that = (StyleProperty) o;
-        return alignment == that.alignment && verticalAlignment == that.verticalAlignment && Objects.equals(font, that.font) && Objects.equals(border, that.border) && Objects.equals(background, that.background);
+        return alignment == that.alignment && verticalAlignment == that.verticalAlignment && Objects.equals(dataFormat, that.dataFormat) && Objects.equals(font, that.font) && Objects.equals(border, that.border) && Objects.equals(background, that.background);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(alignment, verticalAlignment, font, border, background);
+        return Objects.hash(alignment, verticalAlignment, dataFormat, font, border, background);
     }
 }

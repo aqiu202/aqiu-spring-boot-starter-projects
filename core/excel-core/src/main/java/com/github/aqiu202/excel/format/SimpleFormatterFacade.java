@@ -21,19 +21,19 @@ public class SimpleFormatterFacade implements FormatterFacade {
     }
 
     @Override
-    public ResultWrapper<?> format(Object target, FormatterProvider formatterProvider) {
+    public ValueWrapper<?> format(Object target, FormatterProvider formatterProvider) {
         if (target == null) {
             NullFormatter formatter = this.formatterFinder.findFormatter(formatterProvider.getNullFormatter());
-            return new SimpleFormatResultWrapper(null, formatter.format());
+            return new FormatedValueWrapper(null, formatter.format());
         }
         if (ClassUtils.isDate(target)) {
-            SimpleDateResultWrapper dateWrapper = SimpleDateResultWrapper.of(target);
+            DateValueWrapper dateWrapper = DateValueWrapper.of(target);
             DateFormatter dateFormatter = this.formatterFinder.findFormatter(formatterProvider.getDateFormatter());
             String pattern = formatterProvider.getDateFormat();
             if (StringUtils.isBlank(pattern)) {
                 return dateWrapper;
             }
-            return new SimpleFormatResultWrapper(dateWrapper, dateFormatter.format(target, pattern));
+            return new FormatedValueWrapper(dateWrapper, dateFormatter.format(target, pattern));
         }
         if (ClassUtils.isNumber(target)) {
             NumberFormatter numberFormatter =
@@ -45,14 +45,14 @@ public class SimpleFormatterFacade implements FormatterFacade {
             } else {
                 number = (Number) target;
             }
-            SimpleNumberResultWrapper numberWrapper = new SimpleNumberResultWrapper(number);
+            NumberValueWrapper numberWrapper = new NumberValueWrapper(number);
             String pattern = formatterProvider.getNumberFormat();
             if (StringUtils.isBlank(pattern)) {
                 pattern = FormatterProvider.DEFAULT_NUM_FORMAT_PATTERN;
             }
-            return new SimpleFormatResultWrapper(numberWrapper, numberFormatter.format(number, pattern));
+            return new FormatedValueWrapper(numberWrapper, numberFormatter.format(number, pattern));
         }
-        return new SimpleStringResultWrapper(String.valueOf(target));
+        return new StringValueWrapper(String.valueOf(target));
     }
 
     @Override
@@ -78,7 +78,7 @@ public class SimpleFormatterFacade implements FormatterFacade {
             }
             return numberFormatter.parse(text, pattern, targetType);
         }
-        if (CharSequence.class.isAssignableFrom(targetType)) {
+        if (String.class.isAssignableFrom(targetType)) {
             return (T) text;
         }
         throw new RuntimeException("不支持的解析类型：" + targetType.getName());

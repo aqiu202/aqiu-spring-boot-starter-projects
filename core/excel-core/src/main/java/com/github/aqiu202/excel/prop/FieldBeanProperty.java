@@ -79,7 +79,7 @@ public class FieldBeanProperty implements BeanProperty {
     }
 
     @Override
-    public Class<?> getPropertyType() {
+    public Class<?> getValueType() {
         return this.pathFields.getLastElementType();
     }
 

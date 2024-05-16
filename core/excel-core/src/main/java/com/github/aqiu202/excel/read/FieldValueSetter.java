@@ -3,23 +3,25 @@ package com.github.aqiu202.excel.read;
 import com.github.aqiu202.excel.read.cell.*;
 import com.github.aqiu202.util.ClassUtils;
 
-public interface FieldValueSetter {
-    void set(Object instance, MappedCellValue mappedCellValue);
+import javax.annotation.Nullable;
 
-    default Object extractCellValueWithType(CellValue<?> cellValue, Class<?> type) {
+public interface FieldValueSetter {
+    void set(Object instance, @Nullable MappedCellValue mappedCellValue);
+
+    default Object extractCellValueWithType(CellVal<?> cellVal, Class<?> type) {
         // 如果是Map直接返回value
         if (type == null) {
-            return cellValue.getValue();
+            return cellVal.getValue();
         }
         Object targetValue;
-        if (ClassUtils.isNumber(type) && cellValue instanceof NumberCellValue) {
-            targetValue = ((NumberCellValue) cellValue).convertAs(type);
-        } else if (ClassUtils.isDate(type) && cellValue instanceof DateCellValue) {
-            targetValue = ((DateCellValue) cellValue).convertAs(type);
-        } else if ((type.equals(Boolean.class) || type.equals(Boolean.TYPE)) && cellValue instanceof BooleanCellValue) {
-            targetValue = ((BooleanCellValue) cellValue).getValue();
+        if (ClassUtils.isNumber(type) && cellVal instanceof NumberCellVal) {
+            targetValue = ((NumberCellVal) cellVal).convertAs(type);
+        } else if (ClassUtils.isDate(type) && cellVal instanceof DateCellVal) {
+            targetValue = ((DateCellVal) cellVal).convertAs(type);
+        } else if ((type.equals(Boolean.class) || type.equals(Boolean.TYPE)) && cellVal instanceof BooleanCellVal) {
+            targetValue = ((BooleanCellVal) cellVal).getValue();
         } else if (type.equals(String.class)) {
-            targetValue = cellValue.getValue();
+            targetValue = cellVal.getValue();
         } else {
             targetValue = null;
         }

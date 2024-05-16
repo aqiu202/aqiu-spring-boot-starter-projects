@@ -3,7 +3,7 @@ package com.github.aqiu202.entity;
 /**
  * 工作中心
  */
-public class BaseWorkCenter extends SmesBaseEntity<BaseWorkCenter> {
+public class BaseWorkCenter {
 
     /**
      * 工作中心编号

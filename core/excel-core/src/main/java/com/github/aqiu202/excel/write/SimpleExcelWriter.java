@@ -1,14 +1,18 @@
 package com.github.aqiu202.excel.write;
 
 import com.github.aqiu202.excel.convert.ConverterFactory;
-import com.github.aqiu202.excel.model.SheetWriteConfiguration;
+import com.github.aqiu202.excel.model.WorkbookSheetWriteConfiguration;
+import com.github.aqiu202.excel.write.extract.AnnotationDataExtractor;
+import com.github.aqiu202.excel.write.extract.DataExtractor;
+import com.github.aqiu202.excel.write.extract.TypeDataExtractor;
 
-public class SimpleExcelWriter extends SimpleConfigurableExcelWriter<ExcelWriter> implements ExcelWriter {
+public class SimpleExcelWriter implements ExcelWriter {
 
+    private final WorkbookSheetWriteConfiguration configuration;
     private final ConverterFactory converterFactory;
 
-    public SimpleExcelWriter(SheetWriteConfiguration configuration, ConverterFactory converterFactory) {
-        super.configuration = configuration;
+    public SimpleExcelWriter(WorkbookSheetWriteConfiguration configuration, ConverterFactory converterFactory) {
+        this.configuration = configuration;
         this.converterFactory = converterFactory;
     }
 
@@ -17,27 +21,25 @@ public class SimpleExcelWriter extends SimpleConfigurableExcelWriter<ExcelWriter
     }
 
     @Override
-    public <T> ItemExcelWriter<T> type(Class<T> type) {
-        return new SimpleItemExcelWriter<>(
-                new SimpleTypedExcelWriter(this.getConfiguration(), this.getConverterFactory()), type);
+    public <T> ExcelSheetConfigurer<T> type(Class<T> type) {
+        return new SimpleExcelSheetConfigurer<>(TypeDataExtractor.INSTANCE, type, this.getConverterFactory(),this.getConfiguration());
     }
 
     @Override
-    public <T> ItemExcelWriter<T> annotation(Class<T> type) {
+    public <T> AnnotationExcelSheetConfigurer<T> annotation(Class<T> type) {
         if (type.isInterface()) {
             throw new RuntimeException("暂不支持接口类型");
         }
-        return new SimpleItemExcelWriter<>(
-                new SimpleAnnotationExcelWriter(this.getConfiguration(), this.getConverterFactory()), type);
+        return new AnnotationExcelSheetConfigurer<>(new AnnotationDataExtractor(), type, this.getConverterFactory(),this.getConfiguration());
     }
 
     @Override
-    public SheetExcelWriter sheetName(String sheetName) {
-        return new SimpleSheetExcelWriter(sheetName, this.getConfiguration(), this.getConverterFactory());
+    public <T> ExcelSheetConfigurer<T> custom(DataExtractor<?> dataExtractor, Class<T> type) {
+        return new SimpleExcelSheetConfigurer<>(dataExtractor, type, this.getConverterFactory(), this.getConfiguration());
     }
 
-    @Override
-    public BatchExcelWriter batch() {
-        return new SimpleBatchExcelWriter(this.getConfiguration(), this.getConverterFactory());
+    public WorkbookSheetWriteConfiguration getConfiguration() {
+        return this.configuration;
     }
+
 }

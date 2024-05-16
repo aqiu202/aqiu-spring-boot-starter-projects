@@ -1,15 +1,18 @@
 package com.github.aqiu202.excel.write;
 
-public interface ExcelWriter extends ConfigurableExcelWriter<ExcelWriter> {
+import com.github.aqiu202.excel.write.extract.DataExtractor;
 
-    String SHEET_NAME_PREFIX = "sheet";
+public interface ExcelWriter {
+    /**
+     * 基于反射读取元数据
+     */
+    <T> ExcelSheetConfigurer<T> type(Class<T> type);
 
-    <T> ItemExcelWriter<T> type(Class<T> type);
+    /**
+     * 基于注解读取元数据
+     */
+    <T> AnnotationExcelSheetConfigurer<T> annotation(Class<T> type);
 
-    <T> ItemExcelWriter<T> annotation(Class<T> type);
-
-    SheetExcelWriter sheetName(String sheetName);
-
-    BatchExcelWriter batch();
+    <T> ExcelSheetConfigurer<T> custom(DataExtractor<?> dataExtractor, Class<T> type);
 
 }

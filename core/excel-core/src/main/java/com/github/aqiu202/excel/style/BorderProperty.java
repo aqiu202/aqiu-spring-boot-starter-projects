@@ -5,6 +5,8 @@ import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 
+import java.util.Objects;
+
 public class BorderProperty {
 
     private BorderStyle left = BorderStyle.THIN;
@@ -93,5 +95,29 @@ public class BorderProperty {
         cellStyle.setRightBorderColor(this.rightColor.resolveColorIndex());
         cellStyle.setTopBorderColor(this.topColor.resolveColorIndex());
         cellStyle.setBottomBorderColor(this.bottomColor.resolveColorIndex());
+    }
+
+    public void from(CellStyle cellStyle) {
+        this.setLeft(cellStyle.getBorderLeft());
+        this.setRight(cellStyle.getBorderRight());
+        this.setTop(cellStyle.getBorderTop());
+        this.setBottom(cellStyle.getBorderBottom());
+        this.leftColor.setIndex(cellStyle.getLeftBorderColor());
+        this.rightColor.setIndex(cellStyle.getRightBorderColor());
+        this.topColor.setIndex(cellStyle.getTopBorderColor());
+        this.bottomColor.setIndex(cellStyle.getBottomBorderColor());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BorderProperty that = (BorderProperty) o;
+        return left == that.left && right == that.right && top == that.top && bottom == that.bottom && Objects.equals(leftColor, that.leftColor) && Objects.equals(rightColor, that.rightColor) && Objects.equals(topColor, that.topColor) && Objects.equals(bottomColor, that.bottomColor);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(left, right, top, bottom, leftColor, rightColor, topColor, bottomColor);
     }
 }

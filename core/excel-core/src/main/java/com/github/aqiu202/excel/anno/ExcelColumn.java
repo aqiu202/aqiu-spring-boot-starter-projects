@@ -1,6 +1,7 @@
 package com.github.aqiu202.excel.anno;
 
 import com.github.aqiu202.excel.format.*;
+import com.github.aqiu202.excel.model.PropertyAccessor;
 
 import java.lang.annotation.*;
 
@@ -10,14 +11,21 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 //excel表格注解
 public @interface ExcelColumn {
-    //字段excel表头名称
-    String value() default "";
 
-    // 默认字段name，可用于JPA关联实体数据
+    //字段excel表头名称
+    String[] value();
+
+    // 默认字段name
     String field() default "";
 
     // 列顺序
     int order() default 0;
+
+    // 公式
+    String formula() default "";
+
+    //是否为图片
+    boolean image() default false;
 
     //是否为日期格式
     String dateFormat() default "";
@@ -31,4 +39,9 @@ public @interface ExcelColumn {
     Class<? extends NullFormatter> nullFormatter() default SimpleNullFormatter.class;
 
     String converter() default "";
+
+    /**
+     * @see PropertyAccessor#name()
+     */
+    String accessor() default "";
 }

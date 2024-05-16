@@ -18,7 +18,7 @@ public class MapBeanProperty implements BeanProperty {
     }
 
     @Override
-    public Class<?> getPropertyType() {
+    public Class<?> getValueType() {
         return null;
     }
 

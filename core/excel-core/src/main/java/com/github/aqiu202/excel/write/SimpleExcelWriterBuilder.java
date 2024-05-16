@@ -1,21 +1,15 @@
 package com.github.aqiu202.excel.write;
 
-import com.github.aqiu202.excel.ExcelFactory;
+import com.github.aqiu202.excel.convert.ConverterFactory;
 
 public class SimpleExcelWriterBuilder extends ExcelWriterBuilder {
 
-    private final ExcelFactory excelFactory;
-
-    public SimpleExcelWriterBuilder(ExcelFactory excelFactory) {
-        this.excelFactory = excelFactory;
-    }
-
-    public ExcelFactory getExcelFactory() {
-        return excelFactory;
+    public SimpleExcelWriterBuilder(ConverterFactory converterFactory) {
+        super(converterFactory);
     }
 
     @Override
     public ExcelWriter build() {
-        return new SimpleExcelWriter(this.getConfiguration(), this.getExcelFactory().getConverterFactory());
+        return new SimpleExcelWriter(this.configuration, this.converterFactory);
     }
 }

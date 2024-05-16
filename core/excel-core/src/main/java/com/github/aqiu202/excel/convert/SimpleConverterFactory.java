@@ -5,8 +5,6 @@ import java.util.Map;
 
 public class SimpleConverterFactory implements ConverterFactory {
 
-    public static final ConverterFactory INSTANCE = new SimpleConverterFactory();
-
     private final Map<String, Converter<?, ?>> converterMap = new HashMap<>();
 
     @Override

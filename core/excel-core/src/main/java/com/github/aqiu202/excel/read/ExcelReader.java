@@ -1,29 +1,17 @@
 package com.github.aqiu202.excel.read;
 
-import com.github.aqiu202.excel.mapping.FieldValueMapping;
-import com.github.aqiu202.excel.mapping.IndexValueMapping;
-import com.github.aqiu202.excel.mapping.ValueMapping;
+import com.github.aqiu202.excel.analyse.MetaAnalyzer;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public interface ExcelReader {
-    <T> CommonExcelReader<T> type(Class<T> type);
 
-    <T> CommonExcelReader<T> annotation(Class<T> type);
+    <T> ExcelSheetReader<T> type(Class<T> type);
 
-    <T> CommonExcelReader<T> custom(Class<T> type, ValueMapping<?> valueMapping);
+    <T> AnnotationExcelSheetReader<T> annotation(Class<T> type);
 
-    default <T> CommonExcelReader<T> index(Class<T> type, IndexValueMapping valueMapping) {
-        return this.custom(type, valueMapping);
-    }
+    ExcelSheetReader<HashMap> map();
 
-    default <T> CommonExcelReader<T> property(Class<T> type, FieldValueMapping valueMapping) {
-        return this.custom(type, valueMapping);
-    }
-
-    <T extends Map> CommonExcelReader<T> map(Class<T> type);
-
-    CommonExcelReader<HashMap> map();
+    <T> ExcelSheetReader<T> custom(Class<T> type, MetaAnalyzer<?> metaAnalyzer);
 
 }

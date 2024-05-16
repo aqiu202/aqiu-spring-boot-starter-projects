@@ -3,37 +3,93 @@ package com.github.aqiu202;
 import com.github.aqiu202.entity.BaseStation;
 import com.github.aqiu202.excel.ExcelFactory;
 import com.github.aqiu202.excel.SimpleExcelFactory;
-import com.github.aqiu202.excel.mapping.IndexValueMapping;
+import com.github.aqiu202.excel.convert.SimpleConverterFactory;
+import com.github.aqiu202.excel.convert.SimpleMapConverter;
 import com.github.aqiu202.excel.read.ExcelReader;
 import com.github.aqiu202.excel.write.ExcelWriter;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import org.junit.jupiter.api.Test;
 
-import java.io.File;
-import java.util.List;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Unit test for simple App.
  */
 public class AppTest {
-    public static void main(String[] args) {
-        ExcelFactory excelFactory = new SimpleExcelFactory();
-        ExcelReader excelReader = excelFactory.forReader().build();
-        List<BaseStation> readData = excelReader.index(BaseStation.class, new IndexValueMapping(
-                        "code", "name", "", "createTime",
-                        "updateTime", "workCenter.code", "workCenter.name", "dictStationType.dictName",
-                        "dictStationProduceAttr.dictName", "dictStationSpecialAttr.dictName",
-                        "createUser.userName", "updateUser.userName"
-                ))
-                .read(new File("D:/station.xlsx"));
-//        List<HashMap> readData = excelReader.map(HashMap.class)
-//                .read(new File("D:/station.xlsx"));
-        ExcelWriter excelWriter = excelFactory.forWriter().build();
-        excelWriter.annotation(BaseStation.class).writeData(readData)
-                .append(BaseStation.class).write("台位信息", readData)
-                .writeTo("D:/station-copy.xlsx");
-//        long t3 = System.currentTimeMillis();
+
+
+    private Map<Short, String> getValidMap() {
+        return new HashMap<Short, String>(){{
+            put((short) 1, "正常");
+            put((short) 2, "故障");
+            put(null, "未知");
+        }};
+    }
+
+    @Test
+    public void testExcelExport() {
+        SimpleConverterFactory converterFactory = new SimpleConverterFactory();
+        converterFactory.addConverter("convertValid", new SimpleMapConverter<>(this.getValidMap()));
+        ExcelFactory excelFactory = new SimpleExcelFactory()
+                .converterFactory(converterFactory);
+        String url = "https://img0.baidu.com/it/u=759006001,1162006204&fm=253&fmt=auto&app=138&f=JPEG?w=888&h=500";
+        String url2 = "https://img1.baidu.com/it/u=307475733,3112699775&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281";
+        List<BaseStation> baseStations = new ArrayList<>();
+        BaseStation bs1 = new BaseStation();
+        bs1.setCode("TW_001");
+        bs1.setName("台位001");
+        bs1.setTotal(new BigDecimal(2));
+        bs1.setCoefficient(new BigDecimal("10.5"));
+        bs1.setUrl(url);
+        bs1.setCreateTime(LocalDateTime.now());
+        BaseStation bs2 = new BaseStation();
+        bs2.setCode("TW_002");
+        bs2.setName("台位002");
+        bs2.setTotal(new BigDecimal(5));
+        bs2.setCoefficient(new BigDecimal("8.5"));
+        bs2.setUrl(url2);
+        bs2.setCreateTime(LocalDateTime.now());
+        bs2.setValid(((short) 2));
+        baseStations.add(bs1);
+        baseStations.add(bs2);
+        SimpleConverterFactory cf = new SimpleConverterFactory();
+        ExcelWriter excelWriter = excelFactory.buildWriter()
+                .configuration(config -> {
+                    config.setDefaultDateFormat("yyyy-MM-dd HH:mm:ss");
+                })
+                .converterFactory(cf)
+                .build();
+        excelWriter
+                .annotation(BaseStation.class)
+                .sheetName("台位信息")
+                .then()
+                .write(baseStations)
+                .write(Collections.singleton(bs1))
+                .next()
+                .type(BaseStation.class)
+                .protectSheet("123456")
+                .sheetName("简单信息")
+                .then()
+                .write(baseStations)
+                .exportTo("C:/tmp/test1.xlsx");
+        System.out.println(baseStations);
+    }
+
+    @Test
+    public void testReader() {
+        SimpleConverterFactory converterFactory = new SimpleConverterFactory();
+        converterFactory.addConverter("convertValid", new SimpleMapConverter<>(this.getValidMap()));
+        ExcelFactory excelFactory = new SimpleExcelFactory()
+                .converterFactory(converterFactory);
+        ExcelReader excelReader = excelFactory.buildReader()
+                .configuration(configuration -> {
+                    configuration.setReadFormula(true);
+                    configuration.setReadEmptyText(false);
+                })
+                .build();
+        List<BaseStation> readData = excelReader.annotation(BaseStation.class)
+                .read("C:/tmp/test.xlsx", 0, 2);
         System.out.println(readData);
     }
 }

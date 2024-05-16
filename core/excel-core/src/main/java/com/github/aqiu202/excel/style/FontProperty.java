@@ -91,6 +91,20 @@ public class FontProperty {
         this.color = color;
     }
 
+    public void from(Font font) {
+        if (font != null) {
+            this.setFontName(font.getFontName());
+            this.setFontSize(font.getFontHeightInPoints());
+            this.setItalic(font.getItalic());
+            this.setBold(font.getBold());
+            this.setFontHeight(font.getFontHeight());
+            this.setCharSet(font.getCharSet());
+            this.setStrikeout(font.getStrikeout());
+            this.setUnderline(font.getUnderline());
+            this.color.setIndex(font.getColor());
+        }
+    }
+
     public void apply(Font font) {
         if (font != null) {
             font.setUnderline(this.getUnderline());

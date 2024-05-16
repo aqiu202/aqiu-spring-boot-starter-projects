@@ -3,8 +3,9 @@ package com.github.aqiu202.excel;
 import com.github.aqiu202.excel.convert.ConverterFactory;
 import com.github.aqiu202.excel.convert.NamedConverter;
 import com.github.aqiu202.excel.convert.SimpleConverterFactory;
-import com.github.aqiu202.excel.model.SheetReadConfiguration;
+import com.github.aqiu202.excel.model.ReadConfiguration;
 import com.github.aqiu202.excel.model.SheetWriteConfiguration;
+import com.github.aqiu202.excel.model.WorkbookSheetWriteConfiguration;
 import com.github.aqiu202.excel.read.ExcelReader;
 import com.github.aqiu202.excel.write.ExcelWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +22,15 @@ public class ExcelAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(SheetWriteConfiguration.class)
     @ConfigurationProperties(prefix = "excel.write")
-    public SheetWriteConfiguration sheetWriteConfiguration() {
-        return new SheetWriteConfiguration();
+    public WorkbookSheetWriteConfiguration workbookWriteConfiguration() {
+        return new WorkbookSheetWriteConfiguration();
     }
 
     @Bean
-    @ConditionalOnMissingBean(SheetReadConfiguration.class)
+    @ConditionalOnMissingBean(ReadConfiguration.class)
     @ConfigurationProperties(prefix = "excel.read")
-    public SheetReadConfiguration sheetReadConfiguration() {
-        return new SheetReadConfiguration();
+    public ReadConfiguration sheetReadConfiguration() {
+        return new ReadConfiguration();
     }
 
     @Bean
@@ -45,13 +46,13 @@ public class ExcelAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ExcelWriter.class)
-    public ExcelWriter excelWriter(ExcelFactory excelFactory, SheetWriteConfiguration writeConfiguration) {
-        return excelFactory.forWriter().configuration(writeConfiguration).build();
+    public ExcelWriter excelWriter(ExcelFactory excelFactory, WorkbookSheetWriteConfiguration writeConfiguration) {
+        return excelFactory.buildWriter().configuration(writeConfiguration).build();
     }
 
     @Bean
     @ConditionalOnMissingBean(ExcelReader.class)
-    public ExcelReader excelReader(ExcelFactory excelFactory, SheetReadConfiguration readConfiguration) {
-        return excelFactory.forReader().configuration(readConfiguration).build();
+    public ExcelReader excelReader(ExcelFactory excelFactory, ReadConfiguration readConfiguration) {
+        return excelFactory.buildReader().configuration(readConfiguration).build();
     }
 }

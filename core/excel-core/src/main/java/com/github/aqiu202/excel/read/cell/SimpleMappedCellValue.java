@@ -1,29 +1,29 @@
 package com.github.aqiu202.excel.read.cell;
 
-import com.github.aqiu202.excel.prop.MappedProperty;
+import com.github.aqiu202.excel.meta.TableMeta;
 
-public class SimpleMappedCellValue implements MappedCellValue{
-    private final MappedProperty mappedProperty;
+public class SimpleMappedCellValue implements MappedCellValue {
+    private final TableMeta tableMeta;
 
-    private CellValue<?> cellValue;
+    private CellVal<?> cellVal;
 
-    public SimpleMappedCellValue(MappedProperty mappedProperty, CellValue<?> cellValue) {
-        this.mappedProperty = mappedProperty;
-        this.cellValue = cellValue;
+    public SimpleMappedCellValue(TableMeta tableMeta, CellVal<?> cellVal) {
+        this.tableMeta = tableMeta;
+        this.cellVal = cellVal;
     }
 
     @Override
-    public MappedProperty getMappedProperty() {
-        return mappedProperty;
+    public TableMeta getTableMeta() {
+        return tableMeta;
     }
 
     @Override
-    public CellValue<?> getCellValue() {
-        return cellValue;
+    public CellVal<?> getCellValue() {
+        return cellVal;
     }
 
     @Override
-    public void setCellValue(CellValue<?> cellValue) {
-        this.cellValue = cellValue;
+    public void setCellValue(CellVal<?> cellVal) {
+        this.cellVal = cellVal;
     }
 }

@@ -1,29 +1,26 @@
 package com.github.aqiu202.excel.read;
 
-import com.github.aqiu202.excel.meta.MappingMeta;
-import com.github.aqiu202.excel.prop.BeanProperty;
-import com.github.aqiu202.excel.prop.MappedProperty;
-import com.github.aqiu202.excel.read.cell.CellValue;
-import com.github.aqiu202.excel.read.cell.ConvertedCellValue;
+import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.ValueDescriptor;
+import com.github.aqiu202.excel.read.cell.CellVal;
+import com.github.aqiu202.excel.read.cell.ConvertedCellVal;
 import com.github.aqiu202.excel.read.cell.MappedCellValue;
+
+import javax.annotation.Nullable;
 
 public class ComplexFieldValueSetter implements FieldValueSetter {
 
     @Override
-    public void set(Object instance, MappedCellValue mappedCellValue) {
-        MappedProperty mappedProperty = mappedCellValue.getMappedProperty();
-        MappingMeta mappingMeta = mappedProperty.getMappingMeta();
-        if (mappingMeta == null || mappedProperty.nonProperty()) {
+    public void set(Object instance, @Nullable MappedCellValue mappedCellValue) {
+        if (mappedCellValue == null) {
             return;
         }
-        BeanProperty beanProperty = mappedProperty.getBeanProperty();
-        if (!beanProperty.isValid()) {
-            return;
+        TableMeta tableMeta = mappedCellValue.getTableMeta();
+        ValueDescriptor vd = tableMeta.getValueDescriptor();
+        CellVal<?> cellVal = mappedCellValue.getCellValue();
+        if (cellVal instanceof ConvertedCellVal) {
+            cellVal = ((ConvertedCellVal) cellVal).getValue();
         }
-        CellValue<?> cellValue = mappedCellValue.getCellValue();
-        if (cellValue instanceof ConvertedCellValue) {
-            cellValue = ((ConvertedCellValue) cellValue).getValue();
-        }
-        beanProperty.setValue(instance, this.extractCellValueWithType(cellValue, beanProperty.getPropertyType()));
+        vd.setValue(instance, this.extractCellValueWithType(cellVal, vd.getValueType()));
     }
 }
