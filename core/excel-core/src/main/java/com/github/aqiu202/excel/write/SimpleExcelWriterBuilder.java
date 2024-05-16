@@ -10,6 +10,6 @@ public class SimpleExcelWriterBuilder extends ExcelWriterBuilder {
 
     @Override
     public ExcelWriter build() {
-        return new SimpleExcelWriter(this.configuration, this.converterFactory);
+        return new SimpleExcelWriter(this.converterFactory, this.configuration);
     }
 }

@@ -8,12 +8,12 @@ import com.github.aqiu202.excel.write.extract.TypeDataExtractor;
 
 public class SimpleExcelWriter implements ExcelWriter {
 
-    private final WorkbookSheetWriteConfiguration configuration;
     private final ConverterFactory converterFactory;
+    private final WorkbookSheetWriteConfiguration configuration;
 
-    public SimpleExcelWriter(WorkbookSheetWriteConfiguration configuration, ConverterFactory converterFactory) {
-        this.configuration = configuration;
+    public SimpleExcelWriter(ConverterFactory converterFactory, WorkbookSheetWriteConfiguration configuration) {
         this.converterFactory = converterFactory;
+        this.configuration = configuration;
     }
 
     public ConverterFactory getConverterFactory() {
