@@ -2,20 +2,22 @@ package com.github.aqiu202.excel.format.wrap;
 
 import com.github.aqiu202.util.ClassUtils;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
-public class DateValueWrapper implements ValueWrapper<LocalDateTime> {
+public class DateValueWrapper implements ValueWrapper<Date> {
 
-    private final LocalDateTime result;
+    private final Date result;
 
-    public DateValueWrapper(LocalDateTime result) {
+    public DateValueWrapper(Date result) {
         this.result = result;
     }
 
-    public DateValueWrapper(Date result) {
-        this(LocalDateTime.ofInstant((result).toInstant(), ZoneId.systemDefault()));
+    public DateValueWrapper(LocalDateTime result) {
+        // 将Instant转换为Date
+        this(Date.from(result.atZone(ZoneId.systemDefault()).toInstant()));
     }
 
     public static DateValueWrapper of(Object result) {
@@ -30,7 +32,7 @@ public class DateValueWrapper implements ValueWrapper<LocalDateTime> {
     }
 
     @Override
-    public LocalDateTime getValue() {
+    public Date getValue() {
         return this.result;
     }
 

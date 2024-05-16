@@ -21,7 +21,7 @@ public class SimpleCellReader implements CellReader {
                 return new StringCellVal(cell, stringCellValue);
             case NUMERIC:
                 if (DateUtil.isCellDateFormatted(cell)) {
-                    return new DateCellVal(cell, cell.getLocalDateTimeCellValue());
+                    return DateCellVal.of(cell, cell.getDateCellValue());
                 } else {
                     return new NumberCellVal(cell, cell.getNumericCellValue());
                 }
