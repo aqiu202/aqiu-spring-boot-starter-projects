@@ -32,23 +32,6 @@ public abstract class ReflectionUtils {
      */
     private static final ConcurrentMap<String, ClassFields> fieldsCache = new ConcurrentHashMap<>();
 
-    private static final ClassLoader classLoader;
-
-    static {
-        ClassLoader cl = null;
-        try {
-            cl = Thread.currentThread().getContextClassLoader();
-        } catch (Throwable ignored) {
-        }
-        if (cl == null) {
-            try {
-                cl = ClassLoader.getSystemClassLoader();
-            } catch (Throwable ignored) {
-            }
-        }
-        classLoader = cl;
-    }
-
     /**
      * 使构造器可访问
      *
@@ -108,7 +91,7 @@ public abstract class ReflectionUtils {
     /**
      * 获取所有的方法（包含私有方法，但不包含abstract和static修饰的方法）
      *
-     * @param type 类型
+     * @param type      类型
      * @param direction 扫描方向
      * @return 所有方法集合
      */
@@ -137,6 +120,7 @@ public abstract class ReflectionUtils {
 
     /**
      * 获取类所有的非抽象和静态方法
+     *
      * @param type 类
      * @return 方法集合
      */
