@@ -42,11 +42,7 @@ public interface ExcelSheetReader<T> {
     List<T> read(Workbook workbook, int sheetIndex, int headRows);
 
     default List<T> read(InputStream is) {
-        try {
-            return this.read(WorkbookFactory.create(is));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return this.read(is, 0);
     }
 
     default List<T> read(File file) {
