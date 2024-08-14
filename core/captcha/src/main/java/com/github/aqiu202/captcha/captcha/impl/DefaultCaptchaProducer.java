@@ -130,7 +130,7 @@ public class DefaultCaptchaProducer implements CaptchaProducer {
 
     @Override
     public void writeToResponse(BufferedImage image, HttpServletResponse response) {
-        response.setHeader("Pragma", "No-cache");
+        response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
         response.setContentType("image/jpeg");

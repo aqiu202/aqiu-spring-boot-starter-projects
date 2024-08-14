@@ -194,7 +194,7 @@ public abstract class HttpHeaderUtils {
         if (StringUtils.isNotBlank(fileName)) {
             response.setHeader("Content-Disposition", "attachment;filename=" + formatAttachmentFileName(fileName));
             //需要暴露给前端js
-            response.setHeader("Access-Control-Expose-Headers", "Content-Disposition");
+            response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
         }
     }
 
@@ -238,5 +238,11 @@ public abstract class HttpHeaderUtils {
             return str;
         }
         //return str;
+    }
+
+    public static void main(String[] args) {
+        String fileName = "测试.txt";
+        System.out.println(formatAttachmentFileName(fileName));
+        System.out.println(new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
     }
 }
