@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -19,29 +20,29 @@ import java.util.*;
  *
  * @author aqiu 2020/8/19 11:12 上午
  **/
-public class DebugLogFilter extends OncePerRequestFilter {
+public class DebugLoggingFilter extends OncePerRequestFilter {
 
-    private static final String LOG_PREFIX = "DEBUG-LOG | ";
+    private static final String LOG_PREFIX = "SERVLET-LOG | ";
 
-    private final Logger log = LoggerFactory.getLogger(DebugLogFilter.class);
+    private final Logger log = LoggerFactory.getLogger(DebugLoggingFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         String query = request.getQueryString();
-        log.info("{}HTTP: Query: {}", LOG_PREFIX, query);
+        log.info("{}Request--Query: {}", LOG_PREFIX, query);
         String method = request.getMethod();
-        log.info("{}HTTP: Method: {}", LOG_PREFIX, method);
+        log.info("{}Request--Method: {}", LOG_PREFIX, method);
         String uri = request.getRequestURI().replace(request.getContextPath(), "");
-        log.info("{}HTTP: Path: {}", LOG_PREFIX, uri);
+        log.info("{}Request--Path: {}", LOG_PREFIX, uri);
         Enumeration<String> headerNames = request.getHeaderNames();
         Map<String, List<String>> headers = new HashMap<>();
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             headers.put(headerName, enumerationToString(request.getHeaders(headerName)));
         }
-        log.info("{}HTTP: Headers: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, headers);
+        log.info("{}Request--Headers: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, headers);
         LogHttpServletRequestWrapper requestWrapper = null;
         switch (HttpMethod.valueOf(method)) {
             case POST:
@@ -53,19 +54,26 @@ public class DebugLogFilter extends OncePerRequestFilter {
                 map.forEach(
                         (key, value) -> parameters.put(key, Arrays.asList(value))
                 );
-                log.info("{}HTTP: Parameters: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, parameters);
+                log.info("{}Request--Parameters: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, parameters);
                 requestWrapper = new LogHttpServletRequestWrapper(request);
-                log.info("{}HTTP: Body: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
+                log.info("{}Request--Body: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
                         requestWrapper.getBody());
                 break;
             default:
                 break;
         }
+        LogHttpServletResponseWrapper responseWrapper = new LogHttpServletResponseWrapper(response);
         if (requestWrapper != null) {
-            filterChain.doFilter(requestWrapper, response);
+            filterChain.doFilter(requestWrapper, responseWrapper);
         } else {
-            filterChain.doFilter(request, response);
+            filterChain.doFilter(request, responseWrapper);
         }
+        responseWrapper.flushBuffer();
+        log.info("{}Response--Status: {}", LOG_PREFIX, response.getStatus());
+        log.info("{}Response--Headers: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
+                responseWrapper.getHeaderMap());
+        log.info("{}Response--Content:{}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
+                responseWrapper.getResponseDataAsString());
     }
 
     @Override

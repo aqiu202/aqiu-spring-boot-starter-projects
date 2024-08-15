@@ -1,7 +1,7 @@
 package com.github.aqiu202.autolog.config;
 
 import com.github.aqiu202.autolog.anno.EnableAutoLog;
-import com.github.aqiu202.autolog.aop.DebugLogFilter;
+import com.github.aqiu202.autolog.aop.DebugLoggingFilter;
 import org.springframework.context.annotation.AdviceMode;
 import org.springframework.context.annotation.ImportSelector;
 import org.springframework.core.annotation.AnnotationAttributes;
@@ -22,7 +22,7 @@ public class AutoLogConfigurationSelector implements ImportSelector {
             beanNames.add(attributes.getEnum("mode") == AdviceMode.ASPECTJ ? AspectjAutoLogConfiguration.class.getName() : ProxyAutoLogConfiguration.class.getName());
         }
         if (attributes.getBoolean("debug")) {
-            beanNames.add(DebugLogFilter.class.getName());
+            beanNames.add(DebugLoggingFilter.class.getName());
         }
         return beanNames.toArray(new String[0]);
     }
