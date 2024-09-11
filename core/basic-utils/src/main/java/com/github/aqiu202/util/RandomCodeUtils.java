@@ -19,7 +19,6 @@ public final class RandomCodeUtils {
 
     public enum RandomCodeLevel {
         Simple, Medium, Hard;
-
         RandomCodeLevel() {
         }
     }
