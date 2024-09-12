@@ -84,8 +84,7 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
      * 构造函数
      */
     public SnowFlakeIdGenerator() {
-        this.workerId = this.getWorkerId();
-        this.dataCenterId = this.getDataCenterId();
+        this(new SnowFlakeIdProperties());
     }
 
     public SnowFlakeIdGenerator(SnowFlakeIdProperties properties) {
