@@ -1,9 +1,11 @@
 package com.github.aqiu202.autolog.aop;
 
 import com.fasterxml.jackson.core.util.DefaultIndenter;
+import com.github.aqiu202.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -11,8 +13,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
 
 /**
@@ -49,15 +51,39 @@ public class DebugLoggingFilter extends OncePerRequestFilter {
             case PUT:
             case PATCH:
             case DELETE:
+                String contentType = request.getContentType();
+                if (StringUtils.isNotBlank(contentType)) {
+                    MediaType mediaType = MediaType.valueOf(contentType);
+                    if (mediaType.isCompatibleWith(MediaType.MULTIPART_FORM_DATA)) {
+                        Map<String, List<String>> files = new HashMap<>();
+                        Collection<Part> parts = request.getParts();
+                        for (Part part : parts) {
+                            String name = part.getName();
+                            String value = part.getSubmittedFileName();
+                            files.compute(name, (k, v) -> {
+                                if (v == null) {
+                                    v = new ArrayList<>();
+                                }
+                                v.add(value);
+                                return v;
+                            });
+                        }
+                        log.info("{}Request--Files: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, files);
+                    }
+                    requestWrapper = new LogHttpServletRequestWrapper(request);
+                    if (mediaType.isCompatibleWith(MediaType.APPLICATION_JSON)) {
+                        log.info("{}Request--Body: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
+                                requestWrapper.getBody());
+                    }
+                } else {
+                    requestWrapper = new LogHttpServletRequestWrapper(request);
+                }
                 Map<String, String[]> map = request.getParameterMap();
                 Map<String, List<String>> parameters = new HashMap<>();
                 map.forEach(
                         (key, value) -> parameters.put(key, Arrays.asList(value))
                 );
                 log.info("{}Request--Parameters: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, parameters);
-                requestWrapper = new LogHttpServletRequestWrapper(request);
-                log.info("{}Request--Body: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
-                        requestWrapper.getBody());
                 break;
             default:
                 break;

@@ -21,15 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
-import org.springframework.util.Assert;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
 
 /**
  * AutoLog日志aop切面类
@@ -37,7 +31,7 @@ import java.util.StringJoiner;
  * @author aqiu 2018年10月24日 下午3:54:16
  */
 @Aspect
-public class AspectjAutoLogBean implements SPelKeyHandler {
+public class AspectjAutoLogBean implements SPelKeyHandler, LogMethodParamProcessor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AspectjAutoLogBean.class);
 
@@ -56,6 +50,16 @@ public class AspectjAutoLogBean implements SPelKeyHandler {
     private final LogHandler logHandler;
     private final LogCollector logCollector;
     private final EvaluationFiller evaluationFiller;
+
+    @Override
+    public ParamReader getParamReader() {
+        return paramReader;
+    }
+
+    @Override
+    public ParameterNameDiscoverer getParameterNameDiscoverer() {
+        return parameterNameDiscoverer;
+    }
 
     /**
      * 类拦截
@@ -161,30 +165,5 @@ public class AspectjAutoLogBean implements SPelKeyHandler {
         return methodSignature.getMethod();
     }
 
-
-    /**
-     * 根据方法参数生成描述
-     *
-     * @param args 参数
-     * @return {@link String}
-     * @author AQIU 2018/8/8 上午11:31
-     **/
-    private String handleParams(Method method, Object[] args) {
-        String[] paramNames = this.parameterNameDiscoverer.getParameterNames(method);
-        Assert.notNull(paramNames, "获取方法参数名称失败");
-        StringJoiner joiner = new StringJoiner(",", "请求参数：[", "]");
-        Map<String, Object> paramMap = new HashMap<>();
-        for (int i = 0; i < args.length; i++) {
-            Object o = args[i];
-            if (o instanceof ServletRequest || o instanceof ServletResponse) {
-                continue;
-            }
-            String value = paramNames[i] + ":{" + i + "}";
-            joiner.add(value);
-            paramMap.put(String.valueOf(i), paramReader.apply(o));
-        }
-        return StringUtils.stringFormat(joiner.toString(), paramMap).replace("[", "{")
-                .replace("]", "}");
-    }
 
 }

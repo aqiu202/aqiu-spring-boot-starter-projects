@@ -15,22 +15,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
-import org.springframework.util.Assert;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
 
 /**
  * <pre>AutoLog日志拦截处理</pre>
  *
  * @author aqiu 2020/12/8 1:56
  **/
-public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<AutoLog> {
+public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<AutoLog> implements LogMethodParamProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(AutoLogMethodInterceptor.class);
 
@@ -45,6 +39,16 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
         this.paramReader = cb.getParamReader();
         this.logCollector = cb.getLogCollector();
         this.logHandler = cb.getLogHandler();
+    }
+
+    @Override
+    public ParameterNameDiscoverer getParameterNameDiscoverer() {
+        return parameterNameDiscoverer;
+    }
+
+    @Override
+    public ParamReader getParamReader() {
+        return paramReader;
     }
 
     @Override
@@ -110,31 +114,6 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
             template = this.processKey(template, invocation.getThis(), method, args);
         }
         return template;
-    }
-
-    /**
-     * <pre>根据方法参数生成描述</pre>
-     *
-     * @param args 参数
-     * @return 自动生成的日志描述信息
-     * @author aqiu
-     **/
-    private String handleParams(Method method, Object[] args) {
-        String[] paramNames = this.parameterNameDiscoverer.getParameterNames(method);
-        Assert.notNull(paramNames, "获取方法参数名称失败");
-        StringJoiner joiner = new StringJoiner(",", "请求参数：[", "]");
-        Map<String, Object> paramMap = new HashMap<>();
-        for (int i = 0; i < args.length; i++) {
-            Object o = args[i];
-            if (o instanceof ServletRequest || o instanceof ServletResponse) {
-                continue;
-            }
-            String value = paramNames[i] + ":{" + i + "}";
-            joiner.add(value);
-            paramMap.put(String.valueOf(i), this.paramReader.apply(o));
-        }
-        return StringUtils.stringFormat(joiner.toString(), paramMap).replace("[", "{")
-                .replace("]", "}");
     }
 
 }
