@@ -5,13 +5,12 @@
     <parent>
         <artifactId>starter</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.1.3</version>
+        <version>1.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>spring-jpa-querydsl-spring-boot-starter</artifactId>
-    <version>1.1.3</version>
-    <packaging>jar</packaging>
+    <version>1.2.1</version>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -24,7 +23,16 @@
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>
+            <artifactId>spring-aop-core</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aqiu202</groupId>
             <artifactId>pageable-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.aqiu202</groupId>
+            <artifactId>basic-utils</artifactId>
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>
@@ -35,6 +43,15 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
     </dependencies>
 
+    <packaging>jar</packaging>
 </project>

@@ -84,8 +84,7 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
      * 构造函数
      */
     public SnowFlakeIdGenerator() {
-        this.workerId = this.getWorkerId();
-        this.dataCenterId = this.getDataCenterId();
+        this(new SnowFlakeIdProperties());
     }
 
     public SnowFlakeIdGenerator(SnowFlakeIdProperties properties) {
@@ -127,7 +126,7 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
     @Override
     @NonNull
     public synchronized Long nextId() {
-        long timestamp = timeGen();
+        long timestamp = this.generateTimestamp();
 
         //如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
         if (timestamp < lastTimestamp) {
@@ -143,7 +142,7 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
             //毫秒内序列溢出
             if (sequence == 0) {
                 //阻塞到下一个毫秒,获得新的时间戳
-                timestamp = tilNextMillis(lastTimestamp);
+                timestamp = this.tilNextMillis(lastTimestamp);
             }
         }
         //时间戳改变，毫秒内序列重置
@@ -168,9 +167,9 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
      * @return 当前时间戳
      */
     private long tilNextMillis(long lastTimestamp) {
-        long timestamp = timeGen();
+        long timestamp = this.generateTimestamp();
         while (timestamp <= lastTimestamp) {
-            timestamp = timeGen();
+            timestamp = this.generateTimestamp();
         }
         return timestamp;
     }
@@ -180,7 +179,7 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
      *
      * @return 当前时间(毫秒)
      */
-    private long timeGen() {
+    private long generateTimestamp() {
         return System.currentTimeMillis();
     }
 

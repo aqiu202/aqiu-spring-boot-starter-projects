@@ -11,6 +11,7 @@ import org.springframework.aop.support.StaticMethodMatcherPointcut;
 public abstract class AbstractAnnotationPointcut<T extends Annotation> extends StaticMethodMatcherPointcut {
 
     protected final Class<T> annotationType;
+    protected boolean checkInherited;
 
     protected AbstractAnnotationPointcut(Class<T> annotationType) {
         this.annotationType = annotationType;
@@ -18,5 +19,13 @@ public abstract class AbstractAnnotationPointcut<T extends Annotation> extends S
 
     protected Class<T> getAnnotationType() {
         return annotationType;
+    }
+
+    public boolean isCheckInherited() {
+        return checkInherited;
+    }
+
+    public void setCheckInherited(boolean checkInherited) {
+        this.checkInherited = checkInherited;
     }
 }

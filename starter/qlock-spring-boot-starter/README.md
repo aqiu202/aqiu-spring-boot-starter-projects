@@ -4,7 +4,7 @@
 <dependency>
   <groupId>com.github.aqiu202</groupId>
   <artifactId>qlock-spring-boot-starter</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
 </dependency>
 ```
 
@@ -29,9 +29,9 @@ public class QLockApplication {
 ```java
 @RestController
 public class TestController{
-    @GetMapping("lock-test")
+    @GetMapping("keyLock-test")
     @QLock(
-        value = "lock-test", //锁的Key为 lock-test,支持SpEL扩展
+        value = "keyLock-test", //锁的Key为 keyLock-test,支持SpEL扩展
         timeout = 10 //10秒后锁自动释放
     )
     public JsonResult<Void> lockTest() {

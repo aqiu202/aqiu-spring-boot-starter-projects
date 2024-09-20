@@ -1,42 +1,32 @@
 package com.github.aqiu202.autolog.aop;
 
 import com.github.aqiu202.aop.pointcut.AbstractKeyAnnotationInterceptor;
-import com.github.aqiu202.util.IPUtils;
-import com.github.aqiu202.util.ServletRequestUtils;
 import com.github.aqiu202.autolog.anno.AutoLog;
+import com.github.aqiu202.autolog.config.AutoLogConfigurationBean;
 import com.github.aqiu202.autolog.interceptor.LogCollector;
 import com.github.aqiu202.autolog.interceptor.LogHandler;
 import com.github.aqiu202.autolog.interceptor.ParamReader;
 import com.github.aqiu202.autolog.result.LogRequestParam;
-import com.github.aqiu202.autolog.result.LogRequestParam.DefaultLogRequestParam;
+import com.github.aqiu202.autolog.util.AutoLogUtils;
+import com.github.aqiu202.util.ServletRequestUtils;
 import com.github.aqiu202.util.StringUtils;
-import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.ParameterNameDiscoverer;
-import org.springframework.lang.NonNull;
-import org.springframework.lang.Nullable;
-import org.springframework.util.Assert;
+
+import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Method;
 
 /**
  * <pre>AutoLog日志拦截处理</pre>
  *
  * @author aqiu 2020/12/8 1:56
  **/
-public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<AutoLog> {
+public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<AutoLog> implements LogMethodParamProcessor {
 
     private static final Logger log = LoggerFactory.getLogger(AutoLogMethodInterceptor.class);
-
-    public static final boolean LOG_RESULT_SUCCESS = true;
-    public static final boolean LOG_RESULT_FAil = false;
 
     private final ParameterNameDiscoverer parameterNameDiscoverer = new DefaultParameterNameDiscoverer();
 
@@ -44,12 +34,21 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
     private final LogHandler logHandler;
     private final LogCollector logCollector;
 
-    public AutoLogMethodInterceptor(@NonNull ParamReader paramReader,
-            @Nullable LogCollector logCollector,
-            @Nullable LogHandler logHandler) {
-        this.paramReader = paramReader;
-        this.logCollector = logCollector;
-        this.logHandler = logHandler;
+    public AutoLogMethodInterceptor(AutoLogConfigurationBean cb) {
+        super(cb.getEvaluationFiller());
+        this.paramReader = cb.getParamReader();
+        this.logCollector = cb.getLogCollector();
+        this.logHandler = cb.getLogHandler();
+    }
+
+    @Override
+    public ParameterNameDiscoverer getParameterNameDiscoverer() {
+        return parameterNameDiscoverer;
+    }
+
+    @Override
+    public ParamReader getParamReader() {
+        return paramReader;
     }
 
     @Override
@@ -80,11 +79,11 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
             LogRequestParam param;
             //无自定义日志采集器
             if (this.logCollector == null) {
-                param = this.collect(request, this.generatorKey(invocation, autoLog));
+                param = AutoLogUtils.collect(request, this.generatorKey(invocation, autoLog));
                 if (throwable == null) {
-                    param.setResult(LOG_RESULT_SUCCESS);
+                    param.setResult(AutoLogUtils.LOG_RESULT_SUCCESS);
                 } else {
-                    param.setResult(LOG_RESULT_FAil);
+                    param.setResult(AutoLogUtils.LOG_RESULT_FAil);
                 }
             } else {
                 //使用自定义的日志采集器
@@ -94,50 +93,14 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
                 if (StringUtils.isEmpty(param.getDesc())) {
                     param.setDesc(this.generatorKey(invocation, autoLog));
                 }
-                if (StringUtils.isEmpty(param.getIp())) {
-                    param.setIp(IPUtils.getIpAddress(request));
-                }
-                if (StringUtils.isEmpty(param.getUri())) {
-                    param.setUri(request.getRequestURI().replace(request.getContextPath(), ""));
-                }
-                if (StringUtils.isEmpty(param.getMethod())) {
-                    param.setMethod(request.getMethod());
-                }
-                if (param.getResult() == null) {
-                    if (throwable == null) {
-                        param.setResult(LOG_RESULT_SUCCESS);
-                    } else {
-                        param.setResult(LOG_RESULT_FAil);
-                    }
-                }
+                AutoLogUtils.handleDefaultValues(request, param, throwable);
             }
-            log.info("result={}", param.getResult() == LOG_RESULT_SUCCESS ? "成功" : "失败");
+            log.info("result={}", param.getResult() == AutoLogUtils.LOG_RESULT_SUCCESS ? "成功" : "失败");
             if (this.logHandler != null) {
                 this.logHandler.handle(param);
             }
         }
         return result;
-    }
-
-    private LogRequestParam collect(HttpServletRequest request, String desc) {
-        LogRequestParam param = new DefaultLogRequestParam();
-        String context = request.getContextPath();
-        String uri = request.getRequestURI();
-        // url
-        uri = uri.replace(context, "");
-        // method
-        String method = request.getMethod();
-        // ip
-        String ip = IPUtils.getIpAddress(request);
-        log.info("url={}", uri);
-        log.info("method={}", method);
-        log.info("ip={}", ip);
-        log.info("desc={}", desc);
-        param.setIp(ip);
-        param.setMethod(method);
-        param.setUri(uri);
-        param.setDesc(desc);
-        return param;
     }
 
     @Override
@@ -151,31 +114,6 @@ public class AutoLogMethodInterceptor extends AbstractKeyAnnotationInterceptor<A
             template = this.processKey(template, invocation.getThis(), method, args);
         }
         return template;
-    }
-
-    /**
-     * <pre>根据方法参数生成描述</pre>
-     *
-     * @param args 参数
-     * @return 自动生成的日志描述信息
-     * @author aqiu
-     **/
-    private String handleParams(Method method, Object[] args) {
-        String[] paramNames = this.parameterNameDiscoverer.getParameterNames(method);
-        Assert.notNull(paramNames, "获取方法参数名称失败");
-        StringJoiner joiner = new StringJoiner(",", "请求参数：[", "]");
-        Map<String, Object> paramMap = new HashMap<>();
-        for (int i = 0; i < args.length; i++) {
-            Object o = args[i];
-            if (o instanceof ServletRequest || o instanceof ServletResponse) {
-                continue;
-            }
-            String value = paramNames[i] + ":{" + i + "}";
-            joiner.add(value);
-            paramMap.put(String.valueOf(i), this.paramReader.apply(o));
-        }
-        return StringUtils.stringFormat(joiner.toString(), paramMap).replace("[", "{")
-                .replace("]", "}");
     }
 
 }

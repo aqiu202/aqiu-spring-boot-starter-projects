@@ -3,9 +3,6 @@ package com.github.aqiu202.starters.jpa.dao.impl;
 import com.github.aqiu202.starters.jpa.dao.JpaBaseRepository;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Predicate;
-import java.util.Optional;
-import javax.annotation.Nonnull;
-import javax.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -13,6 +10,12 @@ import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.QuerydslJpaPredicateExecutor;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.data.querydsl.SimpleEntityPathResolver;
+import org.springframework.data.repository.query.FluentQuery;
+
+import javax.annotation.Nonnull;
+import javax.persistence.EntityManager;
+import java.util.Optional;
+import java.util.function.Function;
 
 
 public class JpaBaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> implements
@@ -21,7 +24,7 @@ public class JpaBaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> imp
     private final QuerydslJpaPredicateExecutor<T> querydslJpaPredicateExecutor;
 
     public JpaBaseRepositoryImpl(JpaEntityInformation<T, ?> entityInformation,
-            EntityManager entityManager) {
+                                 EntityManager entityManager) {
         super(entityInformation, entityManager);
         this.querydslJpaPredicateExecutor = new QuerydslJpaPredicateExecutor<>(entityInformation,
                 entityManager,
@@ -72,5 +75,11 @@ public class JpaBaseRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID> imp
     @Override
     public boolean exists(@Nonnull Predicate predicate) {
         return querydslJpaPredicateExecutor.exists(predicate);
+    }
+
+    @Nonnull
+    @Override
+    public <S extends T, R> R findBy(@Nonnull Predicate predicate, @Nonnull Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
+        return querydslJpaPredicateExecutor.findBy(predicate, queryFunction);
     }
 }

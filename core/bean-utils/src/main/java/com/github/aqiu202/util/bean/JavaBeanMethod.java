@@ -1,6 +1,7 @@
 package com.github.aqiu202.util.bean;
 
-import com.github.aqiu202.util.PropertyNameUtils;
+import com.github.aqiu202.util.StringUtils;
+
 import java.lang.reflect.Field;
 import java.util.Objects;
 
@@ -17,7 +18,7 @@ public final class JavaBeanMethod {
     private JavaBeanMethod(Field field) {
         this.type = field.getType();
         this.fieldName = field.getName();
-        String _fieldName = PropertyNameUtils.capitalize(this.fieldName);
+        String _fieldName = StringUtils.capitalize(this.fieldName);
         this.writeMethodName = SET_PREFIX + _fieldName;
         if (boolean.class.equals(this.type)) {
             this.readMethodName = IS_PREFIX + _fieldName;

@@ -3,14 +3,14 @@ package com.github.aqiu202.util;
 import com.esotericsoftware.reflectasm.FieldAccess;
 import com.esotericsoftware.reflectasm.MethodAccess;
 import com.github.aqiu202.util.bean.JavaBeanMethod;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public abstract class BeanUtils {
 
@@ -19,6 +19,7 @@ public abstract class BeanUtils {
     private static final Map<String, MethodAccess> methodCache = new ConcurrentHashMap<>();
     private static final Map<String, FieldAccess> fieldCache = new ConcurrentHashMap<>();
     private static final Map<String, List<JavaBeanMethod>> methodsCache = new ConcurrentHashMap<>();
+    private static final Map<String, Set<String>> methodNamesCache = new ConcurrentHashMap<>();
 
     public static MethodAccess get(Class<?> clazz) {
         MethodAccess methodAccess;
@@ -33,7 +34,6 @@ public abstract class BeanUtils {
 
     public static FieldAccess getFieldAccess(Class<?> clazz) {
         FieldAccess fieldAccess;
-
         if (null != (fieldAccess = fieldCache.get(clazz.getName()))) {
             return fieldAccess;
         }
@@ -42,31 +42,51 @@ public abstract class BeanUtils {
         return fieldAccess;
     }
 
-    public static <F, T> void copyProperties(F from, T to) {
-        MethodAccess fromMethodAccess = get(from.getClass());
-        MethodAccess toMethodAccess = get(to.getClass());
-        Class<?> fromClz = from.getClass();
-        List<JavaBeanMethod> methods = getMethods(fromClz);
+    public static Set<String> getMethodNames(Class<?> clazz) {
+        return methodNamesCache.computeIfAbsent(clazz.getName(), k -> {
+            MethodAccess methodAccess = get(clazz);
+            return new HashSet<>(Arrays.asList(methodAccess.getMethodNames()));
+        });
+    }
+
+    public static void copyProperties(Object from, Object to) {
+        Class<?> fromClass = from.getClass();
+        Class<?> toClass = to.getClass();
+        List<JavaBeanMethod> methods = getIntersectionMethods(fromClass, toClass);
+        MethodAccess fromMethodAccess = get(fromClass);
+        MethodAccess toMethodAccess = get(toClass);
         for (JavaBeanMethod method : methods) {
             swap(fromMethodAccess, toMethodAccess, from, to, method);
         }
     }
 
-    public static <F, T> void copyNotNullProperties(F from, T to) {
-        MethodAccess fromMethodAccess = get(from.getClass());
-        MethodAccess toMethodAccess = get(to.getClass());
-        Class<?> fromClz = from.getClass();
-        List<JavaBeanMethod> methods = getMethods(fromClz);
+    private static List<JavaBeanMethod> getIntersectionMethods(Class<?> fromClass, Class<?> toClass) {
+        Set<String> readMethodNames = getMethodNames(fromClass);
+        Set<String> writeMethodNames = getMethodNames(toClass);
+        return getMethods(fromClass)
+                .stream()
+                .filter(method -> readMethodNames.contains(method.getReadMethodName())
+                        && writeMethodNames.contains(method.getWriteMethodName()))
+                .collect(Collectors.toList());
+    }
+
+    public static void copyNotNullProperties(Object from, Object to) {
+        Class<?> fromClass = from.getClass();
+        Class<?> toClass = to.getClass();
+        List<JavaBeanMethod> methods = getIntersectionMethods(fromClass, toClass);
+        MethodAccess fromMethodAccess = get(fromClass);
+        MethodAccess toMethodAccess = get(toClass);
         for (JavaBeanMethod method : methods) {
             swapNotNull(fromMethodAccess, toMethodAccess, from, to, method);
         }
     }
 
-    public static <F, T> void copyNotNullOrBlankProperties(F from, T to) {
-        MethodAccess fromMethodAccess = get(from.getClass());
-        MethodAccess toMethodAccess = get(to.getClass());
-        Class<?> fromClz = from.getClass();
-        List<JavaBeanMethod> methods = getMethods(fromClz);
+    public static void copyNotNullOrBlankProperties(Object from, Object to) {
+        Class<?> fromClass = from.getClass();
+        MethodAccess fromMethodAccess = get(fromClass);
+        Class<?> toClass = to.getClass();
+        MethodAccess toMethodAccess = get(toClass);
+        List<JavaBeanMethod> methods = getIntersectionMethods(fromClass, toClass);
         for (JavaBeanMethod method : methods) {
             swapNotNullOrBlank(fromMethodAccess, toMethodAccess, from, to, method);
         }
@@ -83,12 +103,12 @@ public abstract class BeanUtils {
                     method.setWriteIndex(methodAccess
                             .getIndex(method.getWriteMethodName(), method.getType()));
                 } catch (Exception e) {
-                    method.setWriteIndex(-1);
+                    log.warn("setter方法：{}未找到:{}", method.getWriteMethodName(), e.getMessage());
                 }
                 try {
                     method.setReadIndex(methodAccess.getIndex(method.getReadMethodName(), 0));
                 } catch (Exception e) {
-                    method.setReadIndex(-1);
+                    log.warn("getter方法：{}未找到:{}", method.getReadMethodName(), e.getMessage());
                 }
             }
             methodsCache.putIfAbsent(clz.getName(), methods);
@@ -115,22 +135,22 @@ public abstract class BeanUtils {
         return !(Modifier.isFinal(m) || Modifier.isStatic(m));
     }
 
-    private static <F, T> void swap(MethodAccess fma, MethodAccess tma,
-                                    F f, T t, JavaBeanMethod method) {
+    private static void swap(MethodAccess fma, MethodAccess tma,
+                             Object f, Object t, JavaBeanMethod method) {
         Object value = fma.invoke(f, method.getReadIndex());
         invoke(tma, t, method.getWriteMethodName(), value);
     }
 
-    private static <F, T> void swapNotNull(MethodAccess fma, MethodAccess tma,
-                                           F f, T t, JavaBeanMethod method) {
+    private static void swapNotNull(MethodAccess fma, MethodAccess tma,
+                                    Object f, Object t, JavaBeanMethod method) {
         Object value = fma.invoke(f, method.getReadIndex());
         if (null != value) {
             invoke(tma, t, method.getWriteMethodName(), value);
         }
     }
 
-    private static <F, T> void swapNotNullOrBlank(MethodAccess fma, MethodAccess tma,
-                                                  F f, T t, JavaBeanMethod method) {
+    private static void swapNotNullOrBlank(MethodAccess fma, MethodAccess tma,
+                                           Object f, Object t, JavaBeanMethod method) {
         Object value = fma.invoke(f, method.getReadIndex());
         if (null != value) {
             if (method.getType().equals(String.class) && !StringUtils.hasText(value.toString())) {
@@ -144,7 +164,7 @@ public abstract class BeanUtils {
         try {
             ma.invoke(obj, method, args);
         } catch (RuntimeException e) {
-            log.error("", e);
+            log.error("反射调用方法异常", e);
         }
     }
 

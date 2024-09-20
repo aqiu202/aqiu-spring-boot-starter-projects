@@ -32,6 +32,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -53,13 +54,13 @@ public class WXPayUtil {
             DocumentBuilder documentBuilder = WXPayXmlUtil.newDocumentBuilder();
             try (InputStream stream = new ByteArrayInputStream(
                     strXML.getBytes(StandardCharsets.UTF_8))) {
-                org.w3c.dom.Document doc = documentBuilder.parse(stream);
+                Document doc = documentBuilder.parse(stream);
                 doc.getDocumentElement().normalize();
                 NodeList nodeList = doc.getDocumentElement().getChildNodes();
                 for (int idx = 0; idx < nodeList.getLength(); ++idx) {
                     Node node = nodeList.item(idx);
                     if (node.getNodeType() == Node.ELEMENT_NODE) {
-                        org.w3c.dom.Element element = (org.w3c.dom.Element) node;
+                        Element element = (Element) node;
                         data.put(element.getNodeName(), element.getTextContent());
                     }
                 }
@@ -84,7 +85,7 @@ public class WXPayUtil {
         Document document;
         try {
             document = WXPayXmlUtil.newDocument();
-            org.w3c.dom.Element root = document.createElement("xml");
+            Element root = document.createElement("xml");
             document.appendChild(root);
             for (String key : data.keySet()) {
                 String value = data.get(key);
@@ -92,7 +93,7 @@ public class WXPayUtil {
                     value = "";
                 }
                 value = value.trim();
-                org.w3c.dom.Element filed = document.createElement(key);
+                Element filed = document.createElement(key);
                 filed.appendChild(document.createTextNode(value));
                 root.appendChild(filed);
             }

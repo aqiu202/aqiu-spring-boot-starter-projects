@@ -19,7 +19,7 @@ import org.springframework.lang.NonNull;
  *
  * @author aqiu 2020/12/10 1:15
  **/
-public class DefaultIdGeneratorFactory<T extends Serializable> implements IdGeneratorFactory<T>,
+public class DefaultIdGeneratorFactory implements IdGeneratorFactory,
         ApplicationContextAware {
 
     private ApplicationContext applicationContext;
@@ -37,9 +37,9 @@ public class DefaultIdGeneratorFactory<T extends Serializable> implements IdGene
 
     @NonNull
     @Override
-    public IdGenerator getIdGenerator() {
+    public IdGenerator<?> getIdGenerator() {
         final IdType type = this.properties.getType();
-        IdGenerator idGenerator;
+        IdGenerator<?> idGenerator;
         try {
             idGenerator = type.getClazz().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {

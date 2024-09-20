@@ -5,12 +5,11 @@
     <parent>
         <artifactId>starter</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.1.1</version>
+        <version>1.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>ttl-cache-spring-boot-starter</artifactId>
-    <version>1.1.1</version>
     <packaging>jar</packaging>
     <name>ttl-cache-spring-boot-starter</name>
 
@@ -22,6 +21,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-common</artifactId>
+            <version>4.1.77.Final</version>
         </dependency>
     </dependencies>
 

@@ -57,6 +57,6 @@ public class SimpleCacheableTokenStore implements CacheableTokenStore {
 
     @Override
     public StringTtlCache getCache() {
-        return null;
+        return this.cache;
     }
 }

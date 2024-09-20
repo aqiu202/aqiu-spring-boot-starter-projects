@@ -4,7 +4,8 @@ import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import com.github.aqiu202.limit.config.LimitingConfiguration;
+import com.github.aqiu202.limit.config.LimitingKeyGeneratorConfiguration;
+import com.github.aqiu202.limit.config.ProxyLimitingConfiguration;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -22,7 +23,7 @@ public @interface RepeatLimiting {
 
     String message() default "请不要重复提交";
 
-    String keyGenerator() default LimitingConfiguration.SESSION_METHOD_KEY_GENERATOR_NAME;
+    String keyGenerator() default LimitingKeyGeneratorConfiguration.SESSION_METHOD_KEY_GENERATOR_NAME;
 
     /**
      * 几秒内不允许重复访问

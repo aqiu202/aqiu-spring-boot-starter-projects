@@ -14,7 +14,7 @@ import org.springframework.lang.NonNull;
  *
  * @author aqiu 2020/12/10 1:50
  **/
-public class SimpleIdGeneratorFactory<T extends Serializable> implements IdGeneratorFactory<T> {
+public class SimpleIdGeneratorFactory implements IdGeneratorFactory {
 
     private final BeanFactory beanFactory;
 
@@ -27,8 +27,8 @@ public class SimpleIdGeneratorFactory<T extends Serializable> implements IdGener
 
     @NonNull
     @Override
-    public IdGenerator<T> getIdGenerator() {
-        IdGenerator idGenerator;
+    public IdGenerator<?> getIdGenerator() {
+        IdGenerator<?> idGenerator;
         try {
             idGenerator = this.idType.getClazz().newInstance();
         } catch (InstantiationException | IllegalAccessException e) {

@@ -5,6 +5,7 @@ import com.github.aqiu202.aliyun.tts.config.TtsToken;
 import com.github.aqiu202.aliyun.tts.store.SimpleTokenStore;
 import com.github.aqiu202.aliyun.tts.store.TokenStore;
 import com.github.aqiu202.util.StringUtils;
+
 import java.util.Objects;
 
 public class DefaultClientStore implements ClientStore {
@@ -26,53 +27,36 @@ public class DefaultClientStore implements ClientStore {
         String accessKeyId = ttsToken.getAccessKeyId();
         String accessKeySecret = ttsToken.getAccessKeySecret();
         String url = ttsToken.getUrl();
-        if (StringUtils.hasText(url)) {
-            if (tokenStore.isExpired(accessKeyId)) {
-                this.shutdown();
-                this.newClient(accessKeyId, accessKeySecret, url);
-            } else {
-                this.cacheClient(accessKeyId, accessKeySecret, url);
-            }
-        } else {
-            if (tokenStore.isExpired(accessKeyId)) {
-                this.shutdown();
-                this.newClient(accessKeyId, accessKeySecret);
-            } else {
-                this.cacheClient(accessKeyId, accessKeySecret);
-            }
+        if (tokenStore.isExpired(accessKeyId)) {
+            this.shutdown();
         }
+        this.cacheClient(accessKeyId, accessKeySecret, url);
         return this.client;
     }
 
-
-    private void cacheClient(String accessKeyId, String accessKeySecret) {
-        if (Objects.isNull(client)) {
-            this.newClient(accessKeyId, accessKeySecret);
+    private void newClient(String accessKeyId, String accessKeySecret, String url) {
+        if (StringUtils.hasText(url)) {
+            this.client = new NlsClient(url, tokenStore.getToken(accessKeyId, accessKeySecret));
+        } else {
+            this.client = new NlsClient(tokenStore.getToken(accessKeyId, accessKeySecret));
         }
     }
 
-    private void newClient(String accessKeyId, String accessKeySecret) {
-        client = new NlsClient(tokenStore.getToken(accessKeyId, accessKeySecret));
-    }
-
-    private void newClient(String accessKeyId, String accessKeySecret, String url) {
-        client = new NlsClient(url, tokenStore.getToken(accessKeyId, accessKeySecret));
-    }
-
     private void cacheClient(String accessKeyId, String accessKeySecret, String url) {
-        if (Objects.isNull(client)) {
+        if (Objects.isNull(this.client)) {
             this.newClient(accessKeyId, accessKeySecret, url);
         }
     }
 
     private void shutdown() {
-        if (Objects.nonNull(client)) {
-            client.shutdown();
+        if (Objects.nonNull(this.client)) {
+            this.client.shutdown();
+            this.client = null;
         }
     }
 
     @Override
     public TokenStore getTokenStore() {
-        return tokenStore;
+        return this.tokenStore;
     }
 }

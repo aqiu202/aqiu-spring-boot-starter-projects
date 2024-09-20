@@ -4,12 +4,14 @@ import javax.annotation.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import java.util.Optional;
+
 /**
  * PageParam pageable实现
  *
  * @author aqiu 2018/11/26 2:44 PM
  **/
-public class PageParam extends com.noah.base.page.PageParam implements Pageable {
+public class PageParam extends com.github.aqiu202.page.PageParam implements Pageable {
 
     @Nullable
     private final Sort sort;
@@ -53,8 +55,23 @@ public class PageParam extends com.noah.base.page.PageParam implements Pageable 
     }
 
     @Override
+    public boolean isPaged() {
+        return Pageable.super.isPaged();
+    }
+
+    @Override
+    public boolean isUnpaged() {
+        return Pageable.super.isUnpaged();
+    }
+
+    @Override
     public Sort getSort() {
         return sort;
+    }
+
+    @Override
+    public Sort getSortOr(Sort sort) {
+        return Pageable.super.getSortOr(sort);
     }
 
     @Override
@@ -77,7 +94,13 @@ public class PageParam extends com.noah.base.page.PageParam implements Pageable 
 
     @Override
     public Pageable withPage(int pageNumber) {
-        return PageParam.of(pageNumber, getPageSize(), getSort());
+        super.setPage(pageNumber);
+        return this;
+    }
+
+    @Override
+    public Optional<Pageable> toOptional() {
+        return Pageable.super.toOptional();
     }
 
 }

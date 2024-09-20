@@ -26,12 +26,12 @@ public class IdGeneratorAutoConfiguration {
     @Bean(name = ID_GENERATOR_FACTORY_BEAN_NAME)
     @ConditionalOnMissingBean(name = ID_GENERATOR_FACTORY_BEAN_NAME)
     public IdGeneratorFactory idGeneratorFactory(IdProperties idProperties) {
-        return new DefaultIdGeneratorFactory<>(idProperties);
+        return new DefaultIdGeneratorFactory(idProperties);
     }
 
     @Bean(name = ID_GENERATOR_BEAN_NAME)
     @ConditionalOnMissingBean(name = ID_GENERATOR_BEAN_NAME)
-    public IdGenerator idGenerator(
+    public IdGenerator<?> idGenerator(
             @Qualifier(ID_GENERATOR_FACTORY_BEAN_NAME) IdGeneratorFactory idGeneratorFactory) {
         return idGeneratorFactory.getIdGenerator();
     }

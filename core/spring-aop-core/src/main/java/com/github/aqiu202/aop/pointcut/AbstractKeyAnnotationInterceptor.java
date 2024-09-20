@@ -2,18 +2,18 @@ package com.github.aqiu202.aop.pointcut;
 
 import com.github.aqiu202.aop.keygen.KeyGenerator;
 import com.github.aqiu202.aop.util.KeyGeneratorUtils;
-import com.github.aqiu202.util.SpELUtils;
 import com.github.aqiu202.util.StringUtils;
 import com.github.aqiu202.util.spel.EvaluationFiller;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import javax.annotation.Nullable;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+
+import javax.annotation.Nullable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 
 /**
  * <pre>AbstractAnnotationInterceptor</pre>
@@ -22,7 +22,7 @@ import org.springframework.context.ApplicationContextAware;
  **/
 public abstract class AbstractKeyAnnotationInterceptor<T extends Annotation> implements
         AnnotationMethodInterceptor<T>,
-        ApplicationContextAware {
+        ApplicationContextAware, SPelKeyHandler {
 
     private static final Logger log = LoggerFactory.getLogger(AnnotationMethodInterceptor.class);
 
@@ -65,12 +65,7 @@ public abstract class AbstractKeyAnnotationInterceptor<T extends Annotation> imp
     }
 
     protected String processKey(String key, Object target, Method method, Object[] parameters) {
-        if (SpELUtils.isSpEL(key)) {
-            key = SpELUtils.handleSpEl(key, target, method, parameters, this.evaluationFiller);
-        } else {
-            key = SpELUtils.handleNormalKey(key);
-        }
-        return key;
+        return this.processKey(key, target, method, parameters, evaluationFiller);
     }
 
     protected String generatorKey(MethodInvocation invocation, T annotation) {
@@ -123,7 +118,7 @@ public abstract class AbstractKeyAnnotationInterceptor<T extends Annotation> imp
     }
 
     protected void afterIntercept(MethodInvocation invocation, T t, String key,
-            @Nullable Throwable throwable) {
+                                  @Nullable Throwable throwable) {
 
     }
 }

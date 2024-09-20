@@ -2,25 +2,22 @@ package com.github.aqiu202.qlock.anno;
 
 import com.github.aqiu202.cache.anno.EnableTtlCaching.CacheMode;
 import com.github.aqiu202.id.type.IdType;
-import com.github.aqiu202.lock.base.Lock;
+import com.github.aqiu202.lock.base.KeyLock;
 import com.github.aqiu202.lock.base.LockValueStrategyMode;
-import com.github.aqiu202.lock.base.LockValueThreadStrategy;
-import com.github.aqiu202.lock.centralize.LocaleTtlLock;
-import com.github.aqiu202.lock.centralize.ReentrantLocaleTtlLock;
-import com.github.aqiu202.lock.distributed.RedisTtlLock;
-import com.github.aqiu202.lock.distributed.ReentrantRedisTtlLock;
-import com.github.aqiu202.lock.distributed.ZookeeperLock;
+import com.github.aqiu202.lock.base.ReentrantCacheKeyLock;
+import com.github.aqiu202.lock.cache.SimpleCacheKeyLock;
+import com.github.aqiu202.lock.redisson.RedissonKeyLock;
+import com.github.aqiu202.lock.redisson.ReentrantRedissonKeyLock;
+import com.github.aqiu202.lock.zk.ReentrantZookeeperKeyLock;
+import com.github.aqiu202.lock.zk.ZookeeperKeyLock;
 import com.github.aqiu202.qlock.config.QLockAutoConfiguration;
 import com.github.aqiu202.qlock.config.QLockConfigRegistrar;
 import com.github.aqiu202.qlock.config.QLockZkCuratorSelector;
-import java.lang.annotation.Documented;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-import java.util.concurrent.TimeUnit;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
+
+import java.lang.annotation.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>EnableQLock</pre>
@@ -58,23 +55,26 @@ public @interface EnableQLock {
     LockValueStrategyMode lockValueStrategyMode() default LockValueStrategyMode.thread;
 
     enum LockMode {
-        guava(CacheMode.guava, LocaleTtlLock.class),
-        guava_r(CacheMode.guava, ReentrantLocaleTtlLock.class, true),
-        caffeine(CacheMode.caffeine, LocaleTtlLock.class),
-        caffeine_r(CacheMode.caffeine, ReentrantLocaleTtlLock.class, true),
-        redis(CacheMode.redis, RedisTtlLock.class),
-        redis_r(CacheMode.redis, ReentrantRedisTtlLock.class, true),
-        zookeeper(CacheMode.none, ZookeeperLock.class);
+        guava(CacheMode.guava, SimpleCacheKeyLock.class),
+        guava_reentrant(CacheMode.guava, ReentrantCacheKeyLock.class, true),
+        caffeine(CacheMode.caffeine, SimpleCacheKeyLock.class),
+        caffeine_reentrant(CacheMode.caffeine, ReentrantCacheKeyLock.class, true),
+        redis(CacheMode.redis, SimpleCacheKeyLock.class),
+        redis_reentrant(CacheMode.redis, ReentrantCacheKeyLock.class, true),
+        zookeeper(CacheMode.none, ZookeeperKeyLock.class),
+        zookeeper_reentrant(CacheMode.none, ReentrantZookeeperKeyLock.class),
+        redisson(CacheMode.none, RedissonKeyLock.class),
+        redisson_reentrant(CacheMode.none, ReentrantRedissonKeyLock.class);
 
         private final CacheMode cacheMode;
-        private final Class<? extends Lock> lockClass;
+        private final Class<? extends KeyLock> lockClass;
         private final boolean hasIdGenerator;
 
-        LockMode(CacheMode cacheMode, Class<? extends Lock> lockClass) {
+        LockMode(CacheMode cacheMode, Class<? extends KeyLock> lockClass) {
             this(cacheMode, lockClass, false);
         }
 
-        LockMode(CacheMode cacheMode, Class<? extends Lock> lockClass, boolean hasIdGenerator) {
+        LockMode(CacheMode cacheMode, Class<? extends KeyLock> lockClass, boolean hasIdGenerator) {
             this.cacheMode = cacheMode;
             this.lockClass = lockClass;
             this.hasIdGenerator = hasIdGenerator;
@@ -84,7 +84,7 @@ public @interface EnableQLock {
             return cacheMode;
         }
 
-        public Class<? extends Lock> getLockClass() {
+        public Class<? extends KeyLock> getLockClass() {
             return lockClass;
         }
 

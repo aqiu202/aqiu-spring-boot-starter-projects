@@ -13,7 +13,6 @@ public abstract class LockValueHolder {
 
     static LockValueStrategyMode mode = LockValueStrategyMode.thread;
 
-
     public static String setIfAbsent(String value) {
         String old = getValue();
         if (old == null) {

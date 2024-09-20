@@ -5,12 +5,11 @@
     <parent>
         <artifactId>starter</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.1.0</version>
+        <version>1.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>qrcode-spring-boot-starter</artifactId>
-    <version>1.1.0</version>
     <packaging>jar</packaging>
     <name>qrcode-spring-boot-starter</name>
 
@@ -24,6 +23,16 @@
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>${zxing.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>android-core</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>android-integration</artifactId>
+            <version>3.3.0</version>
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>

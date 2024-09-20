@@ -12,7 +12,7 @@ public class MethodKeyGenerator implements KeyGenerator {
             Object... params) {
         StringJoiner joiner = new StringJoiner(",", "(", ")");
         for (Object param : params) {
-            joiner.add(param.getClass().getName());
+            joiner.add(param == null ? "null" : param.getClass().getName());
         }
         return target.getClass().getName().concat(".").concat(method.getName())
                 .concat(joiner.toString());

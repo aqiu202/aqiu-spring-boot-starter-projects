@@ -1,7 +1,7 @@
 package com.github.aqiu202.starters.jpa.page;
 
-import com.noah.base.page.PageResult;
-import com.noah.base.page.PageableInput;
+import com.github.aqiu202.page.PageResult;
+import com.github.aqiu202.page.PageableInput;
 import com.querydsl.core.QueryResults;
 import java.util.List;
 import org.springframework.data.domain.Page;
