@@ -167,6 +167,7 @@ public abstract class HttpHeaderUtils {
      * 得到需要写入的 html http 类型
      *
      * @param typeName 类型名，一般以后缀名呈现
+     * @return {@link String}
      */
     public static String getContentType(String typeName) {
         if (StringUtils.isBlank(typeName)) {

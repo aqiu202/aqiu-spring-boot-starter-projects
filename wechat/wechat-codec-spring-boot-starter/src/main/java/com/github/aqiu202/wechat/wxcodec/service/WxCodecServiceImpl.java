@@ -13,9 +13,15 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Base64.Decoder;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.http.HttpEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-public class DecryptServiceImpl implements DecryptService {
+public class WxCodecServiceImpl implements WxCodecService {
 
     private final WxCodecProperty wxCodecProperty;
 
@@ -23,13 +29,13 @@ public class DecryptServiceImpl implements DecryptService {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public DecryptServiceImpl(WxCodecProperty wxCodecProperty) {
+    public WxCodecServiceImpl(WxCodecProperty wxCodecProperty) {
         this.wxCodecProperty = wxCodecProperty;
         this.restTemplate = new RestTemplate();
     }
 
     @Override
-    public JsonNode session(String code) {
+    public JsonNode login(String code) {
         if (code == null || code.length() == 0) {
             throw new IllegalArgumentException("登录凭证不能为空");
         }
@@ -54,6 +60,31 @@ public class DecryptServiceImpl implements DecryptService {
     }
 
     @Override
+    public JsonNode getPhoneNumber(String code) {
+        JsonNode jsonNode = this.obtainAccessToken();
+        String accessToken = jsonNode.get("access_token").asText();
+        return this.getPhoneNumber(code, accessToken);
+    }
+
+    @Override
+    public JsonNode getPhoneNumber(String code, String accessToken) {
+        String url = "https://api.weixin.qq.com/wxa/business/getuserphonenumber?access_token={1}";
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", code);
+        String bodyString;
+        try {
+            bodyString = mapper.writeValueAsString(map);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.set("Content-Type", "application/json");
+        HttpEntity<String> body = new HttpEntity<>(bodyString, headers);
+        //{"errcode":0,"errmsg":"ok","phone_info":{"phoneNumber":"15764212419","purePhoneNumber":"15764212419","countryCode":"86","watermark":{"timestamp":1726847080,"appid":"wx1a94dcdb3490a778"}}}
+        return this.restTemplate.postForObject(url, body, JsonNode.class, accessToken);
+    }
+
+    @Override
     public JsonNode decrypt(String encryptedData, String sessionKey, String iv) {
         String result = null;
         byte[] resultByte;
@@ -75,8 +106,8 @@ public class DecryptServiceImpl implements DecryptService {
     }
 
     @Override
-    public ObjectNode decodeUser(String encryptedData, String iv, String code) {
-        JsonNode data = this.session(code);
+    public ObjectNode decodeUserInfoByCode(String encryptedData, String iv, String code) {
+        JsonNode data = this.login(code);
         if (data != null) {
             JsonNode sessionKey;
             JsonNode openId;
@@ -111,7 +142,7 @@ public class DecryptServiceImpl implements DecryptService {
     }
 
     @Override
-    public JsonNode accessToken(String code) {
+    public JsonNode gzhLogin(String code) {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token"
                 + "?appid={1}&secret={2}&code={3}&grant_type=authorization_code";
         String str = this.restTemplate
@@ -126,7 +157,7 @@ public class DecryptServiceImpl implements DecryptService {
     }
 
     @Override
-    public JsonNode userInfo(String accessToken, String openid) {
+    public JsonNode obtainGzhUserInfo(String accessToken, String openid) {
         //获取资源信息
         String url = " https://api.weixin.qq.com/sns/userinfo?" +
                 "access_token=" + accessToken +
@@ -141,7 +172,7 @@ public class DecryptServiceImpl implements DecryptService {
     }
 
     @Override
-    public JsonNode accessToken() {
+    public JsonNode obtainAccessToken() {
         String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={1}&secret={2}";
         return this.restTemplate
                 .getForObject(url, JsonNode.class, this.wxCodecProperty.getAppId(),

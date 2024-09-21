@@ -25,6 +25,7 @@
         <module>basic-utils</module>
         <module>bean-utils</module>
         <module>excel-core</module>
+        <module>http-utils</module>
     </modules>
 
 </project>

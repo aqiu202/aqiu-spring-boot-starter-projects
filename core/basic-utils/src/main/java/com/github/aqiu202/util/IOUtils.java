@@ -35,6 +35,9 @@ public abstract class IOUtils {
 
     /**
      * 复制InputStream到OutputStream
+     * @param inputStream 输入流
+     * @param outputStream 输出流
+     * @throws IOException 如果复制过程中发生错误
      */
     public static void copy(InputStream inputStream, OutputStream outputStream) throws IOException {
         byte[] buffer = new byte[1024];

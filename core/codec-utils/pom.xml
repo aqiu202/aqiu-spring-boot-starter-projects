@@ -10,15 +10,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>codec-utils</artifactId>
+    <version>1.2.1</version>
 
     <properties>
-        <bcprov.version>1.46</bcprov.version>
+        <bcprov.version>1.78.1</bcprov.version>
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
+            <artifactId>bcprov-jdk18on</artifactId>
             <version>${bcprov.version}</version>
         </dependency>
     </dependencies>

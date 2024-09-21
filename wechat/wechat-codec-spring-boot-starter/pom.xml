@@ -11,6 +11,7 @@
 
     <groupId>com.github.aqiu202.wechat</groupId>
     <artifactId>wechat-codec-spring-boot-starter</artifactId>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
     <name>wechat-codec-spring-boot-starter</name>
 
@@ -26,10 +27,17 @@
         <dependency>
             <groupId>com.github.aqiu202</groupId>
             <artifactId>codec-utils</artifactId>
+            <version>1.2.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>
             <artifactId>basic-utils</artifactId>
+            <version>1.2.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
