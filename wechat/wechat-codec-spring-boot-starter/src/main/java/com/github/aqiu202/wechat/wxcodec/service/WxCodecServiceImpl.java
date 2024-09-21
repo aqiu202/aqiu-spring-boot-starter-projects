@@ -46,9 +46,7 @@ public class WxCodecServiceImpl implements WxCodecService {
         JsonNode result = restTemplate.getForObject(url, JsonNode.class,
                 this.wxCodecProperty.getAppId(), this.wxCodecProperty.getSecret(), code,
                 grant_type);
-        // 解析相应内容（转换成json对象）
-        int errcode = result.get("errcode").asInt();
-        Assert.isTrue(errcode == 0, result.get("errmsg").asText());
+        this.checkResult(result);
         return result;
     }
 
@@ -75,8 +73,7 @@ public class WxCodecServiceImpl implements WxCodecService {
         HttpEntity<String> body = new HttpEntity<>(bodyString, headers);
         //{"errcode":0,"errmsg":"ok","phone_info":{"phoneNumber":"15764212419","purePhoneNumber":"15764212419","countryCode":"86","watermark":{"timestamp":1726847080,"appid":"wx1a94dcdb3490a778"}}}
         JsonNode result = this.restTemplate.postForObject(url, body, JsonNode.class, accessToken);
-        int errcode = result.get("errcode").asInt();
-        Assert.isTrue(errcode == 0, result.get("errmsg").asText());
+        this.checkResult(result);
         return result;
     }
 
@@ -171,8 +168,18 @@ public class WxCodecServiceImpl implements WxCodecService {
     @Override
     public JsonNode obtainAccessToken() {
         String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={1}&secret={2}";
-        return this.restTemplate
+        JsonNode result = this.restTemplate
                 .getForObject(url, JsonNode.class, this.wxCodecProperty.getAppId(),
                         this.wxCodecProperty.getSecret());
+        this.checkResult(result);
+        return result;
+    }
+
+    private void checkResult(JsonNode result) {
+        Assert.notNull(result, "微信接口返回结果为空");
+        if (result.has("errcode")) {
+            int errcode = result.get("errcode").asInt();
+            Assert.isTrue(errcode == 0, result.get("errmsg").asText());
+        }
     }
 }
