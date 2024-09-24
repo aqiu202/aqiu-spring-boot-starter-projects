@@ -43,9 +43,15 @@ public class WxCodecServiceImpl implements WxCodecService {
         // 请求参数
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid={1}&secret={2}&js_code={3}&grant_type={4}";
         // 发送请求
-        JsonNode result = restTemplate.getForObject(url, JsonNode.class,
+        String resultString = restTemplate.getForObject(url, String.class,
                 this.wxCodecProperty.getAppId(), this.wxCodecProperty.getSecret(), code,
                 grant_type);
+        JsonNode result;
+        try {
+            result = this.mapper.readTree(resultString);
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("json解析失败，" + e.getMessage());
+        }
         this.checkResult(result);
         return result;
     }
