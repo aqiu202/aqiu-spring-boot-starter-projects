@@ -22,4 +22,6 @@ public interface WxCodecService {
     JsonNode obtainAccessToken();
 
     JsonNode gzhLogin(String code);
+
+    JsonNode gzhLogin(String appid, String secret, String code);
 }
