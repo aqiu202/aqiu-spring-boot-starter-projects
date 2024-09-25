@@ -176,6 +176,11 @@ public class WxCodecServiceImpl implements WxCodecService {
 
     @Override
     public JsonNode obtainAccessToken() {
+        return this.obtainAccessToken(this.wxCodecProperty.getAppId(), this.wxCodecProperty.getSecret());
+    }
+
+    @Override
+    public JsonNode obtainAccessToken(String appid, String appSecret) {
         String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={1}&secret={2}";
         JsonNode result = this.restTemplate
                 .getForObject(url, JsonNode.class, this.wxCodecProperty.getAppId(),

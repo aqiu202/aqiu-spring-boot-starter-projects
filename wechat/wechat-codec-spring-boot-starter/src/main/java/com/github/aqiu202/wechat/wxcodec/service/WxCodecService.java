@@ -17,11 +17,13 @@ public interface WxCodecService {
 
     String decodeRefundInfo(String content, String apiKey);
 
-    JsonNode obtainGzhUserInfo(String accessToken, String openid);
-
     JsonNode obtainAccessToken();
+
+    JsonNode obtainAccessToken(String appid, String appSecret);
 
     JsonNode gzhLogin(String code);
 
     JsonNode gzhLogin(String appid, String secret, String code);
+
+    JsonNode obtainGzhUserInfo(String accessToken, String openid);
 }
