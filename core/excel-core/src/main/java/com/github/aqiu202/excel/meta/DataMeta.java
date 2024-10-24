@@ -3,7 +3,7 @@ package com.github.aqiu202.excel.meta;
 /**
  * 表格的元数据（表头和表内容的描述）
  */
-public interface TableMeta {
+public interface DataMeta {
 
     /**
      * 表格字段的key，配合{@link #getFormula()}描述公式

@@ -5,7 +5,7 @@ import com.github.aqiu202.excel.format.wrap.FormatedValueWrapper;
 import com.github.aqiu202.excel.format.wrap.NumberValueWrapper;
 import com.github.aqiu202.excel.format.wrap.StringValueWrapper;
 import com.github.aqiu202.excel.format.wrap.ValueWrapper;
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 import com.github.aqiu202.excel.model.SheetWriteConfiguration;
 import com.github.aqiu202.excel.model.WorkbookType;
 import com.github.aqiu202.excel.style.SimpleStyleProcessor;
@@ -77,8 +77,8 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
     }
 
     @Override
-    public <T extends TableMeta> Sheet writeMetas(Workbook workbook, DataExtractor<T> dataExtractor,
-                                                  String sheetName, Class<?> type, SheetWriteConfiguration configuration) {
+    public <T extends DataMeta> Sheet writeMetas(Workbook workbook, DataExtractor<T> dataExtractor,
+                                                 String sheetName, Class<?> type, SheetWriteConfiguration configuration) {
         StyleProcessor styleProcessor = new SimpleStyleProcessor(workbook);
         int sheetIndex = workbook.getNumberOfSheets();
         Sheet sheet;
@@ -141,8 +141,8 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
     }
 
     @Override
-    public <M extends TableMeta, D> void appendData(Sheet sheet, DataExtractor<M> dataExtractor,
-                                                    Class<D> dataType, Collection<D> rows, SheetWriteConfiguration configuration) {
+    public <M extends DataMeta, D> void appendData(Sheet sheet, DataExtractor<M> dataExtractor,
+                                                   Class<D> dataType, Collection<D> rows, SheetWriteConfiguration configuration) {
         StyleProcessor styleProcessor = new SimpleStyleProcessor(sheet.getWorkbook());
         int contentRowIndex = sheet.getLastRowNum() + 1;
         RowHandler rowHandler = this.handlerStore.getResolvedRowHandler();

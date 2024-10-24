@@ -5,7 +5,7 @@ import com.github.aqiu202.excel.ExcelFactory;
 import com.github.aqiu202.excel.SimpleExcelFactory;
 import com.github.aqiu202.excel.convert.SimpleConverterFactory;
 import com.github.aqiu202.excel.convert.SimpleMapConverter;
-import com.github.aqiu202.excel.meta.PropertyTableMeta;
+import com.github.aqiu202.excel.meta.MapPropertyMeta;
 import com.github.aqiu202.excel.read.ExcelReader;
 import com.github.aqiu202.excel.write.ExcelWriter;
 import com.github.aqiu202.excel.write.extract.PropertyDataExtractor;
@@ -75,17 +75,17 @@ public class AppTest {
                 .then()
                 .write(baseStations)
                 .exportTo("/Users/xuqiu/tmp/test1.xlsx");
-        List<PropertyTableMeta> metas = Arrays.asList(
-                new PropertyTableMeta("field1", "模板说明：\n" +
+        List<MapPropertyMeta> metas = Arrays.asList(
+                new MapPropertyMeta("field1", "模板说明：\n" +
                         "1、模版keyType字段仅支持web（前端）与backend（后端）类型，字段不能为空\n" +
                         "2、如需添加web类型文案，languageKey格式为intl_{8}-{4}-{4}-{4}-{12}（intl_UUID32位）\n" +
                         "3、如需添加backend类型文案，languageKey格式为intl_backend_{8}-{4}-{4}-{4}-{12}（intl_backend_UUID32位）\n" +
                         "4、如需添加公共类型文案，模版keyType字段仅支持web（前端）\n" +
                         "5、模板中内容请勿修改，以防止导入出现问题", "field1"),
-                new PropertyTableMeta("","English"),
-                new PropertyTableMeta("","简体中文"),
-                new PropertyTableMeta("","繁体中文"),
-                new PropertyTableMeta("","日本语")
+                new MapPropertyMeta("","English"),
+                new MapPropertyMeta("","简体中文"),
+                new MapPropertyMeta("","繁体中文"),
+                new MapPropertyMeta("","日本语")
         );
         excelWriter.custom(new PropertyDataExtractor(metas), Map.class)
                         .then().write(new ArrayList<>())

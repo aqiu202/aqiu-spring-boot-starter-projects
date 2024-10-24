@@ -4,11 +4,11 @@ import com.github.aqiu202.util.StringUtils;
 
 import java.util.Map;
 
-public class MapBeanProperty implements BeanProperty {
+public class MapValueDescriptor implements BeanValueDescriptor {
 
     private final String propertyName;
 
-    public MapBeanProperty(String propertyName) {
+    public MapValueDescriptor(String propertyName) {
         this.propertyName = propertyName;
     }
 

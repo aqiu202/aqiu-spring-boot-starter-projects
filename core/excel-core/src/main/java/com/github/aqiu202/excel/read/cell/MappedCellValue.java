@@ -1,10 +1,10 @@
 package com.github.aqiu202.excel.read.cell;
 
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 
 public interface MappedCellValue {
 
-    TableMeta getTableMeta();
+    DataMeta getTableMeta();
 
     CellVal<?> getCellValue();
 

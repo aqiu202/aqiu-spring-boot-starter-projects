@@ -5,8 +5,8 @@ import com.github.aqiu202.excel.convert.Converter;
 import com.github.aqiu202.excel.convert.ConverterFactory;
 import com.github.aqiu202.excel.convert.ConverterProvider;
 import com.github.aqiu202.excel.convert.ConverterProviderWrapper;
-import com.github.aqiu202.excel.meta.IndexedTableMeta;
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.IndexedMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 import com.github.aqiu202.excel.model.ReadConfiguration;
 import com.github.aqiu202.excel.model.ReadDataFilter;
 import com.github.aqiu202.excel.model.ReadDataListener;
@@ -145,22 +145,22 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
         Row headRow = sheet.getRow(contentFirstRowNum - 1);
         int startColIndex = headRow.getFirstCellNum();
         int columns = headRow.getPhysicalNumberOfCells();
-        List<IndexedTableMeta> indexedTableMetas = this.dataAnalyser.analyse(sheet, type, startColIndex, columns, headRows);
+        List<IndexedMeta> indexedMetas = this.dataAnalyser.analyse(sheet, type, startColIndex, columns, headRows);
         List<RowMappedCellValues> mappedCellValues = new ArrayList<>();
         for (int i = contentFirstRowNum; i <= maxRowNum; i++) {
             Row row = sheet.getRow(i);
             RowMappedCellValues rowCellValues = new SimpleRowMappedCellValues(i, columns);
-            for (IndexedTableMeta indexedTableMeta : indexedTableMetas) {
-                int colIndex = indexedTableMeta.getIndex();
+            for (IndexedMeta indexedMeta : indexedMetas) {
+                int colIndex = indexedMeta.getIndex();
                 Cell cell = row.getCell(colIndex);
                 CellVal<?> cellVal = this.dataAnalyser.readConvertedCellValue(cell,
-                        configuration, this.findConverter(indexedTableMeta.getMeta()));
+                        configuration, this.findConverter(indexedMeta.getMeta()));
                 // 空/未知数据跳过不处理
                 if (cellVal instanceof NullCellVal || cellVal instanceof BlankCellVal
                         || cellVal instanceof UnknownCellVal) {
                     continue;
                 }
-                rowCellValues.setMappedCellValue(colIndex, new SimpleMappedCellValue(indexedTableMeta, cellVal));
+                rowCellValues.setMappedCellValue(colIndex, new SimpleMappedCellValue(indexedMeta, cellVal));
             }
             mappedCellValues.add(rowCellValues);
         }
@@ -175,12 +175,12 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     /**
      * 获取转换器提供者
      *
-     * @param tableMeta 表元数据
+     * @param dataMeta 表元数据
      * @return 转换器提供者
      */
-    protected ConverterProvider findConverterProvider(TableMeta tableMeta) {
-        if (tableMeta instanceof ConverterProviderWrapper) {
-            ConverterProviderWrapper wrapper = (ConverterProviderWrapper) tableMeta;
+    protected ConverterProvider findConverterProvider(DataMeta dataMeta) {
+        if (dataMeta instanceof ConverterProviderWrapper) {
+            ConverterProviderWrapper wrapper = (ConverterProviderWrapper) dataMeta;
             return wrapper.getConverterProvider();
         }
         return null;
@@ -189,11 +189,11 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     /**
      * 获取转换器
      *
-     * @param tableMeta 表元数据
+     * @param dataMeta 表元数据
      * @return 转换器
      */
-    protected Converter<?, ?> findConverter(TableMeta tableMeta) {
-        ConverterProvider converterProvider = this.findConverterProvider(tableMeta);
+    protected Converter<?, ?> findConverter(DataMeta dataMeta) {
+        ConverterProvider converterProvider = this.findConverterProvider(dataMeta);
         if (converterProvider != null) {
             return this.converterFactory.findConverter(converterProvider.getConverter());
         }

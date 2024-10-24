@@ -1,6 +1,6 @@
 package com.github.aqiu202.excel.read.cell;
 
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 import com.github.aqiu202.util.CollectionUtils;
 import com.github.aqiu202.util.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -38,7 +38,7 @@ public class HeadMeta {
         return colIndex;
     }
 
-    public boolean isMatched(TableMeta vm) {
+    public boolean isMatched(DataMeta vm) {
         String[] titles = vm.getHeadDescriptor().getContents();
         CellVal<?>[] cells = this.getCells();
         int index = 0;

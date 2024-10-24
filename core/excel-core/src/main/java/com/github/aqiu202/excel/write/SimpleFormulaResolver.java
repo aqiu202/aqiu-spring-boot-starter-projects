@@ -1,7 +1,7 @@
 package com.github.aqiu202.excel.write;
 
-import com.github.aqiu202.excel.meta.IndexedTableMeta;
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.IndexedMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,18 +44,18 @@ public class SimpleFormulaResolver implements FormulaResolver {
     }
 
     @Override
-    public String resolve(String formula, int rowIndex, List<? extends TableMeta> metaList) {
-        List<IndexedTableMeta> indexedTableMetas = this.resolveIndexedMeta(metaList);
-        Map<String, Integer> metaKeyIndexMap = indexedTableMetas.stream()
-                .collect(Collectors.toMap(IndexedTableMeta::getKey, IndexedTableMeta::getIndex));
+    public String resolve(String formula, int rowIndex, List<? extends DataMeta> metaList) {
+        List<IndexedMeta> indexedMetas = this.resolveIndexedMeta(metaList);
+        Map<String, Integer> metaKeyIndexMap = indexedMetas.stream()
+                .collect(Collectors.toMap(IndexedMeta::getKey, IndexedMeta::getIndex));
         return this.resolveFormula(formula, metaKeyIndexMap, rowIndex);
     }
 
-    private List<IndexedTableMeta> resolveIndexedMeta(List<? extends TableMeta> metaList) {
-        List<IndexedTableMeta> results = new ArrayList<>();
+    private List<IndexedMeta> resolveIndexedMeta(List<? extends DataMeta> metaList) {
+        List<IndexedMeta> results = new ArrayList<>();
         for (int i = 0; i < metaList.size(); i++) {
-            TableMeta tableMeta = metaList.get(i);
-            results.add(new IndexedTableMeta(i, tableMeta));
+            DataMeta dataMeta = metaList.get(i);
+            results.add(new IndexedMeta(i, dataMeta));
         }
         return results;
     }

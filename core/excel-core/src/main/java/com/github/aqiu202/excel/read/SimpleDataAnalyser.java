@@ -2,8 +2,8 @@ package com.github.aqiu202.excel.read;
 
 import com.github.aqiu202.excel.analyse.MetaAnalyzer;
 import com.github.aqiu202.excel.convert.Converter;
-import com.github.aqiu202.excel.meta.IndexedTableMeta;
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.IndexedMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 import com.github.aqiu202.excel.model.ReadConfiguration;
 import com.github.aqiu202.excel.read.cell.*;
 import com.github.aqiu202.util.ClassUtils;
@@ -49,8 +49,8 @@ public class SimpleDataAnalyser implements DataAnalyser {
     }
 
     @Override
-    public List<IndexedTableMeta> analyse(Sheet sheet, Class<?> type, int startColIndex, int columns, int headRows) {
-        List<? extends TableMeta> metas = this.metaAnalyzer.analyseMetas(type);
+    public List<IndexedMeta> analyse(Sheet sheet, Class<?> type, int startColIndex, int columns, int headRows) {
+        List<? extends DataMeta> metas = this.metaAnalyzer.analyseMetas(type);
         HeadMeta[] headMetas = cellReader.readHeads(sheet, startColIndex, columns, headRows);
         return this.indexedMetaResolver.resolve(type, metas, headMetas);
     }

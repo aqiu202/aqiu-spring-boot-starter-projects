@@ -4,7 +4,7 @@ import com.github.aqiu202.excel.prop.FieldValueDescriptor;
 
 import java.lang.reflect.Field;
 
-public class FieldMeta implements TableMeta {
+public class FieldMeta implements DataMeta {
 
     private final Field field;
 

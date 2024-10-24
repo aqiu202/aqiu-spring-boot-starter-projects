@@ -1,20 +1,20 @@
 package com.github.aqiu202.excel.read.cell;
 
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 
 public class SimpleMappedCellValue implements MappedCellValue {
-    private final TableMeta tableMeta;
+    private final DataMeta dataMeta;
 
     private CellVal<?> cellVal;
 
-    public SimpleMappedCellValue(TableMeta tableMeta, CellVal<?> cellVal) {
-        this.tableMeta = tableMeta;
+    public SimpleMappedCellValue(DataMeta dataMeta, CellVal<?> cellVal) {
+        this.dataMeta = dataMeta;
         this.cellVal = cellVal;
     }
 
     @Override
-    public TableMeta getTableMeta() {
-        return tableMeta;
+    public DataMeta getTableMeta() {
+        return dataMeta;
     }
 
     @Override

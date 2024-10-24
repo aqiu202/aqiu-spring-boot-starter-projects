@@ -8,13 +8,13 @@ import com.github.aqiu202.excel.format.FormatterProvider;
 import com.github.aqiu202.excel.format.FormatterProviderWrapper;
 import com.github.aqiu202.excel.model.AnnotatedField;
 import com.github.aqiu202.excel.model.PropertyAccessor;
-import com.github.aqiu202.excel.prop.ProxyBeanProperty;
+import com.github.aqiu202.excel.prop.ProxyBeanValueDescriptor;
 import com.github.aqiu202.util.CollectionUtils;
 import com.github.aqiu202.util.StringUtils;
 
 import java.lang.reflect.Field;
 
-public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements TableMeta, ConverterProviderWrapper,
+public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements DataMeta, ConverterProviderWrapper,
         FormatterProviderWrapper {
 
     private AnnotationFormatterProvider provider;
@@ -76,7 +76,7 @@ public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements Table
         if (accessor == null) {
             accessor = PropertyAccessor.FIELD;
         }
-        return new ProxyBeanProperty(this.getField().getDeclaringClass(), this.getKey(), accessor);
+        return new ProxyBeanValueDescriptor(this.getField().getDeclaringClass(), this.getKey(), accessor);
     }
 
     @Override
@@ -103,6 +103,6 @@ public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements Table
 
     @Override
     public int getOrder() {
-        return this.hasAnnotation() ? this.getAnnotation().order() : TableMeta.super.getOrder();
+        return this.hasAnnotation() ? this.getAnnotation().order() : DataMeta.super.getOrder();
     }
 }

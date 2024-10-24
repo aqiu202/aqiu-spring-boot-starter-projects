@@ -1,7 +1,7 @@
 package com.github.aqiu202.excel.read;
 
-import com.github.aqiu202.excel.meta.IndexedTableMeta;
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.IndexedMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 import com.github.aqiu202.excel.read.cell.HeadMeta;
 
 import java.util.List;
@@ -11,5 +11,5 @@ import java.util.List;
  */
 public interface IndexedMetaResolver {
 
-    List<IndexedTableMeta> resolve(Class<?> type, List<? extends TableMeta> metas, HeadMeta[] headMetas);
+    List<IndexedMeta> resolve(Class<?> type, List<? extends DataMeta> metas, HeadMeta[] headMetas);
 }

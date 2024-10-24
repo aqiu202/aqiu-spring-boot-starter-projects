@@ -1,7 +1,7 @@
 package com.github.aqiu202.excel.write;
 
 import com.github.aqiu202.excel.convert.ConverterFactory;
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 import com.github.aqiu202.excel.model.SheetWriteConfiguration;
 import com.github.aqiu202.excel.model.WorkbookSheetWriteConfiguration;
 import com.github.aqiu202.excel.model.WorkbookType;
@@ -35,9 +35,9 @@ public interface WorkbookWriter extends HandlerStore {
         return this.createWorkbook(type, WorkbookSheetWriteConfiguration.DEFAULT_ROW_ACCESS_WINDOW_SIZE);
     }
 
-    <T extends TableMeta> Sheet writeMetas(Workbook workbook, DataExtractor<T> dataExtractor, String sheetName, Class<?> type, SheetWriteConfiguration configuration);
+    <T extends DataMeta> Sheet writeMetas(Workbook workbook, DataExtractor<T> dataExtractor, String sheetName, Class<?> type, SheetWriteConfiguration configuration);
 
-    <T extends TableMeta, D> void appendData(Sheet sheet, DataExtractor<T> dataExtractor, Class<D> dataType, Collection<D> rows, SheetWriteConfiguration configuration);
+    <T extends DataMeta, D> void appendData(Sheet sheet, DataExtractor<T> dataExtractor, Class<D> dataType, Collection<D> rows, SheetWriteConfiguration configuration);
 
     void processSheet(Sheet sheet, String protectedPassword);
 

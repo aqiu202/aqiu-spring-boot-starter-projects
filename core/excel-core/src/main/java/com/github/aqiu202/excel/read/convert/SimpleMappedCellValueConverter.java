@@ -6,7 +6,7 @@ import com.github.aqiu202.excel.format.FormatterProviderWrapper;
 import com.github.aqiu202.excel.format.SimpleFormatterFacade;
 import com.github.aqiu202.excel.format.wrap.FormatedValueWrapper;
 import com.github.aqiu202.excel.format.wrap.ValueWrapper;
-import com.github.aqiu202.excel.meta.TableMeta;
+import com.github.aqiu202.excel.meta.DataMeta;
 import com.github.aqiu202.excel.meta.ValueDescriptor;
 import com.github.aqiu202.excel.read.cell.*;
 import com.github.aqiu202.util.ClassUtils;
@@ -28,15 +28,15 @@ public class SimpleMappedCellValueConverter implements MappedCellValueConverter 
             mappedCellValue.setCellValue(cellVal);
         }
         Cell cell = cellVal.getCell();
-        TableMeta tableMeta = mappedCellValue.getTableMeta();
-        if (tableMeta instanceof FormatterProviderWrapper) {
-            FormatterProvider fp = ((FormatterProviderWrapper) tableMeta).getProvider();
+        DataMeta dataMeta = mappedCellValue.getTableMeta();
+        if (dataMeta instanceof FormatterProviderWrapper) {
+            FormatterProvider fp = ((FormatterProviderWrapper) dataMeta).getProvider();
             if (fp != null) {
                 formatterProvider = fp;
             }
         }
         CellVal<?> newCellVal = null;
-        ValueDescriptor vd = tableMeta.getValueDescriptor();
+        ValueDescriptor vd = dataMeta.getValueDescriptor();
         Class<?> valueType = vd.getValueType();
         if (valueType == null) {
             return;
