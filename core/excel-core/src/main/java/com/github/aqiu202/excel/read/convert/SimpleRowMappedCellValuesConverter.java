@@ -29,10 +29,9 @@ public class SimpleRowMappedCellValuesConverter implements RowMappedCellValuesCo
     public void convert(RowMappedCellValues rowMappedCellValues, FormatterProvider formatterProvider) {
         MappedCellValue[] mappedCellValues = rowMappedCellValues.getMappedCellValues();
         for (MappedCellValue mappedCellValue : mappedCellValues) {
-            if (mappedCellValue == null) {
-                return;
+            if (mappedCellValue != null) {
+                this.mappedCellValueConverter.convert(mappedCellValue, formatterProvider);
             }
-            this.mappedCellValueConverter.convert(mappedCellValue, formatterProvider);
         }
     }
 }
