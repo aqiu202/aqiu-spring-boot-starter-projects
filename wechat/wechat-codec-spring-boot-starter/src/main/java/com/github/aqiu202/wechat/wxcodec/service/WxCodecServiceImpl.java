@@ -142,12 +142,12 @@ public class WxCodecServiceImpl implements WxCodecService {
     }
 
     @Override
-    public JsonNode gzhLogin(String code) {
-        return this.gzhLogin(this.wxCodecProperty.getAppId(), this.wxCodecProperty.getSecret(), code);
+    public JsonNode webLogin(String code) {
+        return this.webLogin(this.wxCodecProperty.getAppId(), this.wxCodecProperty.getSecret(), code);
     }
 
     @Override
-    public JsonNode gzhLogin(String appid, String secret, String code) {
+    public JsonNode webLogin(String appid, String secret, String code) {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token"
                 + "?appid={1}&secret={2}&code={3}&grant_type=authorization_code";
         String str = this.restTemplate
