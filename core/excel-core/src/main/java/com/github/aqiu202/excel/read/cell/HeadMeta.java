@@ -46,7 +46,7 @@ public class HeadMeta {
             if (cellVal.getCell() == null || cellVal instanceof BlankCellVal) {
                 continue;
             }
-            String scv = cellVal.getCell().getStringCellValue();
+            String scv = cellVal.getValueAsText();
             if (!StringUtils.equals(titles[index++], scv)) {
                 return false;
             }
@@ -65,7 +65,7 @@ public class HeadMeta {
             if (cell == null || cellVal instanceof BlankCellVal) {
                 continue;
             }
-            joiner.add(cell.getStringCellValue());
+            joiner.add(cellVal.getValueAsText());
         }
         return joiner.toString();
     }
