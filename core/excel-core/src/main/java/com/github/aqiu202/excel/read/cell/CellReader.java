@@ -1,6 +1,6 @@
 package com.github.aqiu202.excel.read.cell;
 
-import com.github.aqiu202.excel.model.ReadConfiguration;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -10,10 +10,10 @@ import org.apache.poi.ss.usermodel.Sheet;
 public interface CellReader {
 
     default CellVal<?> readCell(Cell cell) {
-        return this.readCell(cell, new ReadConfiguration());
+        return this.readCell(cell, new SheetReadConfiguration());
     }
 
-    CellVal<?> readCell(Cell cell, ReadConfiguration configuration);
+    CellVal<?> readCell(Cell cell, SheetReadConfiguration configuration);
 
     HeadMeta readHead(Sheet sheet, int colIndex, int headRows);
 

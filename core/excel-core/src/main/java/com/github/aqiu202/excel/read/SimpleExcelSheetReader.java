@@ -7,7 +7,7 @@ import com.github.aqiu202.excel.convert.ConverterProvider;
 import com.github.aqiu202.excel.convert.ConverterProviderWrapper;
 import com.github.aqiu202.excel.meta.IndexedMeta;
 import com.github.aqiu202.excel.meta.DataMeta;
-import com.github.aqiu202.excel.model.ReadConfiguration;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 import com.github.aqiu202.excel.model.ReadDataFilter;
 import com.github.aqiu202.excel.model.ReadDataListener;
 import com.github.aqiu202.excel.read.cell.*;
@@ -20,9 +20,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -34,10 +32,10 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     private TypeTranslator typeTranslator = new SimpleTypeTranslator();
     private ReadDataFilter<RowMappedCellValues> rawDataFilter;
     private ReadDataFilter<T> filter;
-    private ReadConfiguration configuration;
+    private SheetReadConfiguration configuration;
     private ConverterFactory converterFactory;
 
-    public SimpleExcelSheetReader(Class<T> type, MetaAnalyzer<?> metaAnalyzer, ConverterFactory converterFactory, ReadConfiguration configuration) {
+    public SimpleExcelSheetReader(Class<T> type, MetaAnalyzer<?> metaAnalyzer, ConverterFactory converterFactory, SheetReadConfiguration configuration) {
         if (ClassUtils.isCustomClass(type) || ClassUtils.isAssignableFrom(Map.class, type)) {
             this.type = type;
         } else {
@@ -54,7 +52,7 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     }
 
     @Override
-    public ReadConfiguration getConfiguration() {
+    public SheetReadConfiguration getConfiguration() {
         return configuration;
     }
 
@@ -79,15 +77,15 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     }
 
     @Override
-    public SimpleExcelSheetReader<T> configuration(ReadConfiguration configuration) {
+    public SimpleExcelSheetReader<T> configuration(SheetReadConfiguration configuration) {
         this.configuration = configuration;
         return this;
     }
 
     @Override
-    public ExcelSheetReader<T> configuration(Consumer<ReadConfiguration> configurationConsumer) {
+    public ExcelSheetReader<T> configuration(Consumer<SheetReadConfiguration> configurationConsumer) {
         if (this.configuration == null) {
-            this.configuration = new ReadConfiguration();
+            this.configuration = new SheetReadConfiguration();
         }
         configurationConsumer.accept(this.configuration);
         return this;
@@ -136,7 +134,7 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
             throw new RuntimeException("Sheet页不存在");
         }
         Class<T> type = this.getDataType();
-        ReadConfiguration configuration = this.getConfiguration();
+        SheetReadConfiguration configuration = this.getConfiguration();
         int minRowNum = sheet.getFirstRowNum();
         int maxRowNum = sheet.getLastRowNum();
         // 获取表内容第一行
@@ -170,6 +168,27 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
                 .map(values -> this.getTypeTranslator().translate(values, type))
                 .filter(item -> this.getFilter() == null || this.getFilter().test(item))
                 .peek(item -> this.getListeners().forEach(listener -> listener.onData(item))).collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, List<T>> readAll(Workbook workbook, int headRdRows) {
+        int numberOfSheets = workbook.getNumberOfSheets();
+        Map<String, List<T>> result = new LinkedHashMap<>();
+        for (int i = 0; i < numberOfSheets; i++) {
+            Sheet sheet = workbook.getSheetAt(i);
+            result.put(sheet.getSheetName(), this.read(workbook, i, headRdRows));
+        }
+        return result;
+    }
+
+    @Override
+    public List<T>[] readAllWithIndex(Workbook workbook, int headRdRows) {
+        int numberOfSheets = workbook.getNumberOfSheets();
+        List<T>[] result = new ArrayList[numberOfSheets];
+        for (int i = 0; i < numberOfSheets; i++) {
+            result[i] = this.read(workbook, i, headRdRows);
+        }
+        return result;
     }
 
     /**

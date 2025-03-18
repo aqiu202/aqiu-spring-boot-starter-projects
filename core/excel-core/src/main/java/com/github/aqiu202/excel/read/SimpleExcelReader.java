@@ -4,16 +4,17 @@ import com.github.aqiu202.excel.analyse.AnnotationMetaAnalyzer;
 import com.github.aqiu202.excel.analyse.FieldMetaAnalyzer;
 import com.github.aqiu202.excel.analyse.MetaAnalyzer;
 import com.github.aqiu202.excel.convert.ConverterFactory;
-import com.github.aqiu202.excel.model.ReadConfiguration;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SimpleExcelReader implements ExcelReader {
 
     private final ConverterFactory converterFactory;
-    private final ReadConfiguration configuration;
+    private final SheetReadConfiguration configuration;
 
-    public SimpleExcelReader(ConverterFactory converterFactory, ReadConfiguration configuration) {
+    public SimpleExcelReader(ConverterFactory converterFactory, SheetReadConfiguration configuration) {
         this.converterFactory = converterFactory;
         this.configuration = configuration;
     }
@@ -22,7 +23,7 @@ public class SimpleExcelReader implements ExcelReader {
         return converterFactory;
     }
 
-    public ReadConfiguration getConfiguration() {
+    public SheetReadConfiguration getConfiguration() {
         return configuration;
     }
 
@@ -41,8 +42,8 @@ public class SimpleExcelReader implements ExcelReader {
 
     @Override
     @SuppressWarnings("rawtypes")
-    public ExcelSheetReader<HashMap> map() {
-        return this.type(HashMap.class);
+    public ExcelSheetReader<Map<String, Object>> map() {
+        return (ExcelSheetReader) this.type(LinkedHashMap.class);
     }
 
     @Override

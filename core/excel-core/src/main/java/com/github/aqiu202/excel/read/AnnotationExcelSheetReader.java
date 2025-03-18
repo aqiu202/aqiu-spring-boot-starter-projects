@@ -3,13 +3,13 @@ package com.github.aqiu202.excel.read;
 import com.github.aqiu202.excel.analyse.AnnotationMetaAnalyzer;
 import com.github.aqiu202.excel.convert.ConverterFactory;
 import com.github.aqiu202.excel.model.PropertyAccessor;
-import com.github.aqiu202.excel.model.ReadConfiguration;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 
 public class AnnotationExcelSheetReader<T> extends SimpleExcelSheetReader<T> {
 
     private final AnnotationMetaAnalyzer metaAnalyzer;
 
-    public AnnotationExcelSheetReader(Class<T> type, AnnotationMetaAnalyzer metaAnalyzer, ConverterFactory converterFactory, ReadConfiguration configuration) {
+    public AnnotationExcelSheetReader(Class<T> type, AnnotationMetaAnalyzer metaAnalyzer, ConverterFactory converterFactory, SheetReadConfiguration configuration) {
         super(type, metaAnalyzer, converterFactory, configuration);
         this.metaAnalyzer = metaAnalyzer;
     }

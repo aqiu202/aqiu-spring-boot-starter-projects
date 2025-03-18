@@ -4,7 +4,7 @@ import com.github.aqiu202.excel.analyse.MetaAnalyzer;
 import com.github.aqiu202.excel.convert.Converter;
 import com.github.aqiu202.excel.meta.IndexedMeta;
 import com.github.aqiu202.excel.meta.DataMeta;
-import com.github.aqiu202.excel.model.ReadConfiguration;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 import com.github.aqiu202.excel.read.cell.*;
 import com.github.aqiu202.util.ClassUtils;
 import org.apache.poi.ss.usermodel.Cell;
@@ -24,7 +24,7 @@ public class SimpleDataAnalyser implements DataAnalyser {
     }
 
     @Override
-    public CellVal<?> readConvertedCellValue(Cell cell, ReadConfiguration configuration, Converter converter) {
+    public CellVal<?> readConvertedCellValue(Cell cell, SheetReadConfiguration configuration, Converter converter) {
         CellVal<?> cellVal = this.cellReader.readCell(cell, configuration);
         if (converter != null) {
             Object value = cellVal.getValue();

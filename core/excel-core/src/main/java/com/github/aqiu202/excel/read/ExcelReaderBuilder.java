@@ -1,25 +1,25 @@
 package com.github.aqiu202.excel.read;
 
 import com.github.aqiu202.excel.convert.ConverterFactory;
-import com.github.aqiu202.excel.model.ReadConfiguration;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 
 import java.util.function.Consumer;
 
 public abstract class ExcelReaderBuilder {
 
-    protected ReadConfiguration configuration = new ReadConfiguration();
+    protected SheetReadConfiguration configuration = new SheetReadConfiguration();
     protected ConverterFactory converterFactory;
 
     public ExcelReaderBuilder(ConverterFactory converterFactory) {
         this.converterFactory = converterFactory;
     }
 
-    public ExcelReaderBuilder configuration(ReadConfiguration configuration) {
+    public ExcelReaderBuilder configuration(SheetReadConfiguration configuration) {
         this.configuration = configuration;
         return this;
     }
 
-    public ExcelReaderBuilder configuration(Consumer<ReadConfiguration> configurationConsumer) {
+    public ExcelReaderBuilder configuration(Consumer<SheetReadConfiguration> configurationConsumer) {
         configurationConsumer.accept(this.configuration);
         return this;
     }
