@@ -51,8 +51,32 @@ public abstract class ExcelWriterBuilder {
         return this;
     }
 
+    public ExcelWriterBuilder headStyle(Consumer<StyleProperty> consumer) {
+        if (consumer != null) {
+            StyleProperty headStyle = this.configuration.getHeadStyle();
+            if (headStyle == null) {
+                headStyle = new StyleProperty();
+                this.configuration.setHeadStyle(headStyle);
+            }
+            consumer.accept(headStyle);
+        }
+        return this;
+    }
+
     public ExcelWriterBuilder contentStyle(StyleProperty contentStyle) {
         this.configuration.setContentStyle(contentStyle);
+        return this;
+    }
+
+    public ExcelWriterBuilder contentStyle(Consumer<StyleProperty> consumer) {
+        if (consumer != null) {
+            StyleProperty contentStyle = this.configuration.getContentStyle();
+            if (contentStyle == null) {
+                contentStyle = new StyleProperty();
+                this.configuration.setContentStyle(contentStyle);
+            }
+            consumer.accept(contentStyle);
+        }
         return this;
     }
 

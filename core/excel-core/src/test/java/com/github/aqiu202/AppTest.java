@@ -33,8 +33,8 @@ public class AppTest {
     public void testExcelExport() {
         SimpleConverterFactory converterFactory = new SimpleConverterFactory();
         converterFactory.addConverter("convertValid", new SimpleMapConverter<>(this.getValidMap()));
-        ExcelFactory excelFactory = new SimpleExcelFactory()
-                .converterFactory(converterFactory);
+        ExcelFactory excelFactory = ExcelFactory.builder()
+            .converterFactory(converterFactory).build();
         String url = "https://img0.baidu.com/it/u=759006001,1162006204&fm=253&fmt=auto&app=138&f=JPEG?w=888&h=500";
         String url2 = "https://img1.baidu.com/it/u=307475733,3112699775&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=281";
         List<BaseStation> baseStations = new ArrayList<>();
@@ -97,8 +97,8 @@ public class AppTest {
     public void testReader() {
         SimpleConverterFactory converterFactory = new SimpleConverterFactory();
         converterFactory.addConverter("convertValid", new SimpleMapConverter<>(this.getValidMap()));
-        ExcelFactory excelFactory = new SimpleExcelFactory()
-                .converterFactory(converterFactory);
+        ExcelFactory excelFactory = ExcelFactory.builder()
+                .converterFactory(converterFactory).build();
         ExcelReader excelReader = excelFactory.buildReader()
                 .configuration(configuration -> {
                     configuration.setReadFormula(true);

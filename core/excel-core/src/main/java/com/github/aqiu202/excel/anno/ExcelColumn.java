@@ -27,6 +27,11 @@ public @interface ExcelColumn {
     //是否为图片
     boolean image() default false;
 
+    /**
+     * 自定义宽度
+     */
+    int width() default 0;
+
     //是否为日期格式
     String dateFormat() default "";
 

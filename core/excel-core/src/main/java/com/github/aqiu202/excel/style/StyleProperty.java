@@ -10,6 +10,7 @@ public class StyleProperty {
     private VerticalAlignment verticalAlignment = VerticalAlignment.CENTER;
     private Short dataFormat;
     private Boolean locked;
+    private Boolean wrapText;
 
     @NestedConfigurationProperty
     private FontProperty font = new FontProperty();
@@ -83,6 +84,14 @@ public class StyleProperty {
         return this;
     }
 
+    public Boolean getWrapText() {
+        return wrapText;
+    }
+
+    public void setWrapText(Boolean wrapText) {
+        this.wrapText = wrapText;
+    }
+
     public void apply(CellStyle cellStyle, Font font) {
         if (font != null) {
             this.font.apply(font);
@@ -106,6 +115,9 @@ public class StyleProperty {
             }
             if (this.locked != null) {
                 cellStyle.setLocked(this.locked);
+            }
+            if (this.wrapText != null) {
+                cellStyle.setWrapText(this.wrapText);
             }
         }
     }
