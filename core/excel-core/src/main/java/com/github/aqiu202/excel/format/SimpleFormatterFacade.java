@@ -1,6 +1,7 @@
 package com.github.aqiu202.excel.format;
 
 import com.github.aqiu202.excel.format.wrap.*;
+import com.github.aqiu202.excel.util.DateUtils;
 import com.github.aqiu202.util.ClassUtils;
 import com.github.aqiu202.util.StringUtils;
 
@@ -27,9 +28,12 @@ public class SimpleFormatterFacade implements FormatterFacade {
             return new FormatedValueWrapper(null, formatter.format());
         }
         if (ClassUtils.isDate(target)) {
-            DateValueWrapper dateWrapper = DateValueWrapper.of(target);
             DateFormatter dateFormatter = this.formatterFinder.findFormatter(formatterProvider.getDateFormatter());
             String pattern = formatterProvider.getDateFormat();
+            DateValueWrapper dateWrapper = DateValueWrapper.of(target);
+            if (formatterProvider.isEnableDefaultFormatter()) {
+                pattern = this.getDefaultPattern(target.getClass());
+            }
             if (StringUtils.isBlank(pattern)) {
                 return dateWrapper;
             }
@@ -65,7 +69,11 @@ public class SimpleFormatterFacade implements FormatterFacade {
             DateFormatter dateFormatter = this.formatterFinder.findFormatter(formatterProvider.getDateFormatter());
             String pattern = formatterProvider.getDateFormat();
             if (StringUtils.isBlank(pattern)) {
-                pattern = FormatterProvider.DEFAULT_DATE_FORMAT_PATTERN;
+                if (formatterProvider.isEnableDefaultFormatter()) {
+                    pattern = this.getDefaultPattern(targetType);
+                } else {
+                    pattern = FormatterProvider.DEFAULT_DATE_TIME_FORMAT_PATTERN;
+                }
             }
             return dateFormatter.parse(text, pattern, targetType);
         }
@@ -82,6 +90,18 @@ public class SimpleFormatterFacade implements FormatterFacade {
             return (T) text;
         }
         throw new RuntimeException("不支持的解析类型：" + targetType.getName());
+    }
+
+    protected String getDefaultPattern(Class<?> type) {
+        String pattern;
+        if (DateUtils.isDate(type)) {
+            pattern = FormatterProvider.DEFAULT_DATE_FORMAT_PATTERN;
+        } else if (DateUtils.isTime(type)) {
+            pattern = FormatterProvider.DEFAULT_TIME_FORMAT_PATTERN;
+        } else {
+            pattern = FormatterProvider.DEFAULT_DATE_TIME_FORMAT_PATTERN;
+        }
+        return pattern;
     }
 
 }

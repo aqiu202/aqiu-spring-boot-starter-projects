@@ -9,12 +9,11 @@ import com.github.aqiu202.excel.format.FormatterProviderWrapper;
 import com.github.aqiu202.excel.model.AnnotatedField;
 import com.github.aqiu202.excel.model.PropertyAccessor;
 import com.github.aqiu202.excel.prop.ProxyBeanValueDescriptor;
-import com.github.aqiu202.util.CollectionUtils;
 import com.github.aqiu202.util.StringUtils;
 
 import java.lang.reflect.Field;
 
-public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements DataMeta, ConverterProviderWrapper,
+public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements TableMeta, ConverterProviderWrapper,
         FormatterProviderWrapper {
 
     private AnnotationFormatterProvider provider;
@@ -92,7 +91,7 @@ public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements DataM
         if (this.hasAnnotation()) {
             contents = this.getAnnotation().value();
         }
-        if (CollectionUtils.isEmpty(contents)) {
+        if (contents == null || contents.length == 0) {
             contents = new String[]{this.getField().getName()};
         }
         return new SimpleHeadDescriptor(contents);
@@ -110,6 +109,6 @@ public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements DataM
 
     @Override
     public int getOrder() {
-        return this.hasAnnotation() ? this.getAnnotation().order() : DataMeta.super.getOrder();
+        return this.hasAnnotation() ? this.getAnnotation().order() : TableMeta.super.getOrder();
     }
 }

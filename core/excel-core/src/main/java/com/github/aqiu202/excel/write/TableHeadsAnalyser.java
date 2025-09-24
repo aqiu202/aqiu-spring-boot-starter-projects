@@ -1,6 +1,6 @@
 package com.github.aqiu202.excel.write;
 
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 
 import java.util.List;
 
@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface TableHeadsAnalyser {
 
-    Heads analyse(List<? extends DataMeta> metas);
+    Heads analyse(List<? extends TableMeta> metas);
 
 }

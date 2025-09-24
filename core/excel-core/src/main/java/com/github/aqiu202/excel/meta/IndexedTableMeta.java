@@ -1,11 +1,15 @@
 package com.github.aqiu202.excel.meta;
 
-public class IndexedMeta implements DataMeta {
+public class IndexedTableMeta implements TableMeta {
 
     private final int index;
-    private final DataMeta meta;
+    private final TableMeta meta;
 
-    public IndexedMeta(int index, DataMeta meta) {
+    public IndexedTableMeta(int index, String propertyName, String... titles) {
+        this(index, new MapPropertyMeta(propertyName, titles));
+    }
+
+    public IndexedTableMeta(int index, TableMeta meta) {
         this.index = index;
         this.meta = meta;
     }
@@ -44,7 +48,7 @@ public class IndexedMeta implements DataMeta {
         return this.meta.getOrder();
     }
 
-    public DataMeta getMeta() {
+    public TableMeta getMeta() {
         return this.meta;
     }
 }

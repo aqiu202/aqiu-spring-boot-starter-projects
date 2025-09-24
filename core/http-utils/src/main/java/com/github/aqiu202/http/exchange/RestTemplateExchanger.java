@@ -11,7 +11,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.web.client.NoOpResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -23,9 +22,7 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
 
     @Override
     protected RestTemplate createRequestInstance() {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.setErrorHandler(new NoOpResponseErrorHandler());
-        return restTemplate;
+        return new RestTemplate();
     }
 
     @Override

@@ -1,8 +1,8 @@
 package com.github.aqiu202.excel.read;
 
-import com.github.aqiu202.excel.meta.IndexedMeta;
+import com.github.aqiu202.excel.meta.IndexedTableMeta;
 import com.github.aqiu202.excel.meta.MapPropertyMeta;
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 import com.github.aqiu202.excel.read.cell.HeadMeta;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.stream.Stream;
 
 public class SimpleIndexedMetaResolver implements IndexedMetaResolver {
     @Override
-    public List<IndexedMeta> resolve(Class<?> type, List<? extends DataMeta> metas, HeadMeta[] headMetas) {
+    public List<IndexedTableMeta> resolve(Class<?> type, List<? extends TableMeta> metas, HeadMeta[] headMetas) {
         if (Map.class.isAssignableFrom(type)) {
             return Stream.of(headMetas)
                     .map(this::buildMapIndexedTableMeta)
@@ -25,15 +25,18 @@ public class SimpleIndexedMetaResolver implements IndexedMetaResolver {
                 .collect(Collectors.toList());
     }
 
-    private IndexedMeta buildMapIndexedTableMeta(HeadMeta headMeta) {
-        return new IndexedMeta(headMeta.getColIndex(), new MapPropertyMeta(headMeta.asText()));
+    protected IndexedTableMeta buildMapIndexedTableMeta(HeadMeta headMeta) {
+        return new IndexedTableMeta(headMeta.getColIndex(), new MapPropertyMeta(headMeta.asText()));
     }
 
-    private IndexedMeta resolveIndexedTableMeta(DataMeta meta, HeadMeta[] headMetas) {
+    protected IndexedTableMeta resolveIndexedTableMeta(TableMeta meta, HeadMeta[] headMetas) {
+        if (meta instanceof IndexedTableMeta) {
+            return (IndexedTableMeta) meta;
+        }
         HeadMeta headMeta = Stream.of(headMetas)
-                .filter(hm -> hm.isMatched(meta))
+                .filter(hm -> hm.matches(meta))
                 .findFirst()
                 .orElse(null);
-        return headMeta == null ? null : new IndexedMeta(headMeta.getColIndex(), meta);
+        return headMeta == null ? null : new IndexedTableMeta(headMeta.getColIndex(), meta);
     }
 }

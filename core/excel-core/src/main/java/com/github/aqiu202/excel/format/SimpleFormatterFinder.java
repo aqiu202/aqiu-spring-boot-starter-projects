@@ -9,6 +9,7 @@ public class SimpleFormatterFinder implements FormatterFinder {
 
     private final Map<Class<?>, Object> formatterMap = new ConcurrentHashMap<>();
 
+    @Override
     public <T> T findFormatter(Class<T> formatterType) {
         return (T) formatterMap.compute(formatterType, (type, value) -> {
             if (value == null) {

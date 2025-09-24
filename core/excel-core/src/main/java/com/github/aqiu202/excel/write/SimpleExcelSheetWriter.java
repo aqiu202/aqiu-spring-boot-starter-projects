@@ -27,6 +27,11 @@ public class SimpleExcelSheetWriter<T> implements ExcelSheetWriter<T> {
     }
 
     @Override
+    public ExcelBeforeExportHandler getBeforeExportHandler() {
+        return this.configurer.getBeforeExportHandler();
+    }
+
+    @Override
     public ExcelSheetWriter<T> write(Collection<T> data) {
         if (CollectionUtils.isEmpty(data)) {
             return this;

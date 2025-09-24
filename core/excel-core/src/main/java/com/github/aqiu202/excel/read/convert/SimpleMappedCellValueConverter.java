@@ -6,7 +6,7 @@ import com.github.aqiu202.excel.format.FormatterProviderWrapper;
 import com.github.aqiu202.excel.format.SimpleFormatterFacade;
 import com.github.aqiu202.excel.format.wrap.FormatedValueWrapper;
 import com.github.aqiu202.excel.format.wrap.ValueWrapper;
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 import com.github.aqiu202.excel.meta.ValueDescriptor;
 import com.github.aqiu202.excel.read.cell.*;
 import com.github.aqiu202.util.ClassUtils;
@@ -21,6 +21,12 @@ public class SimpleMappedCellValueConverter implements MappedCellValueConverter 
 
     @Override
     public void convert(@Nonnull MappedCellValue mappedCellValue, FormatterProvider formatterProvider) {
+        TableMeta tableMeta = mappedCellValue.getTableMeta();
+        ValueDescriptor vd = tableMeta.getValueDescriptor();
+        Class<?> valueType = vd.getValueType();
+        if (valueType == null) {
+            return;
+        }
         CellVal<?> cellVal = mappedCellValue.getCellValue();
         // 公式实际值为内部的计算值
         if (cellVal instanceof FormulaCellVal) {
@@ -28,19 +34,13 @@ public class SimpleMappedCellValueConverter implements MappedCellValueConverter 
             mappedCellValue.setCellValue(cellVal);
         }
         Cell cell = cellVal.getCell();
-        DataMeta dataMeta = mappedCellValue.getTableMeta();
-        if (dataMeta instanceof FormatterProviderWrapper) {
-            FormatterProvider fp = ((FormatterProviderWrapper) dataMeta).getProvider();
+        if (tableMeta instanceof FormatterProviderWrapper) {
+            FormatterProvider fp = ((FormatterProviderWrapper) tableMeta).getProvider();
             if (fp != null) {
                 formatterProvider = fp;
             }
         }
         CellVal<?> newCellVal = null;
-        ValueDescriptor vd = dataMeta.getValueDescriptor();
-        Class<?> valueType = vd.getValueType();
-        if (valueType == null) {
-            return;
-        }
         // 实体中是字符类型，但是Excel中实际为其他类型
         if (String.class.isAssignableFrom(valueType) && !(cellVal instanceof StringCellVal)) {
             // 如果是（数字或者日期）
@@ -76,7 +76,7 @@ public class SimpleMappedCellValueConverter implements MappedCellValueConverter 
                 // 日期格式化异常时，忽略
             }
             newCellVal = DateCellVal.of(cell, parse);
-        } else if ((valueType.equals(Boolean.class) || valueType.equals(Boolean.TYPE)) && !(cellVal instanceof BooleanCellVal)) {
+        } else if (ClassUtils.isAssignableFrom(Boolean.class, valueType) && !(cellVal instanceof BooleanCellVal)) {
             newCellVal = new BooleanCellVal(cell, Boolean.valueOf(cellVal.toString()));
         }
         if (newCellVal != null) {

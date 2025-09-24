@@ -1,6 +1,6 @@
 package com.github.aqiu202.excel.read;
 
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 import com.github.aqiu202.excel.meta.ValueDescriptor;
 import com.github.aqiu202.excel.read.cell.CellVal;
 import com.github.aqiu202.excel.read.cell.ConvertedCellVal;
@@ -15,8 +15,8 @@ public class ComplexFieldValueSetter implements FieldValueSetter {
         if (mappedCellValue == null) {
             return;
         }
-        DataMeta dataMeta = mappedCellValue.getTableMeta();
-        ValueDescriptor vd = dataMeta.getValueDescriptor();
+        TableMeta tableMeta = mappedCellValue.getTableMeta();
+        ValueDescriptor vd = tableMeta.getValueDescriptor();
         CellVal<?> cellVal = mappedCellValue.getCellValue();
         if (cellVal instanceof ConvertedCellVal) {
             cellVal = ((ConvertedCellVal) cellVal).getValue();

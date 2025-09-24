@@ -10,19 +10,27 @@ public class SimpleExcelWriter implements ExcelWriter {
 
     private final ConverterFactory converterFactory;
     private final WorkbookSheetWriteConfiguration configuration;
+    private final ExcelBeforeExportHandler beforeExportHandler;
 
-    public SimpleExcelWriter(ConverterFactory converterFactory, WorkbookSheetWriteConfiguration configuration) {
+    public SimpleExcelWriter(ConverterFactory converterFactory, WorkbookSheetWriteConfiguration configuration,
+                             ExcelBeforeExportHandler beforeExportHandler) {
         this.converterFactory = converterFactory;
         this.configuration = configuration;
+        this.beforeExportHandler = beforeExportHandler;
     }
 
     public ConverterFactory getConverterFactory() {
         return converterFactory;
     }
 
+    public ExcelBeforeExportHandler getBeforeExportHandler() {
+        return beforeExportHandler;
+    }
+
     @Override
     public <T> ExcelSheetConfigurer<T> type(Class<T> type) {
-        return new SimpleExcelSheetConfigurer<>(TypeDataExtractor.INSTANCE, type, this.getConverterFactory(),this.getConfiguration());
+        return new SimpleExcelSheetConfigurer<>(TypeDataExtractor.INSTANCE, type, this.getConverterFactory(),
+                this.getConfiguration(), this.getBeforeExportHandler());
     }
 
     @Override
@@ -30,12 +38,14 @@ public class SimpleExcelWriter implements ExcelWriter {
         if (type.isInterface()) {
             throw new RuntimeException("暂不支持接口类型");
         }
-        return new AnnotationExcelSheetConfigurer<>(new AnnotationDataExtractor(), type, this.getConverterFactory(),this.getConfiguration());
+        return new AnnotationExcelSheetConfigurer<>(new AnnotationDataExtractor(), type, this.getConverterFactory(),
+                this.getConfiguration(), this.getBeforeExportHandler());
     }
 
     @Override
     public <T> ExcelSheetConfigurer<T> custom(DataExtractor<?> dataExtractor, Class<T> type) {
-        return new SimpleExcelSheetConfigurer<>(dataExtractor, type, this.getConverterFactory(), this.getConfiguration());
+        return new SimpleExcelSheetConfigurer<>(dataExtractor, type, this.getConverterFactory(),
+                this.getConfiguration(), this.getBeforeExportHandler());
     }
 
     public WorkbookSheetWriteConfiguration getConfiguration() {

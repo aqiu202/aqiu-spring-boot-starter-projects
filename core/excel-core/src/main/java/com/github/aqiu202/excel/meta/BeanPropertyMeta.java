@@ -1,9 +1,9 @@
 package com.github.aqiu202.excel.meta;
 
-import com.github.aqiu202.excel.model.BeanProperty;
+import com.github.aqiu202.excel.analyse.BeanProperty;
 import com.github.aqiu202.excel.prop.FieldBeanValueDescriptor;
 
-public class BeanPropertyMeta implements DataMeta {
+public class BeanPropertyMeta implements TableMeta {
 
     private final Class<?> beanType;
     private final String propertyName;
@@ -38,10 +38,6 @@ public class BeanPropertyMeta implements DataMeta {
     @Override
     public HeadDescriptor getHeadDescriptor() {
         return new SimpleHeadDescriptor(this.propertyTitles);
-    }
-
-    public Class<?> getBeanType() {
-        return beanType;
     }
 
     @Override

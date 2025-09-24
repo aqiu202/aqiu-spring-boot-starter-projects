@@ -9,8 +9,9 @@ public class AnnotationExcelSheetReader<T> extends SimpleExcelSheetReader<T> {
 
     private final AnnotationMetaAnalyzer metaAnalyzer;
 
-    public AnnotationExcelSheetReader(Class<T> type, AnnotationMetaAnalyzer metaAnalyzer, ConverterFactory converterFactory, SheetReadConfiguration configuration) {
-        super(type, metaAnalyzer, converterFactory, configuration);
+    public AnnotationExcelSheetReader(Class<T> type, AnnotationMetaAnalyzer metaAnalyzer, ConverterFactory converterFactory,
+                                      SheetReadConfiguration configuration, ExcelBeforeReadHandler beforeReadHandler) {
+        super(type, metaAnalyzer, converterFactory, configuration, beforeReadHandler);
         this.metaAnalyzer = metaAnalyzer;
     }
 

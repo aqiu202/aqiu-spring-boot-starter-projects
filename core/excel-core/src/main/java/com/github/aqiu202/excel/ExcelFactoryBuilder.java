@@ -15,5 +15,4 @@ public class ExcelFactoryBuilder {
     public ExcelFactory build() {
         return new SimpleExcelFactory(this.converterFactory);
     }
-
 }

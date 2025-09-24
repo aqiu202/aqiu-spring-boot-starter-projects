@@ -1,15 +1,15 @@
 package com.github.aqiu202.excel.write.extract;
 
 import com.github.aqiu202.excel.analyse.MetaAnalyzer;
-import com.github.aqiu202.excel.convert.*;
 import com.github.aqiu202.excel.format.FormatterFacade;
 import com.github.aqiu202.excel.format.FormatterProvider;
 import com.github.aqiu202.excel.format.FormatterProviderWrapper;
 import com.github.aqiu202.excel.format.SimpleFormatterFacade;
 import com.github.aqiu202.excel.format.wrap.ImageValueWrapper;
 import com.github.aqiu202.excel.format.wrap.ValueWrapper;
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 import com.github.aqiu202.excel.write.Heads;
+import com.github.aqiu202.excel.convert.*;
 import com.github.aqiu202.util.StringUtils;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @author xuqiu 2023/3/22 14:08
  **/
-public interface DataExtractor<M extends DataMeta> extends DataConverter<Object, Object> {
+public interface DataExtractor<M extends TableMeta> extends DataConverter<Object, Object> {
 
 
     /**

@@ -10,6 +10,6 @@ public class SimpleExcelReaderBuilder extends ExcelReaderBuilder {
 
     @Override
     public ExcelReader build() {
-        return new SimpleExcelReader(this.converterFactory, this.configuration);
+        return new SimpleExcelReader(this.converterFactory, this.configuration, this.beforeReadHandler);
     }
 }

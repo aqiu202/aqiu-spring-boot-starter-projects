@@ -1,5 +1,6 @@
 package com.github.aqiu202.excel.read.cell;
 
+import com.github.aqiu202.util.ClassUtils;
 import org.apache.poi.ss.usermodel.Cell;
 
 import java.math.BigDecimal;
@@ -16,28 +17,28 @@ public class NumberCellVal extends SimpleCellVal<BigDecimal> {
     public <T> T convertAs(Class<T> type) {
         BigDecimal number = this.getValue();
 
-        if (type.equals(Integer.class) || type.equals(Integer.TYPE)) {
+        if (ClassUtils.isAssignableFrom(Integer.class, type)) {
             return (T) Integer.valueOf(number.intValue());
         }
-        if (type.equals(Long.class) || type.equals(Long.TYPE)) {
+        if (ClassUtils.isAssignableFrom(Long.class, type)) {
             return (T) Long.valueOf(number.longValue());
         }
-        if (type.equals(Short.class) || type.equals(Short.TYPE)) {
+        if (ClassUtils.isAssignableFrom(Short.class, type)) {
             return (T) Short.valueOf(number.shortValue());
         }
-        if (type.equals(Byte.class) || type.equals(Byte.TYPE)) {
+        if (ClassUtils.isAssignableFrom(Byte.class, type)) {
             return (T) Byte.valueOf(number.byteValue());
         }
-        if (type.equals(Double.class) || type.equals(Double.TYPE)) {
+        if (ClassUtils.isAssignableFrom(Double.class, type)) {
             return (T) Double.valueOf(number.doubleValue());
         }
-        if (type.equals(Float.class) || type.equals(Float.TYPE)) {
+        if (ClassUtils.isAssignableFrom(Float.class, type)) {
             return (T) Float.valueOf(number.floatValue());
         }
-        if (type.equals(BigInteger.class)) {
+        if (ClassUtils.isAssignableFrom(BigInteger.class, type)) {
             return (T) number.toBigInteger();
         }
-        if (type.equals(BigDecimal.class)) {
+        if (ClassUtils.isAssignableFrom(BigDecimal.class, type)) {
             return (T) number;
         }
         return null;

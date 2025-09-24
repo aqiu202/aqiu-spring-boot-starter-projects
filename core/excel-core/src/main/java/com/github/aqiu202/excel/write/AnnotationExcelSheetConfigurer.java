@@ -10,13 +10,17 @@ public class AnnotationExcelSheetConfigurer<T> extends SimpleExcelSheetConfigure
 
     private final AnnotationMetaAnalyzer metaAnalyzer;
 
-    public AnnotationExcelSheetConfigurer(AnnotationDataExtractor dataExtractor, Class<T> dataType, ExcelSheetWriter<?> sheetWriter) {
+    public AnnotationExcelSheetConfigurer(AnnotationDataExtractor dataExtractor, Class<T> dataType,
+                                          ExcelSheetWriter<?> sheetWriter) {
         super(dataExtractor, dataType, sheetWriter);
         this.metaAnalyzer = dataExtractor.getMetaAnalyzer();
     }
 
-    public AnnotationExcelSheetConfigurer(AnnotationDataExtractor dataExtractor, Class<T> dataType, ConverterFactory converterFactory, WorkbookSheetWriteConfiguration configuration) {
-        super(dataExtractor, dataType, converterFactory, configuration);
+    public AnnotationExcelSheetConfigurer(AnnotationDataExtractor dataExtractor, Class<T> dataType,
+                                          ConverterFactory converterFactory,
+                                          WorkbookSheetWriteConfiguration configuration,
+                                          ExcelBeforeExportHandler beforeExportHandler) {
+        super(dataExtractor, dataType, converterFactory, configuration, beforeExportHandler);
         this.metaAnalyzer = dataExtractor.getMetaAnalyzer();
     }
 

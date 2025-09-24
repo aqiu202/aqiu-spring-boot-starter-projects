@@ -9,6 +9,7 @@ public abstract class ExcelReaderBuilder {
 
     protected SheetReadConfiguration configuration = new SheetReadConfiguration();
     protected ConverterFactory converterFactory;
+    protected ExcelBeforeReadHandler beforeReadHandler;
 
     public ExcelReaderBuilder(ConverterFactory converterFactory) {
         this.converterFactory = converterFactory;
@@ -53,6 +54,11 @@ public abstract class ExcelReaderBuilder {
 
     public ExcelReaderBuilder disableReadEmptyText() {
         return this.readEmptyText(false);
+    }
+
+    public ExcelReaderBuilder beforeReadHandler(ExcelBeforeReadHandler beforeReadHandler) {
+        this.beforeReadHandler = beforeReadHandler;
+        return this;
     }
 
     public abstract ExcelReader build();

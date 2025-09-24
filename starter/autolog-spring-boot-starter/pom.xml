@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.github.aqiu202</groupId>
             <artifactId>spring-aop-core</artifactId>
-            <version>1.2.1</version>
+            <version>1.2.2</version>
         </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>

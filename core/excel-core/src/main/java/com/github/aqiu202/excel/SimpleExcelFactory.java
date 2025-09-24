@@ -18,7 +18,6 @@ public class SimpleExcelFactory implements ExcelFactory {
     public SimpleExcelFactory(ConverterFactory converterFactory) {
         this.converterFactory = converterFactory;
     }
-
     @Override
     public ExcelReaderBuilder buildReader() {
         return new SimpleExcelReaderBuilder(this.getConverterFactory());
@@ -28,6 +27,7 @@ public class SimpleExcelFactory implements ExcelFactory {
     public ExcelWriterBuilder buildWriter() {
         return new SimpleExcelWriterBuilder(this.getConverterFactory());
     }
+
 
     public ConverterFactory getConverterFactory() {
         return this.converterFactory;

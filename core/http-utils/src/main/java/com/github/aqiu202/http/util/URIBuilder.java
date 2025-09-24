@@ -1,8 +1,8 @@
 package com.github.aqiu202.http.util;
 
 import com.github.aqiu202.http.data.HttpQueries;
-import com.aqiu.demo.utils.JacksonUtils;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.aqiu202.util.JacksonUtils;
 import org.springframework.lang.Nullable;
 
 import java.net.URI;
@@ -95,7 +95,7 @@ public class URIBuilder {
     }
 
     public URIBuilder addQueryBean(Object bean) {
-        Map<String, Object> map = JacksonUtils.convert(bean, new TypeReference<>() {
+        Map<String, Object> map = JacksonUtils.convert(bean, new TypeReference<Map<String, Object>>() {
         });
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
@@ -192,7 +192,7 @@ public class URIBuilder {
             }
         }
         StringBuilder queryBuilder = this.buildQuery();
-        if (!builder.isEmpty()) {
+        if (queryBuilder.length() > 0) {
             builder.append(queryBuilder);
         }
         return builder;
@@ -210,7 +210,7 @@ public class URIBuilder {
             builder.deleteCharAt(builder.length() - 1);
         }
         if (Strings.isNotBlank(this.query)) {
-            String s = builder.isEmpty() ? "?" : "&";
+            String s = builder.length() == 0 ? "?" : "&";
             builder.append(s).append(this.query);
         }
         return builder;

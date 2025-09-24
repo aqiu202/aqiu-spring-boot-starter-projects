@@ -1,5 +1,6 @@
 package com.github.aqiu202.http;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpQueries;
 import com.github.aqiu202.http.data.HttpResponseEntity;
@@ -10,8 +11,7 @@ import com.github.aqiu202.http.util.ParameterizedTypeRef;
 import com.github.aqiu202.http.util.RequestDescriptor;
 import com.github.aqiu202.http.util.TypeSpec;
 import com.github.aqiu202.http.util.URIBuilder;
-import com.aqiu.demo.utils.JacksonUtils;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.aqiu202.util.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -232,7 +232,7 @@ public class HttpRequest<T extends HttpRequest<?>> {
      */
     public<S> S exchangeForType(ParameterizedTypeRef<S> responseType) {
         byte[] original = this.exchange(byte[].class);
-        return JacksonUtils.toObject(original, new TypeReference<>() {
+        return JacksonUtils.toObject(original, new TypeReference<S>() {
             @Override
             public Type getType() {
                 return responseType.getType();

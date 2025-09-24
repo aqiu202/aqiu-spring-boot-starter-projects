@@ -5,8 +5,8 @@ import com.github.aqiu202.excel.convert.Converter;
 import com.github.aqiu202.excel.convert.ConverterFactory;
 import com.github.aqiu202.excel.convert.ConverterProvider;
 import com.github.aqiu202.excel.convert.ConverterProviderWrapper;
-import com.github.aqiu202.excel.meta.IndexedMeta;
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.IndexedTableMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 import com.github.aqiu202.excel.model.SheetReadConfiguration;
 import com.github.aqiu202.excel.model.ReadDataFilter;
 import com.github.aqiu202.excel.model.ReadDataListener;
@@ -15,35 +15,45 @@ import com.github.aqiu202.excel.read.convert.MappedCellValueConverter;
 import com.github.aqiu202.excel.read.convert.RowMappedCellValuesConverter;
 import com.github.aqiu202.excel.read.convert.SimpleRowMappedCellValuesConverter;
 import com.github.aqiu202.util.ClassUtils;
+import com.github.aqiu202.util.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.io.InputStream;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
-    private final RowMappedCellValuesConverter rowMappedCellValuesConverter = new SimpleRowMappedCellValuesConverter();
-    private final List<ReadDataListener<T>> listeners = new ArrayList<>();
+    protected final RowMappedCellValuesConverter rowMappedCellValuesConverter = new SimpleRowMappedCellValuesConverter();
+    protected final List<ReadDataListener<T>> listeners = new ArrayList<>();
     private final Class<T> type;
-    private final DataAnalyser dataAnalyser;
-    private TypeTranslator typeTranslator = new SimpleTypeTranslator();
+    protected final DataAnalyser dataAnalyser;
+    protected TypeTranslator typeTranslator = new SimpleTypeTranslator();
     private ReadDataFilter<RowMappedCellValues> rawDataFilter;
     private ReadDataFilter<T> filter;
     private SheetReadConfiguration configuration;
     private ConverterFactory converterFactory;
+    private final ExcelBeforeReadHandler beforeReadHandler;
 
-    public SimpleExcelSheetReader(Class<T> type, MetaAnalyzer<?> metaAnalyzer, ConverterFactory converterFactory, SheetReadConfiguration configuration) {
+    public SimpleExcelSheetReader(Class<T> type, MetaAnalyzer<?> metaAnalyzer, ConverterFactory converterFactory,
+                                  SheetReadConfiguration configuration, ExcelBeforeReadHandler beforeReadHandler) {
+        this(type, new SimpleDataAnalyser(metaAnalyzer), converterFactory, configuration, beforeReadHandler);
+    }
+
+    public SimpleExcelSheetReader(Class<T> type, DataAnalyser dataAnalyser, ConverterFactory converterFactory,
+                                  SheetReadConfiguration configuration, ExcelBeforeReadHandler beforeReadHandler) {
         if (ClassUtils.isCustomClass(type) || ClassUtils.isAssignableFrom(Map.class, type)) {
             this.type = type;
         } else {
             throw new RuntimeException("不支持的类型");
         }
-        this.dataAnalyser = new SimpleDataAnalyser(metaAnalyzer);
+        this.dataAnalyser = dataAnalyser;
         this.converterFactory = converterFactory;
         this.configuration = configuration;
+        this.beforeReadHandler = beforeReadHandler;
     }
 
     @Override
@@ -58,6 +68,10 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
 
     public MappedCellValueConverter getMappedCellValueConverter() {
         return this.rowMappedCellValuesConverter.getMappedCellValueConverter();
+    }
+
+    public RowMappedCellValuesConverter getRowMappedCellValuesConverter() {
+        return rowMappedCellValuesConverter;
     }
 
     @Override
@@ -128,11 +142,64 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     }
 
     @Override
+    public List<T> read(InputStream is, int sheetIndex, int headRows) {
+        return ExcelSheetReader.super.read(this.handleInputStream(is), sheetIndex, headRows);
+    }
+
+    protected InputStream handleInputStream(InputStream is) {
+        InputStream targetInputStream = is;
+        if (beforeReadHandler != null) {
+            try {
+                targetInputStream = beforeReadHandler.handle(is);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return targetInputStream;
+    }
+
+    @Override
+    public Map<String, List<T>> readAll(InputStream is, int headRdRows) {
+        return ExcelSheetReader.super.readAll(this.handleInputStream(is), headRdRows);
+    }
+
+    @Override
+    public List<T>[] readAllWithIndex(InputStream is, int headRdRows) {
+        return ExcelSheetReader.super.readAllWithIndex(this.handleInputStream(is), headRdRows);
+    }
+
+    @Override
     public List<T> read(Workbook workbook, int sheetIndex, int headRows) {
         Sheet sheet = workbook.getSheetAt(sheetIndex);
         if (sheet == null) {
             throw new RuntimeException("Sheet页不存在");
         }
+        return this.readSheet(sheet, headRows);
+    }
+
+    @Override
+    public List<T> read(Workbook workbook, String sheetName, int headRows) {
+        Sheet sheet = workbook.getSheet(sheetName);
+        if (sheet == null) {
+            throw new RuntimeException(String.format("Sheet[%s]页不存在", sheetName));
+        }
+        return this.readSheet(sheet, headRows);
+    }
+
+    protected List<T> readSheet(Sheet sheet, int headRows) {
+        List<RowMappedCellValues> rowMappedCellValues = this.readSheetRows(sheet, headRows);
+        if (CollectionUtils.isEmpty(rowMappedCellValues)) {
+            return Collections.emptyList();
+        }
+        return rowMappedCellValues.stream()
+                .peek(values -> this.getRowMappedCellValuesConverter().convert(values, configuration))
+                .filter(item -> this.getRawDataFilter() == null || this.getRawDataFilter().test(item))
+                .map(values -> this.getTypeTranslator().translate(values, type))
+                .filter(item -> this.getFilter() == null || this.getFilter().test(item))
+                .peek(item -> this.getListeners().forEach(listener -> listener.onData(item))).collect(Collectors.toList());
+    }
+
+    protected List<RowMappedCellValues> readSheetRows(Sheet sheet, int headRows) {
         Class<T> type = this.getDataType();
         SheetReadConfiguration configuration = this.getConfiguration();
         int minRowNum = sheet.getFirstRowNum();
@@ -143,37 +210,32 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
         Row headRow = sheet.getRow(contentFirstRowNum - 1);
         int startColIndex = headRow.getFirstCellNum();
         int columns = headRow.getPhysicalNumberOfCells();
-        List<IndexedMeta> indexedMetas = this.dataAnalyser.analyse(sheet, type, startColIndex, columns, headRows);
+        List<IndexedTableMeta> indexedTableMetas = this.dataAnalyser.analyse(sheet, type, startColIndex, columns, headRows);
         List<RowMappedCellValues> mappedCellValues = new ArrayList<>();
         for (int i = contentFirstRowNum; i <= maxRowNum; i++) {
             Row row = sheet.getRow(i);
             RowMappedCellValues rowCellValues = new SimpleRowMappedCellValues(i, columns);
-            for (IndexedMeta indexedMeta : indexedMetas) {
-                int colIndex = indexedMeta.getIndex();
+            for (IndexedTableMeta indexedTableMeta : indexedTableMetas) {
+                int colIndex = indexedTableMeta.getIndex();
                 Cell cell = row.getCell(colIndex);
                 CellVal<?> cellVal = this.dataAnalyser.readConvertedCellValue(cell,
-                        configuration, this.findConverter(indexedMeta.getMeta()));
+                        configuration, this.findConverter(indexedTableMeta.getMeta()));
                 // 空/未知数据跳过不处理
                 if (cellVal instanceof NullCellVal || cellVal instanceof BlankCellVal
                         || cellVal instanceof UnknownCellVal) {
                     continue;
                 }
-                rowCellValues.setMappedCellValue(colIndex, new SimpleMappedCellValue(indexedMeta, cellVal));
+                rowCellValues.setMappedCellValue(colIndex, new SimpleMappedCellValue(indexedTableMeta, cellVal));
             }
             mappedCellValues.add(rowCellValues);
         }
-        return mappedCellValues.stream()
-                .peek(values -> this.rowMappedCellValuesConverter.convert(values, configuration))
-                .filter(item -> this.getRawDataFilter() == null || this.getRawDataFilter().test(item))
-                .map(values -> this.getTypeTranslator().translate(values, type))
-                .filter(item -> this.getFilter() == null || this.getFilter().test(item))
-                .peek(item -> this.getListeners().forEach(listener -> listener.onData(item))).collect(Collectors.toList());
+        return mappedCellValues;
     }
 
     @Override
     public Map<String, List<T>> readAll(Workbook workbook, int headRdRows) {
         int numberOfSheets = workbook.getNumberOfSheets();
-        Map<String, List<T>> result = new LinkedHashMap<>();
+        Map<String, List<T>> result = new HashMap<>();
         for (int i = 0; i < numberOfSheets; i++) {
             Sheet sheet = workbook.getSheetAt(i);
             result.put(sheet.getSheetName(), this.read(workbook, i, headRdRows));
@@ -194,12 +256,12 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     /**
      * 获取转换器提供者
      *
-     * @param dataMeta 表元数据
+     * @param tableMeta 表元数据
      * @return 转换器提供者
      */
-    protected ConverterProvider findConverterProvider(DataMeta dataMeta) {
-        if (dataMeta instanceof ConverterProviderWrapper) {
-            ConverterProviderWrapper wrapper = (ConverterProviderWrapper) dataMeta;
+    protected ConverterProvider findConverterProvider(TableMeta tableMeta) {
+        if (tableMeta instanceof ConverterProviderWrapper) {
+            ConverterProviderWrapper wrapper = (ConverterProviderWrapper) tableMeta;
             return wrapper.getConverterProvider();
         }
         return null;
@@ -208,11 +270,11 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     /**
      * 获取转换器
      *
-     * @param dataMeta 表元数据
+     * @param tableMeta 表元数据
      * @return 转换器
      */
-    protected Converter<?, ?> findConverter(DataMeta dataMeta) {
-        ConverterProvider converterProvider = this.findConverterProvider(dataMeta);
+    protected Converter<?, ?> findConverter(TableMeta tableMeta) {
+        ConverterProvider converterProvider = this.findConverterProvider(tableMeta);
         if (converterProvider != null) {
             return this.converterFactory.findConverter(converterProvider.getConverter());
         }

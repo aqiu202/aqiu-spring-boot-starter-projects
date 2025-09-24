@@ -2,7 +2,7 @@ package com.github.aqiu202.excel.write.extract;
 
 import com.github.aqiu202.excel.format.FormatterFacade;
 import com.github.aqiu202.excel.format.SimpleFormatterFacade;
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 import com.github.aqiu202.excel.write.Heads;
 import com.github.aqiu202.excel.write.SimpleTableHeadsAnalyser;
 import com.github.aqiu202.excel.write.TableHeadsAnalyser;
@@ -16,7 +16,7 @@ import java.util.Map;
  *
  * @author xuqiu 2023/3/22 14:08
  **/
-public abstract class AbstractDataExtractor<T extends DataMeta> implements DataExtractor<T> {
+public abstract class AbstractDataExtractor<T extends TableMeta> implements DataExtractor<T> {
 
     private final Map<Class<?>, List<T>> metaMap = new HashMap<>();
     private TableHeadsAnalyser tableHeadsAnalyser = new SimpleTableHeadsAnalyser();

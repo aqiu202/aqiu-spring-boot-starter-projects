@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>captcha</artifactId>
+    <version>1.2.1</version>
     <packaging>jar</packaging>
     <name>captcha</name>
 
@@ -33,6 +34,7 @@
         <dependency>
             <groupId>com.github.aqiu202</groupId>
             <artifactId>basic-utils</artifactId>
+            <version>1.2.1</version>
         </dependency>
     </dependencies>
 

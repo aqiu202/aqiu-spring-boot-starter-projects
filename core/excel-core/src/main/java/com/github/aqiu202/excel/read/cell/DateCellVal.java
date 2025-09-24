@@ -9,7 +9,6 @@ import java.time.ZoneId;
 import java.util.Date;
 
 public class DateCellVal extends SimpleCellVal<LocalDateTime> {
-
     public DateCellVal(Cell cell, LocalDateTime value) {
         super(cell, value);
     }

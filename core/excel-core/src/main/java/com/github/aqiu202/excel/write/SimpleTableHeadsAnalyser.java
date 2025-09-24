@@ -1,7 +1,7 @@
 package com.github.aqiu202.excel.write;
 
 import com.github.aqiu202.excel.meta.HeadDescriptor;
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -10,16 +10,16 @@ import java.util.List;
 public class SimpleTableHeadsAnalyser implements TableHeadsAnalyser {
 
     @Override
-    public Heads analyse(List<? extends DataMeta> metas) {
+    public Heads analyse(List<? extends TableMeta> metas) {
         int headRows = metas.stream().map(item -> item.getHeadDescriptor().getContents().length)
                 .max(Comparator.comparing(arr -> arr)).orElse(1);
         int headColumns = metas.size();
         boolean[][] matrix = new boolean[headRows][headColumns];
         ExcelHeads.HeadsBuilder builder = ExcelHeads.builder();
         for (int i = 0; i < headColumns; i++) {
-            DataMeta meta = metas.get(i);
+            TableMeta meta = metas.get(i);
             HeadDescriptor hd = meta.getHeadDescriptor();
-            String[] paddedContents = padding(hd.getContents(), headRows);
+            String[] paddedContents = this.padding(hd.getContents(), headRows);
             for (int j = 0; j < headRows; j++) {
                 String paddedContent = paddedContents[j];
                 if (paddedContent != null) {

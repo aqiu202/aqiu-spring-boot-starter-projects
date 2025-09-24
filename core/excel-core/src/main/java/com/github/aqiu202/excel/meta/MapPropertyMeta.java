@@ -2,7 +2,7 @@ package com.github.aqiu202.excel.meta;
 
 import com.github.aqiu202.excel.prop.MapValueDescriptor;
 
-public class MapPropertyMeta implements DataMeta {
+public class MapPropertyMeta implements TableMeta {
 
     private final String fieldName;
     private final String[] fieldTitles;

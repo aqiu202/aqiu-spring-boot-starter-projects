@@ -1,6 +1,6 @@
 package com.github.aqiu202.http.util;
 
-import org.springframework.lang.Nullable;
+import java.util.Objects;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.ParameterizedType;
@@ -30,13 +30,17 @@ public abstract class ParameterizedTypeRef<T> {
     }
 
     @Override
-    public boolean equals(@Nullable Object other) {
-        return (this == other || (other instanceof ParameterizedTypeRef<?> that && this.type.equals(that.type)));
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ParameterizedTypeRef<?> that = (ParameterizedTypeRef<?>) o;
+        return Objects.equals(type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return this.type.hashCode();
+        return Objects.hashCode(type);
     }
 
     @Override
@@ -46,7 +50,7 @@ public abstract class ParameterizedTypeRef<T> {
 
 
     public static <T> ParameterizedTypeRef<T> forType(Type type) {
-        return new ParameterizedTypeRef<>(type) {
+        return new ParameterizedTypeRef<T>(type) {
         };
     }
 

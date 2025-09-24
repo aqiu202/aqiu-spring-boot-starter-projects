@@ -12,6 +12,11 @@ public class AnnotationFormatterProvider implements FormatterProvider, Converter
     }
 
     @Override
+    public boolean isEnableDefaultFormatter() {
+        return this.annotation.enableDefaultFormatter();
+    }
+
+    @Override
     public Class<? extends NumberFormatter> getNumberFormatter() {
         return this.annotation.numberFormatter();
     }

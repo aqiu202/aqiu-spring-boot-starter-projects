@@ -1,6 +1,7 @@
-package com.github.aqiu202.excel.model;
+package com.github.aqiu202.excel.analyse;
 
 public class BeanProperty {
+
     private final String propertyName;
     private final String[] propertyTitles;
 

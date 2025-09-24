@@ -6,10 +6,12 @@ import com.github.aqiu202.excel.model.ReadDataFilter;
 import com.github.aqiu202.excel.model.ReadDataListener;
 import com.github.aqiu202.excel.read.cell.RowMappedCellValues;
 import com.github.aqiu202.excel.read.convert.MappedCellValueConverter;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -43,6 +45,8 @@ public interface ExcelSheetReader<T> {
     }
 
     List<T> read(Workbook workbook, int sheetIndex, int headRows);
+
+    List<T> read(Workbook workbook, String sheetName, int headRows);
 
     default List<T> read(InputStream is) {
         return this.read(is, 0);
@@ -90,6 +94,38 @@ public interface ExcelSheetReader<T> {
 
     default List<T> read(String filepath, int sheetIndex, int headRows) {
         return this.read(new File(filepath), sheetIndex, headRows);
+    }
+
+    default List<T> read(InputStream is, String sheetName) {
+        return this.read(is, sheetName, 1);
+    }
+
+    default List<T> read(File file, String sheetName) {
+        return this.read(file, sheetName, 1);
+    }
+
+    default List<T> read(String filepath, String sheetName) {
+        return this.read(filepath, sheetName, 1);
+    }
+
+    default List<T> read(InputStream is, String sheetName, int headRows) {
+        try {
+            return this.read(WorkbookFactory.create(is), sheetName, headRows);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    default List<T> read(File file, String sheetName, int headRows) {
+        try {
+            return this.read(new FileInputStream(file), sheetName, headRows);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    default List<T> read(String filepath, String sheetName, int headRows) {
+        return this.read(new File(filepath), sheetName, headRows);
     }
 
     default Map<String, List<T>> readAll(String filepath) {
@@ -167,5 +203,29 @@ public interface ExcelSheetReader<T> {
     }
 
     List<T>[] readAllWithIndex(Workbook workbook, int headRdRows);
+
+    default List<Sheet> getAllSheets(Workbook workbook) {
+        List<Sheet> sheets = new ArrayList<>();
+        for (int i = 0; i < workbook.getNumberOfSheets(); i++) {
+            sheets.add(workbook.getSheetAt(i));
+        }
+        return sheets;
+    }
+
+    default List<Sheet> getAllSheets(String filepath) {
+        try {
+            return this.getAllSheets(WorkbookFactory.create(new FileInputStream(filepath)));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    default List<Sheet> getAllSheets(InputStream is) {
+        try {
+            return this.getAllSheets(WorkbookFactory.create(is));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

@@ -20,8 +20,7 @@ public enum PropertyAccessor {
 
     public static PropertyAccessor parse(String name) {
         if (StringUtils.isNotBlank(name)) {
-            String un = name.toUpperCase();
-            if (un.equals("METHOD")) {
+            if (StringUtils.equalsIgnoreCase("METHOD", name)) {
                 return METHOD;
             }
         }

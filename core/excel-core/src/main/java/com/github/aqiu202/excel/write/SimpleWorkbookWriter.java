@@ -5,7 +5,7 @@ import com.github.aqiu202.excel.format.wrap.FormatedValueWrapper;
 import com.github.aqiu202.excel.format.wrap.NumberValueWrapper;
 import com.github.aqiu202.excel.format.wrap.StringValueWrapper;
 import com.github.aqiu202.excel.format.wrap.ValueWrapper;
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 import com.github.aqiu202.excel.model.SheetWriteConfiguration;
 import com.github.aqiu202.excel.model.WorkbookType;
 import com.github.aqiu202.excel.style.SimpleStyleProcessor;
@@ -78,8 +78,8 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
     }
 
     @Override
-    public <T extends DataMeta> Sheet writeMetas(Workbook workbook, DataExtractor<T> dataExtractor,
-                                                 String sheetName, Class<?> type, SheetWriteConfiguration configuration) {
+    public <T extends TableMeta> Sheet writeMetas(Workbook workbook, DataExtractor<T> dataExtractor,
+                                                  String sheetName, Class<?> type, SheetWriteConfiguration configuration) {
         StyleProcessor styleProcessor = new SimpleStyleProcessor(workbook);
         int sheetIndex = workbook.getNumberOfSheets();
         Sheet sheet;
@@ -142,15 +142,15 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
     }
 
     @Override
-    public <M extends DataMeta, D> void appendData(Sheet sheet, DataExtractor<M> dataExtractor,
-                                                   Class<D> dataType, Collection<D> rows, SheetWriteConfiguration configuration) {
+    public <M extends TableMeta, D> void appendData(Sheet sheet, DataExtractor<M> dataExtractor,
+                                                    Class<D> dataType, Collection<D> rows, SheetWriteConfiguration configuration) {
         if (CollectionUtils.isEmpty(rows)) {
             return;
         }
         StyleProcessor styleProcessor = new SimpleStyleProcessor(sheet.getWorkbook());
         int contentRowIndex = sheet.getLastRowNum() + 1;
-        RowHandler rowHandler = this.handlerStore.getResolvedRowHandler();
-        CellHandler cellHandler = this.handlerStore.getResolvedCellHandler();
+        RowHandler rowHandler = this.getResolvedRowHandler();
+        CellHandler cellHandler = this.getResolvedCellHandler();
         List<M> metaList = dataExtractor.extractMetas(dataType);
         int columnCount = metaList.size();
         for (D item : rows) {
@@ -175,9 +175,8 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
             }
             contentRowIndex++;
         }
-
         this.configureSheet(sheet, metaList, configuration);
-        SheetHandler sheetHandler = this.handlerStore.getResolvedSheetHandler();
+        SheetHandler sheetHandler = this.getResolvedSheetHandler();
         sheetHandler.handle(sheet, columnCount, rows, configuration);
     }
 
@@ -223,10 +222,10 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
      * 配置sheet
      *
      * @param sheet         sheet页
-     * @param metaList      原数据描述集合
+     * @param metaList   列数
      * @param configuration 配置
      */
-    protected <M extends DataMeta> void configureSheet(Sheet sheet, List<M> metaList, SheetWriteConfiguration configuration) {
+    protected <M extends TableMeta> void configureSheet(Sheet sheet, List<M> metaList, SheetWriteConfiguration configuration) {
         int columnCount = metaList.size();
         if (configuration.isAutoSizeColumn()) {
             // SXSSFSheet设置列宽自适应之前需要启用trackAllColumnsForAutoSizing
@@ -243,9 +242,9 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
                 }
             }
         } else {
+            // 设置列宽自适应比例
             for (int i = 0; i < columnCount; i++) {
-                M meta = metaList.get(i);
-                int width = meta.getWidth();
+                int width = metaList.get(i).getWidth();
                 if (width > 0) {
                     sheet.setColumnWidth(i, width * 256);
                 } else {

@@ -1,7 +1,7 @@
 package com.github.aqiu202.excel.write;
 
-import com.github.aqiu202.excel.meta.IndexedMeta;
-import com.github.aqiu202.excel.meta.DataMeta;
+import com.github.aqiu202.excel.meta.IndexedTableMeta;
+import com.github.aqiu202.excel.meta.TableMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,18 +44,18 @@ public class SimpleFormulaResolver implements FormulaResolver {
     }
 
     @Override
-    public String resolve(String formula, int rowIndex, List<? extends DataMeta> metaList) {
-        List<IndexedMeta> indexedMetas = this.resolveIndexedMeta(metaList);
-        Map<String, Integer> metaKeyIndexMap = indexedMetas.stream()
-                .collect(Collectors.toMap(IndexedMeta::getKey, IndexedMeta::getIndex));
+    public String resolve(String formula, int rowIndex, List<? extends TableMeta> metaList) {
+        List<IndexedTableMeta> indexedTableMetas = this.resolveIndexedMeta(metaList);
+        Map<String, Integer> metaKeyIndexMap = indexedTableMetas.stream()
+                .collect(Collectors.toMap(IndexedTableMeta::getKey, IndexedTableMeta::getIndex));
         return this.resolveFormula(formula, metaKeyIndexMap, rowIndex);
     }
 
-    private List<IndexedMeta> resolveIndexedMeta(List<? extends DataMeta> metaList) {
-        List<IndexedMeta> results = new ArrayList<>();
+    private List<IndexedTableMeta> resolveIndexedMeta(List<? extends TableMeta> metaList) {
+        List<IndexedTableMeta> results = new ArrayList<>();
         for (int i = 0; i < metaList.size(); i++) {
-            DataMeta dataMeta = metaList.get(i);
-            results.add(new IndexedMeta(i, dataMeta));
+            TableMeta tableMeta = metaList.get(i);
+            results.add(new IndexedTableMeta(i, tableMeta));
         }
         return results;
     }
@@ -102,7 +102,7 @@ public class SimpleFormulaResolver implements FormulaResolver {
             // 有表别名的替换为表别名，否则去掉字段的表名前缀
             Integer colIndex = metaKeyIndexMap.get(varName);
             if (colIndex != null) {
-                matcher.appendReplacement(output, this.resoleColumnName(rowIndex, colIndex));
+                matcher.appendReplacement(output, resoleColumnName(rowIndex, colIndex));
             }
         }
         matcher.appendTail(output);
