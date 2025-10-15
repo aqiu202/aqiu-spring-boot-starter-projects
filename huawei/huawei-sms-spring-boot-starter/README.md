@@ -8,7 +8,7 @@
 <dependency>
     <groupId>com.github.aqiu202.huawei</groupId>
     <artifactId>huawei-sms-spring-boot-starter</artifactId>
-    <version>1.2.0</version>
+    <version>${revision}</version>
 </dependency>
 ```
 

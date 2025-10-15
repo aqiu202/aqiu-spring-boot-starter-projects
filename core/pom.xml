@@ -3,14 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>aqiu-spring-boot-starter-parent</artifactId>
+        <artifactId>aqiu-spring-boot-starter-projects</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.2.0</version>
-        <relativePath>../aqiu-spring-boot-starter-parent/pom.xml</relativePath>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>core</artifactId>
+    <name>core</name>
     <packaging>pom</packaging>
     <modules>
         <module>captcha</module>

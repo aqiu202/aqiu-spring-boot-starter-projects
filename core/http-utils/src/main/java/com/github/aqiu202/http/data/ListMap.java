@@ -2,6 +2,7 @@ package com.github.aqiu202.http.data;
 
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 class ListMap {
 
@@ -29,7 +30,8 @@ class ListMap {
 
     public ListMap set(String key, Object... values) {
         this.values.put(this.resolveKey(key),
-                Arrays.stream(values).map(String::valueOf).toList());
+                Arrays.stream(values).map(String::valueOf)
+                    .collect(Collectors.toList()));
         return this;
     }
 
@@ -38,7 +40,8 @@ class ListMap {
             this.values.clear();
             values.forEach((key, vs) -> {
                 if (vs != null) {
-                    this.values.put(this.resolveKey(key), vs.stream().map(String::valueOf).toList());
+                    this.values.put(this.resolveKey(key), vs.stream().map(String::valueOf)
+                        .collect(Collectors.toList()));
                 }
             });
         }

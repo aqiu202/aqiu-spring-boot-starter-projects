@@ -5,7 +5,7 @@
     <parent>
         <artifactId>starter</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.2.0</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 

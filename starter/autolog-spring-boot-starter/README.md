@@ -8,7 +8,7 @@ maven坐标
 <dependency>
     <groupId>com.github.aqiu202</groupId>
     <artifactId>autolog-spring-boot-starter</artifactId>
-    <version>1.2.0</version>
+    <version>${revision}</version>
 </dependency>
 ```
 ### 用法

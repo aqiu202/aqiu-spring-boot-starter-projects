@@ -41,7 +41,7 @@ public class ExcelAutoConfiguration {
             converterFactory = new SimpleConverterFactory();
         }
         converters.forEach(converterFactory::addConverter);
-        return new SimpleExcelFactory().converterFactory(converterFactory);
+        return new SimpleExcelFactory(converterFactory);
     }
 
     @Bean
