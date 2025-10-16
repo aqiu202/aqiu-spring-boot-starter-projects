@@ -1,6 +1,5 @@
 package com.github.aqiu202.starters.jpa.sql.trans;
 
-import com.github.aqiu202.starters.jpa.sql.trans.inter.AnonymousResultTransformer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,9 +13,9 @@ public final class SimpleTransformer implements ResultTransformer {
      */
     private static final long serialVersionUID = 1L;
 
-    private final AnonymousResultTransformer anonymousResultTransformer;
+    private final FieldAliasTransformer anonymousResultTransformer;
 
-    public SimpleTransformer(AnonymousResultTransformer anonymousResultTransformer) {
+    public SimpleTransformer(FieldAliasTransformer anonymousResultTransformer) {
         Assert.notNull(anonymousResultTransformer, "构造参数anymousResultTransformer不能为空");
         this.anonymousResultTransformer = anonymousResultTransformer;
     }

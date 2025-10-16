@@ -1,6 +1,5 @@
 package com.github.aqiu202.starters.jpa.sql.trans;
 
-import com.github.aqiu202.starters.jpa.sql.trans.inter.ChangeableTransformer;
 import com.github.aqiu202.starters.jpa.type.DefaultTypeConverter;
 import com.github.aqiu202.starters.jpa.type.TypeConverter;
 import com.github.aqiu202.util.BeanUtils;
@@ -18,13 +17,14 @@ import org.hibernate.property.access.spi.Setter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.hibernate.transform.ResultTransformer;
 
 /**
  * <pre>自定义BeanTransformerAdapter</pre>
  *
  * @author AQIU 2018/11/28 1:42 PM
  **/
-public final class BeanTransformerAdapter<T> implements ChangeableTransformer<T> {
+public final class BeanTransformerAdapter<T> implements ResultTransformer {
 
     private final TypeConverter typeConverter = DefaultTypeConverter.getDefaultTypeConverter();
 
@@ -77,15 +77,10 @@ public final class BeanTransformerAdapter<T> implements ChangeableTransformer<T>
             }
         } catch (InstantiationException | IllegalAccessException e) {
             throw new HibernateException(
-                    "Could not instantiate resultclass: " + resultClass.getName());
+                "Could not instantiate resultclass: " + resultClass.getName());
         }
 
         return result;
-    }
-
-    @Override
-    public <S> BeanTransformerAdapter<S> as(Class<S> newResultClass) {
-        return BeanTransformerAdapter.of(newResultClass);
     }
 
     public Class<T> getResultClass() {
@@ -94,9 +89,9 @@ public final class BeanTransformerAdapter<T> implements ChangeableTransformer<T>
 
     private void initialize(String[] aliases) {
         PropertyAccessStrategyChainedImpl propertyAccessStrategy = new PropertyAccessStrategyChainedImpl(
-                PropertyAccessStrategyBasicImpl.INSTANCE,
-                PropertyAccessStrategyFieldImpl.INSTANCE,
-                PropertyAccessStrategyMapImpl.INSTANCE
+            PropertyAccessStrategyBasicImpl.INSTANCE,
+            PropertyAccessStrategyFieldImpl.INSTANCE,
+            PropertyAccessStrategyMapImpl.INSTANCE
         );
         int size = aliases.length;
         setters = new Setter[size];
@@ -110,8 +105,8 @@ public final class BeanTransformerAdapter<T> implements ChangeableTransformer<T>
                 }
                 this.methods[i] = method;
                 setters[i] = propertyAccessStrategy
-                        .buildPropertyAccess(resultClass, method.getFieldName())
-                        .getSetter();
+                    .buildPropertyAccess(resultClass, method.getFieldName())
+                    .getSetter();
             }
         }
         isInitialized = true;
@@ -124,7 +119,7 @@ public final class BeanTransformerAdapter<T> implements ChangeableTransformer<T>
         }
         for (JavaBeanMethod method : ms) {
             String fieldName = method.getFieldName();
-            String underscoredName = StringUtils.camelToUnderline(fieldName);
+            String underscoredName = StringUtils.uncapitalize(fieldName);
             if (fieldName.length() != underscoredName.length()) {
                 this.methodMappings.put(underscoredName, method);
             }

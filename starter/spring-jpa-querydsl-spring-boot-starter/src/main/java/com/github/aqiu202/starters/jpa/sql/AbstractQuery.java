@@ -3,7 +3,7 @@ package com.github.aqiu202.starters.jpa.sql;
 import com.github.aqiu202.starters.jpa.page.PageParam;
 import com.github.aqiu202.starters.jpa.sql.trans.BeanTransformerAdapter;
 import com.github.aqiu202.starters.jpa.sql.trans.SimpleTransformer;
-import com.github.aqiu202.starters.jpa.sql.trans.inter.AnonymousResultTransformer;
+import com.github.aqiu202.starters.jpa.sql.trans.FieldAliasTransformer;
 import com.github.aqiu202.starters.jpa.util.JPAExpressionSingleton;
 import com.github.aqiu202.util.CollectionUtils;
 import com.github.aqiu202.util.StringUtils;
@@ -34,10 +34,9 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
 
     @SuppressWarnings("unchecked")
     public <S> AbstractQuery<S> as(Class<S> s) {
-        if (this.beanTransformer == null) {
+        if (this.beanTransformer == null
+            || !s.equals(this.beanTransformer.getResultClass())) {
             this.beanTransformer = BeanTransformerAdapter.of(s);
-        } else if (!s.equals(this.beanTransformer.getResultClass())) {
-            this.beanTransformer = this.beanTransformer.as(s);
         }
         return (AbstractQuery<S>) this;
     }
@@ -45,7 +44,7 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     private AbstractQuery<T> init(String sql, boolean isItemParams) {
         //解析SpEL表达式
         this.sql = (String) JPAExpressionSingleton.getParser()
-                .parseExpression(sql, JPAExpressionSingleton.getTemplate()).getValue();
+            .parseExpression(sql, JPAExpressionSingleton.getTemplate()).getValue();
         this.isItemParams = isItemParams;
         return this;
     }
@@ -128,7 +127,7 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     }
 
     public Page<Map<String, Object>> pagingHumpMapList(Pageable pageable,
-            AnonymousResultTransformer anonymousResultTransformer) {
+        FieldAliasTransformer anonymousResultTransformer) {
         this.beforePagingQuery(pageable);
         if (anonymousResultTransformer != null) {
             this.mapTransformer = new SimpleTransformer(anonymousResultTransformer);
@@ -160,12 +159,12 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     }
 
     public Page<Map<String, Object>> pagingHumpMapList(int page, int size, Sort sort,
-            AnonymousResultTransformer anonymousResultTransformer) {
+        FieldAliasTransformer anonymousResultTransformer) {
         return pagingHumpMapList(PageParam.of(page, size, sort), anonymousResultTransformer);
     }
 
     public List<T> queryList(Sort sort) {
-        this.prepareListQuery(this.sql, sort);
+        this.prepareListQuery(sort);
         return this.list();
     }
 
@@ -174,7 +173,7 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     }
 
     public List<Object> queryObjectList(Sort sort) {
-        this.prepareListQuery(this.sql, sort);
+        this.prepareListQuery(sort);
         return this.objects();
     }
 
@@ -187,23 +186,23 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     }
 
     public List<Map<String, Object>> queryMapList(Sort sort) {
-        this.prepareListQuery(this.sql, sort);
+        this.prepareListQuery(sort);
         return this.mapList();
     }
 
     public List<Map<String, Object>> queryMapList(
-            AnonymousResultTransformer anonymousResultTransformer) {
+        FieldAliasTransformer anonymousResultTransformer) {
         return queryHumpMapList(null, anonymousResultTransformer);
     }
 
     public List<Map<String, Object>> queryMapList(Sort sort,
-            AnonymousResultTransformer anonymousResultTransformer) {
+        FieldAliasTransformer anonymousResultTransformer) {
         return queryHumpMapList(sort, anonymousResultTransformer);
     }
 
     public List<Map<String, Object>> queryHumpMapList(Sort sort,
-            AnonymousResultTransformer anonymousResultTransformer) {
-        this.prepareListQuery(this.sql, sort);
+        FieldAliasTransformer anonymousResultTransformer) {
+        this.prepareListQuery(sort);
         if (anonymousResultTransformer != null) {
             this.mapTransformer = new SimpleTransformer(anonymousResultTransformer);
         }
@@ -219,17 +218,17 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     }
 
     public T queryOne() {
-        this.prepareOneQuery(this.sql);
+        this.prepareOneQuery();
         return this.one();
     }
 
     public Object queryObject() {
-        this.prepareOneQuery(this.sql);
+        this.prepareOneQuery();
         return this.object();
     }
 
-    public Map<String, Object> queryMap(AnonymousResultTransformer anonymousResultTransformer) {
-        this.prepareOneQuery(this.sql);
+    public Map<String, Object> queryMap(FieldAliasTransformer anonymousResultTransformer) {
+        this.prepareOneQuery();
         if (anonymousResultTransformer != null) {
             this.mapTransformer = new SimpleTransformer(anonymousResultTransformer);
         }
@@ -237,12 +236,12 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     }
 
     public Map<String, Object> queryMap() {
-        this.prepareOneQuery(this.sql);
+        this.prepareOneQuery();
         return this.map();
     }
 
     public Map<String, Object> queryHumpMap() {
-        this.prepareOneQuery(this.sql);
+        this.prepareOneQuery();
         return this.humpMap();
     }
 
@@ -291,8 +290,8 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
     }
 
     private void beforePagingQuery(Pageable pageable) {
-        this.prepareListQuery(this.sql, pageable.getSort());
-        if (StringUtils.isEmpty(this.countSql)) {
+        this.prepareListQuery(pageable.getSort());
+        if (!StringUtils.hasText(this.countSql)) {
             this.countSql();
         }
         this.countQuery = this.buildQuery(this.countSql);
@@ -305,7 +304,7 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
      * @param sort 排序规则
      */
     private void beforeListQuery(Sort sort) {
-        if (sort != null) {
+        if (sort != null && sort.isSorted()) {
             this.appendSort(sort);
         }
     }
@@ -316,14 +315,14 @@ public abstract class AbstractQuery<T> extends BaseQuery<T> {
         return query;
     }
 
-    private void prepareListQuery(String sql, Sort sort) {
+    private void prepareListQuery(Sort sort) {
         this.beforeListQuery(sort);
-        this.query = this.buildQuery(sql);
+        this.query = this.buildQuery(this.sql);
     }
 
-    private void prepareOneQuery(String sql) {
+    private void prepareOneQuery() {
         this.limitOne();
-        this.query = this.buildQuery(sql);
+        this.query = this.buildQuery(this.sql);
     }
 
     public abstract Query createQuery(String sql);

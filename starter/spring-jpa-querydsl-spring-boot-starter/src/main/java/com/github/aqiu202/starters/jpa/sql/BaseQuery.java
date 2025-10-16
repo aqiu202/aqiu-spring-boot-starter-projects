@@ -1,13 +1,14 @@
 package com.github.aqiu202.starters.jpa.sql;
 
 
+import com.github.aqiu202.starters.jpa.sql.trans.BeanTransformerAdapter;
 import com.github.aqiu202.starters.jpa.sql.trans.MapBeanTransformer;
-import com.github.aqiu202.starters.jpa.sql.trans.inter.ChangeableTransformer;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import org.hibernate.query.spi.QueryImplementor;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.springframework.data.domain.Pageable;
@@ -18,13 +19,13 @@ public class BaseQuery<T> {
     protected Query query;
     protected Query countQuery;
     protected ResultTransformer mapTransformer = MapBeanTransformer.INSTANCE;
-    protected ChangeableTransformer<?> beanTransformer;
+    protected BeanTransformerAdapter<?> beanTransformer;
     protected Pageable pageable;
 
     protected BaseQuery() {
     }
 
-    protected BaseQuery(ChangeableTransformer<?> changeableTransformer) {
+    protected BaseQuery(BeanTransformerAdapter<?> changeableTransformer) {
         this.beanTransformer = changeableTransformer;
     }
 
@@ -34,39 +35,39 @@ public class BaseQuery<T> {
 
     protected T one() {
         if (beanTransformer != null) {
-            query.unwrap(org.hibernate.Query.class).setResultTransformer(beanTransformer);
+            query.unwrap(QueryImplementor.class).setResultTransformer(beanTransformer);
         }
         return (T) this.object();
     }
 
     protected List<T> list() {
         if (beanTransformer != null) {
-            query.unwrap(org.hibernate.Query.class).setResultTransformer(beanTransformer);
+            query.unwrap(QueryImplementor.class).setResultTransformer(beanTransformer);
         }
         this.handlePageable();
         return (List<T>) query.getResultList();
     }
 
     protected List<Map<String, Object>> humpMapList() {
-        query.unwrap(org.hibernate.Query.class).setResultTransformer(mapTransformer);
+        query.unwrap(QueryImplementor.class).setResultTransformer(mapTransformer);
         this.handlePageable();
         return (List<Map<String, Object>>) query.getResultList();
     }
 
     protected Map<String, Object> humpMap() {
-        query.unwrap(org.hibernate.Query.class).setResultTransformer(mapTransformer);
+        query.unwrap(QueryImplementor.class).setResultTransformer(mapTransformer);
         return (Map<String, Object>) this.object();
     }
 
     protected List<Map<String, Object>> mapList() {
-        query.unwrap(org.hibernate.Query.class).setResultTransformer(
-                Transformers.ALIAS_TO_ENTITY_MAP);
+        query.unwrap(QueryImplementor.class).setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        this.handlePageable();
         return (List<Map<String, Object>>) query.getResultList();
     }
 
     protected Map<String, Object> map() {
-        query.unwrap(org.hibernate.Query.class)
-                .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
+        query.unwrap(QueryImplementor.class)
+            .setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
         return (Map<String, Object>) this.object();
     }
 

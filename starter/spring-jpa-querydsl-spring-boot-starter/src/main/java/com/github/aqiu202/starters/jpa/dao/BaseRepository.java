@@ -1,7 +1,9 @@
 package com.github.aqiu202.starters.jpa.dao;
 
 
+import com.github.aqiu202.starters.jpa.sql.AbstractQuery;
 import java.io.Serializable;
+import java.util.Map;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.repository.NoRepositoryBean;
 
@@ -15,5 +17,18 @@ import org.springframework.data.repository.NoRepositoryBean;
 public interface BaseRepository<T, ID extends Serializable> extends
         JpaBaseRepository<T, ID> {
 
-    boolean exists(Specification<T> specification);
+    T getByPrimaryKey(ID id);
+
+    @Deprecated
+    AbstractQuery<T> of(String sql, Map<String, Object> parameters);
+
+    @Deprecated
+    AbstractQuery<T> of(String sql, Object... parameters);
+
+    @Deprecated
+    AbstractQuery<T> hql(String hql, Map<String, Object> parameters);
+
+    @Deprecated
+    AbstractQuery<T> hql(String hql, Object... parameters);
+
 }
