@@ -119,7 +119,7 @@ public final class BeanTransformerAdapter<T> implements ResultTransformer {
         }
         for (JavaBeanMethod method : ms) {
             String fieldName = method.getFieldName();
-            String underscoredName = StringUtils.uncapitalize(fieldName);
+            String underscoredName = StringUtils.camelToUnderline(fieldName);
             if (fieldName.length() != underscoredName.length()) {
                 this.methodMappings.put(underscoredName, method);
             }
