@@ -46,6 +46,7 @@
         <basic-utils.version>${revision}</basic-utils.version>
         <codec-utils.version>${revision}</codec-utils.version>
         <excel-core.version>${revision}</excel-core.version>
+        <excel-starter.version>${revision}</excel-starter.version>
         <pageable-core.version>${revision}</pageable-core.version>
         <jpa-querydsl.version>${revision}</jpa-querydsl.version>
     </properties>
@@ -248,6 +249,11 @@
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
+                <artifactId>excel-spring-boot-starter</artifactId>
+                <version>${excel-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
                 <artifactId>spring-jpa-querydsl-spring-boot-starter</artifactId>
                 <version>${jpa-querydsl.version}</version>
             </dependency>
@@ -370,6 +376,9 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <additionalOptions>-Xdoclint:-missing</additionalOptions>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
