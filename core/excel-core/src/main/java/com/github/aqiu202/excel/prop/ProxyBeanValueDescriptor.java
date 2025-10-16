@@ -2,24 +2,24 @@ package com.github.aqiu202.excel.prop;
 
 import com.github.aqiu202.excel.model.PropertyAccessor;
 
-public class ProxyBeanProperty implements BeanProperty {
+public class ProxyBeanValueDescriptor implements BeanValueDescriptor {
 
-    private final BeanProperty bp;
+    private final BeanValueDescriptor bp;
 
-    public ProxyBeanProperty(Class<?> type, String propertyName, PropertyAccessor propertyAccessor) {
+    public ProxyBeanValueDescriptor(Class<?> type, String propertyName, PropertyAccessor propertyAccessor) {
         switch (propertyAccessor) {
             case FIELD:
-                this.bp = new FieldBeanProperty(type, propertyName);
+                this.bp = new FieldBeanValueDescriptor(type, propertyName);
                 break;
             case METHOD:
-                this.bp = new MethodBeanProperty(type, propertyName);
+                this.bp = new MethodBeanValueDescriptor(type, propertyName);
                 break;
             default:
                 throw new RuntimeException("不支持的访问方式配置");
         }
     }
 
-    private BeanProperty getProxy() {
+    private BeanValueDescriptor getProxy() {
         return this.bp;
     }
 

@@ -5,20 +5,22 @@
     <parent>
         <artifactId>core</artifactId>
         <groupId>com.github.aqiu202</groupId>
-        <version>1.2.0</version>
+        <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>codec-utils</artifactId>
+    <name>codec-utils</name>
 
     <properties>
-        <bcprov.version>1.46</bcprov.version>
+        <bcprov.version>1.78.1</bcprov.version>
     </properties>
 
     <dependencies>
+        <!-- https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk18on -->
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk16</artifactId>
+            <artifactId>bcprov-jdk18on</artifactId>
             <version>${bcprov.version}</version>
         </dependency>
     </dependencies>

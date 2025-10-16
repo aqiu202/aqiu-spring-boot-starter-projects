@@ -140,6 +140,8 @@ public abstract class StringUtils {
 
     /**
      * 驼峰法转下划线
+     * @param name 字段
+     * @return 下划线格式字段
      */
     public static String camelToUnderline(String name) {
         if (name == null || name.isEmpty()) {
@@ -179,6 +181,8 @@ public abstract class StringUtils {
 
     /**
      * 驼峰法转下划线然后大写
+     * @param name 字段名称
+     * @return 转换后的大写字段名称
      */
     public static String camelToUnderlineAndToUpperCase(String name) {
         return camelToUnderline(name).toUpperCase();
@@ -188,6 +192,7 @@ public abstract class StringUtils {
      * 下划线转驼峰
      *
      * @param name 字段名称
+     * @return 转换后的驼峰格式字段名称
      */
     public static String underlineToCamel(String name) {
         if (StringUtils.isBlank(name)) {

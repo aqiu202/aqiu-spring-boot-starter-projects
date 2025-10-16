@@ -21,6 +21,12 @@ public class SimpleMappedCellValueConverter implements MappedCellValueConverter 
 
     @Override
     public void convert(@Nonnull MappedCellValue mappedCellValue, FormatterProvider formatterProvider) {
+        TableMeta tableMeta = mappedCellValue.getTableMeta();
+        ValueDescriptor vd = tableMeta.getValueDescriptor();
+        Class<?> valueType = vd.getValueType();
+        if (valueType == null) {
+            return;
+        }
         CellVal<?> cellVal = mappedCellValue.getCellValue();
         // 公式实际值为内部的计算值
         if (cellVal instanceof FormulaCellVal) {
@@ -28,7 +34,6 @@ public class SimpleMappedCellValueConverter implements MappedCellValueConverter 
             mappedCellValue.setCellValue(cellVal);
         }
         Cell cell = cellVal.getCell();
-        TableMeta tableMeta = mappedCellValue.getTableMeta();
         if (tableMeta instanceof FormatterProviderWrapper) {
             FormatterProvider fp = ((FormatterProviderWrapper) tableMeta).getProvider();
             if (fp != null) {
@@ -36,11 +41,6 @@ public class SimpleMappedCellValueConverter implements MappedCellValueConverter 
             }
         }
         CellVal<?> newCellVal = null;
-        ValueDescriptor vd = tableMeta.getValueDescriptor();
-        Class<?> valueType = vd.getValueType();
-        if (valueType == null) {
-            return;
-        }
         // 实体中是字符类型，但是Excel中实际为其他类型
         if (String.class.isAssignableFrom(valueType) && !(cellVal instanceof StringCellVal)) {
             // 如果是（数字或者日期）
@@ -76,7 +76,7 @@ public class SimpleMappedCellValueConverter implements MappedCellValueConverter 
                 // 日期格式化异常时，忽略
             }
             newCellVal = DateCellVal.of(cell, parse);
-        } else if ((valueType.equals(Boolean.class) || valueType.equals(Boolean.TYPE)) && !(cellVal instanceof BooleanCellVal)) {
+        } else if (ClassUtils.isAssignableFrom(Boolean.class, valueType) && !(cellVal instanceof BooleanCellVal)) {
             newCellVal = new BooleanCellVal(cell, Boolean.valueOf(cellVal.toString()));
         }
         if (newCellVal != null) {

@@ -5,13 +5,13 @@ import com.github.aqiu202.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
 
-public class FieldBeanProperty implements BeanProperty {
+public class FieldBeanValueDescriptor implements BeanValueDescriptor {
 
     private final Class<?> beanType;
     private final String propertyName;
     private final PathElements<PropertyField> pathFields;
 
-    public FieldBeanProperty(Class<?> beanType, String propertyName) {
+    public FieldBeanValueDescriptor(Class<?> beanType, String propertyName) {
         this.beanType = beanType;
         this.propertyName = propertyName;
         this.pathFields = new SimplePathFields(beanType, propertyName);

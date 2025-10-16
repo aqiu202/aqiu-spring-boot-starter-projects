@@ -25,7 +25,8 @@ public final class RandomCodeUtils {
 
     /**
      * 获取随机字符串 Nonce Str
-     *
+     * @param length    长度
+     * @param repeat 是否重复
      * @return String 随机字符串
      */
     public static String generateCode(int length, boolean repeat) {

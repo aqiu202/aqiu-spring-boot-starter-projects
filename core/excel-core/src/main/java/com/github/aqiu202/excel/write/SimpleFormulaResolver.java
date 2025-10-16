@@ -102,7 +102,7 @@ public class SimpleFormulaResolver implements FormulaResolver {
             // 有表别名的替换为表别名，否则去掉字段的表名前缀
             Integer colIndex = metaKeyIndexMap.get(varName);
             if (colIndex != null) {
-                matcher.appendReplacement(output, this.resoleColumnName(rowIndex, colIndex));
+                matcher.appendReplacement(output, resoleColumnName(rowIndex, colIndex));
             }
         }
         matcher.appendTail(output);

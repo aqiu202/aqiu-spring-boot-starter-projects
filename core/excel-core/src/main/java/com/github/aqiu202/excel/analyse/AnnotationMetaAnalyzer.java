@@ -15,11 +15,15 @@ import java.util.stream.Stream;
 
 public class AnnotationMetaAnalyzer implements MetaAnalyzer<ExcelFieldMeta> {
 
+    private static final boolean DEFAULT_STRICT = true;
+
+    private static final PropertyAccessor DEFAULT_PROPERTY_ACCESSOR = PropertyAccessor.FIELD;
+
     /**
      * 严格模式，如果为true，则只分析有注解的字段
      */
-    private boolean strict = true;
-    private PropertyAccessor propertyAccessor = PropertyAccessor.FIELD;
+    private boolean strict = DEFAULT_STRICT;
+    private PropertyAccessor propertyAccessor = DEFAULT_PROPERTY_ACCESSOR;
 
     public AnnotationMetaAnalyzer() {
     }

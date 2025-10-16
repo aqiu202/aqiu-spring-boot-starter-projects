@@ -3,22 +3,53 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.6.7</version>
-        <relativePath/>
-    </parent>
-
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.aqiu202</groupId>
     <artifactId>aqiu-spring-boot-starter-projects</artifactId>
-    <version>1.2.0</version>
+    <version>${revision}</version>
     <packaging>pom</packaging>
+    <name>aqiu-spring-boot-starter-projects</name>
     <url>https://github.com/aqiu202/aqiu-spring-boot-starter-projects</url>
     <description>Some Simple Starter Projects for Spring Boot Application Made by Aqiu202
     </description>
+
+    <properties>
+        <base.version>1.3.0</base.version>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <spring-boot.version>2.7.18</spring-boot.version>
+        <guava.version>30.1-jre</guava.version>
+        <curator.version>5.1.0</curator.version>
+        <reflectasm.version>1.11.9</reflectasm.version>
+        <jsr305.version>3.0.2</jsr305.version>
+        <javax-inject.version>1</javax-inject.version>
+        <qlock.version>${revision}</qlock.version>
+        <sms-api.version>${revision}</sms-api.version>
+        <tts-api.version>${revision}</tts-api.version>
+        <ttl-cache.version>${revision}</ttl-cache.version>
+        <qrcode.version>${revision}</qrcode.version>
+        <limiting.version>${revision}</limiting.version>
+        <captcha.version>${revision}</captcha.version>
+        <autolog.version>${revision}</autolog.version>
+        <jpush-rest-api.version>${revision}</jpush-rest-api.version>
+        <aliyun-sms.version>${revision}</aliyun-sms.version>
+        <aliyun-tts.version>${revision}</aliyun-tts.version>
+        <huawei-sms.version>${revision}</huawei-sms.version>
+        <wechat-codec.version>${revision}</wechat-codec.version>
+        <wechat-pay.version>${revision}</wechat-pay.version>
+        <aop-core.version>${revision}</aop-core.version>
+        <id-generator.version>${revision}</id-generator.version>
+        <zk-curator.version>${revision}</zk-curator.version>
+        <spring-utils.version>${revision}</spring-utils.version>
+        <bean-utils.version>${revision}</bean-utils.version>
+        <basic-utils.version>${revision}</basic-utils.version>
+        <codec-utils.version>${revision}</codec-utils.version>
+        <excel-core.version>${revision}</excel-core.version>
+        <excel-starter.version>${revision}</excel-starter.version>
+        <pageable-core.version>${revision}</pageable-core.version>
+        <jpa-querydsl.version>${revision}</jpa-querydsl.version>
+    </properties>
 
     <licenses>
         <license>
@@ -43,8 +74,201 @@
     </developers>
 
     <modules>
-        <module>aqiu-spring-boot-starter-parent</module>
+        <module>core</module>
+        <module>starter</module>
+        <module>api</module>
+        <module>aurora</module>
+        <module>aliyun</module>
+        <module>huawei</module>
+        <module>wechat</module>
     </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202.api</groupId>
+                <artifactId>sms-api</artifactId>
+                <version>${sms-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202.api</groupId>
+                <artifactId>tts-api</artifactId>
+                <version>${tts-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>ttl-cache-core</artifactId>
+                <version>${ttl-cache.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>ttl-cache-spring-boot-starter</artifactId>
+                <version>${ttl-cache.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>qrcode-spring-boot-starter</artifactId>
+                <version>${qrcode.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>limiting-spring-boot-starter</artifactId>
+                <version>${limiting.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>captcha</artifactId>
+                <version>${captcha.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>captcha-spring-boot-starter</artifactId>
+                <version>${captcha.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>autolog-spring-boot-starter</artifactId>
+                <version>${autolog.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202.aurora</groupId>
+                <artifactId>jpush-rest-api-spring-boot-starter</artifactId>
+                <version>${jpush-rest-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202.aliyun</groupId>
+                <artifactId>aliyun-sms-spring-boot-starter</artifactId>
+                <version>${aliyun-sms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202.aliyun</groupId>
+                <artifactId>aliyun-tts-spring-boot-starter</artifactId>
+                <version>${aliyun-tts.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202.huawei</groupId>
+                <artifactId>huawei-sms-spring-boot-starter</artifactId>
+                <version>${huawei-sms.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202.wechat</groupId>
+                <artifactId>wechat-codec-spring-boot-starter</artifactId>
+                <version>${wechat-codec.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202.wechat</groupId>
+                <artifactId>wechat-pay-spring-boot-starter</artifactId>
+                <version>${wechat-pay.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>spring-aop-core</artifactId>
+                <version>${aop-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>qlock-core</artifactId>
+                <version>${qlock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>id-generator-core</artifactId>
+                <version>${id-generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>id-generator-spring-boot-starter</artifactId>
+                <version>${id-generator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>${curator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>qlock-spring-boot-starter</artifactId>
+                <version>${qlock.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>zk-curator-spring-boot-starter</artifactId>
+                <version>${zk-curator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>zk-curator-core</artifactId>
+                <version>${zk-curator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>pageable-core</artifactId>
+                <version>${pageable-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>spring-utils</artifactId>
+                <version>${spring-utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.esotericsoftware</groupId>
+                <artifactId>reflectasm</artifactId>
+                <version>${reflectasm.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>basic-utils</artifactId>
+                <version>${basic-utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>bean-utils</artifactId>
+                <version>${bean-utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>codec-utils</artifactId>
+                <version>${codec-utils.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>excel-core</artifactId>
+                <version>${excel-core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>excel-spring-boot-starter</artifactId>
+                <version>${excel-starter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>spring-jpa-querydsl-spring-boot-starter</artifactId>
+                <version>${jpa-querydsl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${jsr305.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>${javax-inject.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 <!--    <distributionManagement>-->
 <!--        <repository>-->
@@ -62,20 +286,71 @@
 
     <distributionManagement>
         <repository>
-            <id>nexus-releases</id>
-            <name>nexus-releases</name>
+            <id>nexus-release</id>
+            <name>nexus-release</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
             <uniqueVersion>true</uniqueVersion>
         </repository>
         <snapshotRepository>
-            <id>nexus-snapshots</id>
-            <name>nexus-snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+            <id>nexus-snapshot</id>
+            <name>nexus-snapshot</name>
+<!--            <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>${jsr305.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- SLF4J Log4j 2 桥接器 -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <!-- 配置项，例如是否更新父POM文件 -->
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>bom</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten-clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -101,11 +376,14 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <additionalOptions>-Xdoclint:-missing</additionalOptions>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-gpg-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.2.7</version>
                 <executions>
                     <execution>
                         <phase>verify</phase>
@@ -115,7 +393,35 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>0.9.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <publishingServerId>${publish-server}</publishingServerId>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
+    <profiles>
+        <profile>
+            <id>release</id>
+            <properties>
+                <revision>${base.version}</revision>
+                <publish-server>nexus-release</publish-server>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>snapshot</id>
+            <properties>
+                <revision>${base.version}-SNAPSHOT</revision>
+                <publish-server>nexus-snapshot</publish-server>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -16,6 +16,7 @@ import com.github.aqiu202.excel.write.hand.CellHandler;
 import com.github.aqiu202.excel.write.hand.RowHandler;
 import com.github.aqiu202.excel.write.hand.SheetHandler;
 import com.github.aqiu202.util.ClassUtils;
+import com.github.aqiu202.util.CollectionUtils;
 import com.github.aqiu202.util.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -143,15 +144,19 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
     @Override
     public <M extends TableMeta, D> void appendData(Sheet sheet, DataExtractor<M> dataExtractor,
                                                     Class<D> dataType, Collection<D> rows, SheetWriteConfiguration configuration) {
+        if (CollectionUtils.isEmpty(rows)) {
+            return;
+        }
         StyleProcessor styleProcessor = new SimpleStyleProcessor(sheet.getWorkbook());
         int contentRowIndex = sheet.getLastRowNum() + 1;
-        RowHandler rowHandler = this.handlerStore.getResolvedRowHandler();
-        CellHandler cellHandler = this.handlerStore.getResolvedCellHandler();
+        RowHandler rowHandler = this.getResolvedRowHandler();
+        CellHandler cellHandler = this.getResolvedCellHandler();
         List<M> metaList = dataExtractor.extractMetas(dataType);
+        int columnCount = metaList.size();
         for (D item : rows) {
             Row row = sheet.createRow(contentRowIndex);
             rowHandler.handle(contentRowIndex, row, item, styleProcessor, configuration);
-            for (int j = 0; j < metaList.size(); j++) {
+            for (int j = 0; j < columnCount; j++) {
                 Cell cell = row.createCell(j);
                 M meta = metaList.get(j);
                 String formula = meta.getFormula();
@@ -170,9 +175,8 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
             }
             contentRowIndex++;
         }
-        int columnCount = metaList.size();
-        this.configureSheet(sheet, columnCount, configuration);
-        SheetHandler sheetHandler = this.handlerStore.getResolvedSheetHandler();
+        this.configureSheet(sheet, metaList, configuration);
+        SheetHandler sheetHandler = this.getResolvedSheetHandler();
         sheetHandler.handle(sheet, columnCount, rows, configuration);
     }
 
@@ -218,10 +222,11 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
      * 配置sheet
      *
      * @param sheet         sheet页
-     * @param columnCount   列数
+     * @param metaList   列数
      * @param configuration 配置
      */
-    protected void configureSheet(Sheet sheet, int columnCount, SheetWriteConfiguration configuration) {
+    protected <M extends TableMeta> void configureSheet(Sheet sheet, List<M> metaList, SheetWriteConfiguration configuration) {
+        int columnCount = metaList.size();
         if (configuration.isAutoSizeColumn()) {
             // SXSSFSheet设置列宽自适应之前需要启用trackAllColumnsForAutoSizing
             if (sheet instanceof SXSSFSheet) {
@@ -234,6 +239,16 @@ public class SimpleWorkbookWriter implements WorkbookWriter {
                 if (autoWidthRatio != 1) {
                     int width = BigDecimal.valueOf(sheet.getColumnWidth(i) * configuration.getAutoWidthRatio()).intValue();
                     sheet.setColumnWidth(i, width);
+                }
+            }
+        } else {
+            // 设置列宽自适应比例
+            for (int i = 0; i < columnCount; i++) {
+                int width = metaList.get(i).getWidth();
+                if (width > 0) {
+                    sheet.setColumnWidth(i, width * 256);
+                } else {
+                    sheet.autoSizeColumn(i);
                 }
             }
         }

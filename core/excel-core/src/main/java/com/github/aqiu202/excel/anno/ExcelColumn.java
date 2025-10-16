@@ -1,7 +1,7 @@
 package com.github.aqiu202.excel.anno;
 
-import com.github.aqiu202.excel.format.*;
 import com.github.aqiu202.excel.model.PropertyAccessor;
+import com.github.aqiu202.excel.format.*;
 
 import java.lang.annotation.*;
 
@@ -26,6 +26,13 @@ public @interface ExcelColumn {
 
     //是否为图片
     boolean image() default false;
+
+    /**
+     * 列宽
+     */
+    int width() default 0;
+
+    boolean enableDefaultFormatter() default true;
 
     //是否为日期格式
     String dateFormat() default "";

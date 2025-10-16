@@ -3,7 +3,7 @@ package com.github.aqiu202.excel;
 import com.github.aqiu202.excel.convert.ConverterFactory;
 import com.github.aqiu202.excel.convert.NamedConverter;
 import com.github.aqiu202.excel.convert.SimpleConverterFactory;
-import com.github.aqiu202.excel.model.ReadConfiguration;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 import com.github.aqiu202.excel.model.SheetWriteConfiguration;
 import com.github.aqiu202.excel.model.WorkbookSheetWriteConfiguration;
 import com.github.aqiu202.excel.read.ExcelReader;
@@ -27,10 +27,10 @@ public class ExcelAutoConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean(ReadConfiguration.class)
+    @ConditionalOnMissingBean(SheetReadConfiguration.class)
     @ConfigurationProperties(prefix = "excel.read")
-    public ReadConfiguration sheetReadConfiguration() {
-        return new ReadConfiguration();
+    public SheetReadConfiguration sheetReadConfiguration() {
+        return new SheetReadConfiguration();
     }
 
     @Bean
@@ -41,7 +41,7 @@ public class ExcelAutoConfiguration {
             converterFactory = new SimpleConverterFactory();
         }
         converters.forEach(converterFactory::addConverter);
-        return new SimpleExcelFactory().converterFactory(converterFactory);
+        return new SimpleExcelFactory(converterFactory);
     }
 
     @Bean
@@ -52,7 +52,7 @@ public class ExcelAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(ExcelReader.class)
-    public ExcelReader excelReader(ExcelFactory excelFactory, ReadConfiguration readConfiguration) {
+    public ExcelReader excelReader(ExcelFactory excelFactory, SheetReadConfiguration readConfiguration) {
         return excelFactory.buildReader().configuration(readConfiguration).build();
     }
 }

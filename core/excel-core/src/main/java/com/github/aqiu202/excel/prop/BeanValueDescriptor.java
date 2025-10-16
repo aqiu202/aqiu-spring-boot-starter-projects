@@ -5,7 +5,7 @@ import com.github.aqiu202.excel.meta.ValueDescriptor;
 /**
  * JavaBean属性（用于读取/设置JavaBean属性）
  */
-public interface BeanProperty extends ValueDescriptor {
+public interface BeanValueDescriptor extends ValueDescriptor {
 
     Class<?> getBeanType();
 

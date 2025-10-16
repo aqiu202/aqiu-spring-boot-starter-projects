@@ -8,8 +8,7 @@ import com.github.aqiu202.excel.format.FormatterProvider;
 import com.github.aqiu202.excel.format.FormatterProviderWrapper;
 import com.github.aqiu202.excel.model.AnnotatedField;
 import com.github.aqiu202.excel.model.PropertyAccessor;
-import com.github.aqiu202.excel.prop.ProxyBeanProperty;
-import com.github.aqiu202.util.CollectionUtils;
+import com.github.aqiu202.excel.prop.ProxyBeanValueDescriptor;
 import com.github.aqiu202.util.StringUtils;
 
 import java.lang.reflect.Field;
@@ -20,6 +19,7 @@ public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements Table
     private AnnotationFormatterProvider provider;
     private String formula;
     private boolean image;
+    private int width = 0;
     private final PropertyAccessor propertyAccessor;
 
     public ExcelFieldMeta(Field field, PropertyAccessor propertyAccessor) {
@@ -34,6 +34,7 @@ public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements Table
             this.provider = new AnnotationFormatterProvider(annotation);
             this.formula = annotation.formula();
             this.image = annotation.image();
+            this.width = annotation.width();
         }
     }
 
@@ -64,6 +65,11 @@ public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements Table
     }
 
     @Override
+    public int getWidth() {
+        return this.width;
+    }
+
+    @Override
     public ValueDescriptor getValueDescriptor() {
         PropertyAccessor accessor = this.propertyAccessor;
         if (this.hasAnnotation()) {
@@ -76,7 +82,7 @@ public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements Table
         if (accessor == null) {
             accessor = PropertyAccessor.FIELD;
         }
-        return new ProxyBeanProperty(this.getField().getDeclaringClass(), this.getKey(), accessor);
+        return new ProxyBeanValueDescriptor(this.getField().getDeclaringClass(), this.getKey(), accessor);
     }
 
     @Override
@@ -85,7 +91,7 @@ public class ExcelFieldMeta extends AnnotatedField<ExcelColumn> implements Table
         if (this.hasAnnotation()) {
             contents = this.getAnnotation().value();
         }
-        if (CollectionUtils.isEmpty(contents)) {
+        if (contents == null || contents.length == 0) {
             contents = new String[]{this.getField().getName()};
         }
         return new SimpleHeadDescriptor(contents);

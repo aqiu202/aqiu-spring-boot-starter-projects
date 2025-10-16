@@ -7,7 +7,7 @@ import com.github.aqiu202.excel.convert.ConverterProvider;
 import com.github.aqiu202.excel.convert.ConverterProviderWrapper;
 import com.github.aqiu202.excel.meta.IndexedTableMeta;
 import com.github.aqiu202.excel.meta.TableMeta;
-import com.github.aqiu202.excel.model.ReadConfiguration;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 import com.github.aqiu202.excel.model.ReadDataFilter;
 import com.github.aqiu202.excel.model.ReadDataListener;
 import com.github.aqiu202.excel.read.cell.*;
@@ -15,37 +15,45 @@ import com.github.aqiu202.excel.read.convert.MappedCellValueConverter;
 import com.github.aqiu202.excel.read.convert.RowMappedCellValuesConverter;
 import com.github.aqiu202.excel.read.convert.SimpleRowMappedCellValuesConverter;
 import com.github.aqiu202.util.ClassUtils;
+import com.github.aqiu202.util.CollectionUtils;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.io.InputStream;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
-    private final RowMappedCellValuesConverter rowMappedCellValuesConverter = new SimpleRowMappedCellValuesConverter();
-    private final List<ReadDataListener<T>> listeners = new ArrayList<>();
+    protected final RowMappedCellValuesConverter rowMappedCellValuesConverter = new SimpleRowMappedCellValuesConverter();
+    protected final List<ReadDataListener<T>> listeners = new ArrayList<>();
     private final Class<T> type;
-    private final DataAnalyser dataAnalyser;
-    private TypeTranslator typeTranslator = new SimpleTypeTranslator();
+    protected final DataAnalyser dataAnalyser;
+    protected TypeTranslator typeTranslator = new SimpleTypeTranslator();
     private ReadDataFilter<RowMappedCellValues> rawDataFilter;
     private ReadDataFilter<T> filter;
-    private ReadConfiguration configuration;
+    private SheetReadConfiguration configuration;
     private ConverterFactory converterFactory;
+    private final ExcelBeforeReadHandler beforeReadHandler;
 
-    public SimpleExcelSheetReader(Class<T> type, MetaAnalyzer<?> metaAnalyzer, ConverterFactory converterFactory, ReadConfiguration configuration) {
+    public SimpleExcelSheetReader(Class<T> type, MetaAnalyzer<?> metaAnalyzer, ConverterFactory converterFactory,
+                                  SheetReadConfiguration configuration, ExcelBeforeReadHandler beforeReadHandler) {
+        this(type, new SimpleDataAnalyser(metaAnalyzer), converterFactory, configuration, beforeReadHandler);
+    }
+
+    public SimpleExcelSheetReader(Class<T> type, DataAnalyser dataAnalyser, ConverterFactory converterFactory,
+                                  SheetReadConfiguration configuration, ExcelBeforeReadHandler beforeReadHandler) {
         if (ClassUtils.isCustomClass(type) || ClassUtils.isAssignableFrom(Map.class, type)) {
             this.type = type;
         } else {
             throw new RuntimeException("不支持的类型");
         }
-        this.dataAnalyser = new SimpleDataAnalyser(metaAnalyzer);
+        this.dataAnalyser = dataAnalyser;
         this.converterFactory = converterFactory;
         this.configuration = configuration;
+        this.beforeReadHandler = beforeReadHandler;
     }
 
     @Override
@@ -54,12 +62,16 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     }
 
     @Override
-    public ReadConfiguration getConfiguration() {
+    public SheetReadConfiguration getConfiguration() {
         return configuration;
     }
 
     public MappedCellValueConverter getMappedCellValueConverter() {
         return this.rowMappedCellValuesConverter.getMappedCellValueConverter();
+    }
+
+    public RowMappedCellValuesConverter getRowMappedCellValuesConverter() {
+        return rowMappedCellValuesConverter;
     }
 
     @Override
@@ -79,15 +91,15 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     }
 
     @Override
-    public SimpleExcelSheetReader<T> configuration(ReadConfiguration configuration) {
+    public SimpleExcelSheetReader<T> configuration(SheetReadConfiguration configuration) {
         this.configuration = configuration;
         return this;
     }
 
     @Override
-    public ExcelSheetReader<T> configuration(Consumer<ReadConfiguration> configurationConsumer) {
+    public ExcelSheetReader<T> configuration(Consumer<SheetReadConfiguration> configurationConsumer) {
         if (this.configuration == null) {
-            this.configuration = new ReadConfiguration();
+            this.configuration = new SheetReadConfiguration();
         }
         configurationConsumer.accept(this.configuration);
         return this;
@@ -130,13 +142,66 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
     }
 
     @Override
+    public List<T> read(InputStream is, int sheetIndex, int headRows) {
+        return ExcelSheetReader.super.read(this.handleInputStream(is), sheetIndex, headRows);
+    }
+
+    protected InputStream handleInputStream(InputStream is) {
+        InputStream targetInputStream = is;
+        if (beforeReadHandler != null) {
+            try {
+                targetInputStream = beforeReadHandler.handle(is);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return targetInputStream;
+    }
+
+    @Override
+    public Map<String, List<T>> readAll(InputStream is, int headRdRows) {
+        return ExcelSheetReader.super.readAll(this.handleInputStream(is), headRdRows);
+    }
+
+    @Override
+    public List<T>[] readAllWithIndex(InputStream is, int headRdRows) {
+        return ExcelSheetReader.super.readAllWithIndex(this.handleInputStream(is), headRdRows);
+    }
+
+    @Override
     public List<T> read(Workbook workbook, int sheetIndex, int headRows) {
         Sheet sheet = workbook.getSheetAt(sheetIndex);
         if (sheet == null) {
             throw new RuntimeException("Sheet页不存在");
         }
+        return this.readSheet(sheet, headRows);
+    }
+
+    @Override
+    public List<T> read(Workbook workbook, String sheetName, int headRows) {
+        Sheet sheet = workbook.getSheet(sheetName);
+        if (sheet == null) {
+            throw new RuntimeException(String.format("Sheet[%s]页不存在", sheetName));
+        }
+        return this.readSheet(sheet, headRows);
+    }
+
+    protected List<T> readSheet(Sheet sheet, int headRows) {
+        List<RowMappedCellValues> rowMappedCellValues = this.readSheetRows(sheet, headRows);
+        if (CollectionUtils.isEmpty(rowMappedCellValues)) {
+            return Collections.emptyList();
+        }
+        return rowMappedCellValues.stream()
+                .peek(values -> this.getRowMappedCellValuesConverter().convert(values, configuration))
+                .filter(item -> this.getRawDataFilter() == null || this.getRawDataFilter().test(item))
+                .map(values -> this.getTypeTranslator().translate(values, type))
+                .filter(item -> this.getFilter() == null || this.getFilter().test(item))
+                .peek(item -> this.getListeners().forEach(listener -> listener.onData(item))).collect(Collectors.toList());
+    }
+
+    protected List<RowMappedCellValues> readSheetRows(Sheet sheet, int headRows) {
         Class<T> type = this.getDataType();
-        ReadConfiguration configuration = this.getConfiguration();
+        SheetReadConfiguration configuration = this.getConfiguration();
         int minRowNum = sheet.getFirstRowNum();
         int maxRowNum = sheet.getLastRowNum();
         // 获取表内容第一行
@@ -164,12 +229,28 @@ public class SimpleExcelSheetReader<T> implements ExcelSheetReader<T> {
             }
             mappedCellValues.add(rowCellValues);
         }
-        return mappedCellValues.stream()
-                .peek(values -> this.rowMappedCellValuesConverter.convert(values, configuration))
-                .filter(item -> this.getRawDataFilter() == null || this.getRawDataFilter().test(item))
-                .map(values -> this.getTypeTranslator().translate(values, type))
-                .filter(item -> this.getFilter() == null || this.getFilter().test(item))
-                .peek(item -> this.getListeners().forEach(listener -> listener.onData(item))).collect(Collectors.toList());
+        return mappedCellValues;
+    }
+
+    @Override
+    public Map<String, List<T>> readAll(Workbook workbook, int headRdRows) {
+        int numberOfSheets = workbook.getNumberOfSheets();
+        Map<String, List<T>> result = new HashMap<>();
+        for (int i = 0; i < numberOfSheets; i++) {
+            Sheet sheet = workbook.getSheetAt(i);
+            result.put(sheet.getSheetName(), this.read(workbook, i, headRdRows));
+        }
+        return result;
+    }
+
+    @Override
+    public List<T>[] readAllWithIndex(Workbook workbook, int headRdRows) {
+        int numberOfSheets = workbook.getNumberOfSheets();
+        List<T>[] result = new ArrayList[numberOfSheets];
+        for (int i = 0; i < numberOfSheets; i++) {
+            result[i] = this.read(workbook, i, headRdRows);
+        }
+        return result;
     }
 
     /**

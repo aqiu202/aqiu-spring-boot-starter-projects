@@ -11,6 +11,7 @@ public abstract class ExcelWriterBuilder {
 
     protected WorkbookSheetWriteConfiguration configuration = new WorkbookSheetWriteConfiguration();
     protected ConverterFactory converterFactory;
+    protected ExcelBeforeExportHandler beforeExportHandler;
 
     protected ExcelWriterBuilder(ConverterFactory converterFactory) {
         this.converterFactory = converterFactory;
@@ -51,8 +52,32 @@ public abstract class ExcelWriterBuilder {
         return this;
     }
 
+    public ExcelWriterBuilder headStyle(Consumer<StyleProperty> consumer) {
+        if (consumer != null) {
+            StyleProperty styleProperty = this.configuration.getHeadStyle();
+            if (styleProperty == null) {
+                styleProperty = new StyleProperty();
+                this.configuration.setHeadStyle(styleProperty);
+            }
+            consumer.accept(styleProperty);
+        }
+        return this;
+    }
+
     public ExcelWriterBuilder contentStyle(StyleProperty contentStyle) {
         this.configuration.setContentStyle(contentStyle);
+        return this;
+    }
+
+    public ExcelWriterBuilder contentStyle(Consumer<StyleProperty> consumer) {
+        if (consumer != null) {
+            StyleProperty styleProperty = this.configuration.getContentStyle();
+            if (styleProperty == null) {
+                styleProperty = new StyleProperty();
+                this.configuration.setContentStyle(styleProperty);
+            }
+            consumer.accept(styleProperty);
+        }
         return this;
     }
 
@@ -67,6 +92,11 @@ public abstract class ExcelWriterBuilder {
 
     public ExcelWriterBuilder disableAutoSizeColumn() {
         return this.autoSizeColumn(false);
+    }
+
+    public ExcelWriterBuilder beforeExportHandler(ExcelBeforeExportHandler beforeExportHandler) {
+        this.beforeExportHandler = beforeExportHandler;
+        return this;
     }
 
     public abstract ExcelWriter build();

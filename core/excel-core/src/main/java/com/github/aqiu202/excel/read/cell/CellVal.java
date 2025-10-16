@@ -11,4 +11,8 @@ public interface CellVal<T> {
 
     T getValue();
 
+    default String getValueAsText() {
+        return String.valueOf(this.getValue());
+    }
+
 }

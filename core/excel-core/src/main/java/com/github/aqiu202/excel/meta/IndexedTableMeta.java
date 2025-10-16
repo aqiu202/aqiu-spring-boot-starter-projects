@@ -5,6 +5,10 @@ public class IndexedTableMeta implements TableMeta {
     private final int index;
     private final TableMeta meta;
 
+    public IndexedTableMeta(int index, String propertyName, String... titles) {
+        this(index, new MapPropertyMeta(propertyName, titles));
+    }
+
     public IndexedTableMeta(int index, TableMeta meta) {
         this.index = index;
         this.meta = meta;

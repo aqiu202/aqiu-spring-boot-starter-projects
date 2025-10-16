@@ -38,4 +38,8 @@ public class ChainedExcelWriter implements ExcelWriter, ExportableWorkbookWrappe
         return new SimpleExcelSheetConfigurer<>(dataExtractor, type, this.sheetWriter);
     }
 
+    @Override
+    public ExcelBeforeExportHandler getBeforeExportHandler() {
+        return this.sheetWriter.getBeforeExportHandler();
+    }
 }

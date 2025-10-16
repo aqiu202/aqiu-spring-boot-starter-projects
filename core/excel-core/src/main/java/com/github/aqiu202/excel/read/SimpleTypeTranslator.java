@@ -18,6 +18,9 @@ public class SimpleTypeTranslator implements TypeTranslator {
 
     @Override
     public <T> T translate(RowMappedCellValues rowMappedCellValues, Class<T> type) {
+        if (ClassUtils.isAssignableFrom(RowMappedCellValues.class, type)) {
+            return (T) rowMappedCellValues;
+        }
         // 读取的类必须有默认构造器
         T result = ClassUtils.newInstance(type);
         MappedCellValue[] mappedCellValues = rowMappedCellValues.getMappedCellValues();

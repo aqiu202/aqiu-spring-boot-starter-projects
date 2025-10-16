@@ -1,7 +1,6 @@
 package com.github.aqiu202.excel.read.cell;
 
 import com.github.aqiu202.excel.meta.TableMeta;
-import com.github.aqiu202.util.CollectionUtils;
 import com.github.aqiu202.util.StringUtils;
 import org.apache.poi.ss.usermodel.Cell;
 
@@ -38,7 +37,7 @@ public class HeadMeta {
         return colIndex;
     }
 
-    public boolean isMatched(TableMeta vm) {
+    public boolean matches(TableMeta vm) {
         String[] titles = vm.getHeadDescriptor().getContents();
         CellVal<?>[] cells = this.getCells();
         int index = 0;
@@ -46,7 +45,7 @@ public class HeadMeta {
             if (cellVal.getCell() == null || cellVal instanceof BlankCellVal) {
                 continue;
             }
-            String scv = cellVal.getCell().getStringCellValue();
+            String scv = cellVal.getValueAsText();
             if (!StringUtils.equals(titles[index++], scv)) {
                 return false;
             }
@@ -56,7 +55,7 @@ public class HeadMeta {
 
     public String asText() {
         CellVal<?>[] cells = this.getCells();
-        if (CollectionUtils.isEmpty(cells)) {
+        if (cells == null || cells.length == 0) {
             return "";
         }
         StringJoiner joiner = new StringJoiner(".");
@@ -65,7 +64,7 @@ public class HeadMeta {
             if (cell == null || cellVal instanceof BlankCellVal) {
                 continue;
             }
-            joiner.add(cell.getStringCellValue());
+            joiner.add(cellVal.getValueAsText());
         }
         return joiner.toString();
     }

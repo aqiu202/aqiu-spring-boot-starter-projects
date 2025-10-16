@@ -9,8 +9,15 @@ import com.github.aqiu202.excel.write.SimpleExcelWriterBuilder;
 
 public class SimpleExcelFactory implements ExcelFactory {
 
-    private ConverterFactory converterFactory = new SimpleConverterFactory();
+    private final ConverterFactory converterFactory;
 
+    public SimpleExcelFactory() {
+        this(new SimpleConverterFactory());
+    }
+
+    public SimpleExcelFactory(ConverterFactory converterFactory) {
+        this.converterFactory = converterFactory;
+    }
     @Override
     public ExcelReaderBuilder buildReader() {
         return new SimpleExcelReaderBuilder(this.getConverterFactory());
@@ -21,13 +28,7 @@ public class SimpleExcelFactory implements ExcelFactory {
         return new SimpleExcelWriterBuilder(this.getConverterFactory());
     }
 
-    @Override
-    public ExcelFactory converterFactory(ConverterFactory converterFactory) {
-        this.converterFactory = converterFactory;
-        return this;
-    }
 
-    @Override
     public ConverterFactory getConverterFactory() {
         return this.converterFactory;
     }

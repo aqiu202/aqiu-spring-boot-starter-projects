@@ -8,6 +8,7 @@ import com.github.aqiu202.excel.write.hand.CellHandler;
 import com.github.aqiu202.excel.write.hand.RowHandler;
 import com.github.aqiu202.excel.write.hand.SheetHandler;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public interface ExcelSheetConfigurer<T> extends WorkbookWrapper {
@@ -48,5 +49,9 @@ public interface ExcelSheetConfigurer<T> extends WorkbookWrapper {
 
     ExcelSheetWriter<T> then();
 
+    ExcelSheetWriter<T> write(Collection<T> data);
+
     SheetWriteConfiguration getResolvedConfiguration();
+
+    ExcelBeforeExportHandler getBeforeExportHandler();
 }

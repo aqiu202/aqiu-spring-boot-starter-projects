@@ -1,18 +1,18 @@
 package com.github.aqiu202.excel.meta;
 
-import com.github.aqiu202.excel.prop.MapBeanProperty;
+import com.github.aqiu202.excel.prop.MapValueDescriptor;
 
-public class PropertyTableMeta implements TableMeta {
+public class MapPropertyMeta implements TableMeta {
 
     private final String fieldName;
     private final String[] fieldTitles;
     private boolean image;
 
-    public PropertyTableMeta(String fieldName) {
+    public MapPropertyMeta(String fieldName) {
         this(fieldName, new String[0]);
     }
 
-    public PropertyTableMeta(String fieldName, String... fieldTitles) {
+    public MapPropertyMeta(String fieldName, String... fieldTitles) {
         this.fieldName = fieldName;
         this.fieldTitles = fieldTitles;
     }
@@ -24,7 +24,7 @@ public class PropertyTableMeta implements TableMeta {
 
     @Override
     public ValueDescriptor getValueDescriptor() {
-        return new MapBeanProperty(this.fieldName);
+        return new MapValueDescriptor(this.fieldName);
     }
 
 

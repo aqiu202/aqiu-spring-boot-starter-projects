@@ -5,13 +5,13 @@ import com.github.aqiu202.util.ClassUtils;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 
-public class MethodBeanProperty implements BeanProperty {
+public class MethodBeanValueDescriptor implements BeanValueDescriptor {
 
     private final Class<?> beanType;
     private final String propertyName;
     private final PathElements<PropertyDescriptor> descriptors;
 
-    public MethodBeanProperty(Class<?> beanType, String propertyName) {
+    public MethodBeanValueDescriptor(Class<?> beanType, String propertyName) {
         this.beanType = beanType;
         this.propertyName = propertyName;
         this.descriptors = new SimplePathDescriptors(beanType, propertyName);

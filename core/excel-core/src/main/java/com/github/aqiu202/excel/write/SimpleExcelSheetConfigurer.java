@@ -9,6 +9,7 @@ import com.github.aqiu202.excel.write.hand.RowHandler;
 import com.github.aqiu202.excel.write.hand.SheetHandler;
 import org.apache.poi.ss.usermodel.Workbook;
 
+import java.util.Collection;
 import java.util.function.Consumer;
 
 public class SimpleExcelSheetConfigurer<T> implements ExcelSheetConfigurer<T> {
@@ -22,26 +23,33 @@ public class SimpleExcelSheetConfigurer<T> implements ExcelSheetConfigurer<T> {
     private final WorkbookWriter workbookWriter;
     private String protectedPassword;
     private final Workbook workbook;
+    private final ExcelBeforeExportHandler beforeExportHandler;
 
-    public SimpleExcelSheetConfigurer(DataExtractor<?> dataExtractor, Class<T> dataType, ExcelSheetWriter<?> sheetWriter) {
+    public SimpleExcelSheetConfigurer(DataExtractor<?> dataExtractor, Class<T> dataType,
+                                      ExcelSheetWriter<?> sheetWriter) {
         this(dataExtractor, dataType, sheetWriter.getConfigurer().getWriterConverterFactory(),
-                sheetWriter.getConfigurer().getWriterConfiguration(), sheetWriter.getWorkbook());
+                sheetWriter.getConfigurer().getWriterConfiguration(),
+                sheetWriter.getBeforeExportHandler(), sheetWriter.getWorkbook());
     }
 
     public SimpleExcelSheetConfigurer(DataExtractor<?> dataExtractor, Class<T> dataType,
                                       ConverterFactory converterFactory,
-                                      WorkbookSheetWriteConfiguration configuration) {
-        this(dataExtractor, dataType, converterFactory, configuration, null);
+                                      WorkbookSheetWriteConfiguration configuration,
+                                      ExcelBeforeExportHandler beforeExportHandler) {
+        this(dataExtractor, dataType, converterFactory, configuration, beforeExportHandler, null);
     }
 
     public SimpleExcelSheetConfigurer(DataExtractor<?> dataExtractor, Class<T> dataType,
                                       ConverterFactory converterFactory,
-                                      WorkbookSheetWriteConfiguration configuration, Workbook workbook) {
+                                      WorkbookSheetWriteConfiguration configuration,
+                                      ExcelBeforeExportHandler beforeExportHandler,
+                                      Workbook workbook) {
         this.dataExtractor = dataExtractor;
         this.dataType = dataType;
         this.writerConverterFactory = converterFactory;
         this.writerConfiguration = configuration;
         this.workbookWriter = new SimpleWorkbookWriter(converterFactory);
+        this.beforeExportHandler = beforeExportHandler;
         this.workbook = workbook;
     }
 
@@ -149,6 +157,11 @@ public class SimpleExcelSheetConfigurer<T> implements ExcelSheetConfigurer<T> {
     }
 
     @Override
+    public ExcelSheetWriter<T> write(Collection<T> data) {
+        return this.then().write(data);
+    }
+
+    @Override
     public Workbook getWorkbook() {
         return workbook;
     }
@@ -165,5 +178,10 @@ public class SimpleExcelSheetConfigurer<T> implements ExcelSheetConfigurer<T> {
             configuration = this.getWriterConfiguration();
         }
         return configuration;
+    }
+
+    @Override
+    public ExcelBeforeExportHandler getBeforeExportHandler() {
+        return beforeExportHandler;
     }
 }

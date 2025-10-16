@@ -7,11 +7,21 @@ import com.github.aqiu202.excel.format.NumberFormatter;
 
 public class DataConfiguration implements FormatterProvider {
 
+    private boolean enableDefaultFormatter = true;
     private String dateFormat;
     private Class<? extends DateFormatter> dateFormatter = DEFAULT_DATE_FORMATTER;
     private String numberFormat;
     private Class<? extends NumberFormatter> numberFormatter = DEFAULT_NUM_FORMATTER;
     private Class<? extends NullFormatter> nullFormatter = DEFAULT_NULL_FORMATTER;
+
+    @Override
+    public boolean isEnableDefaultFormatter() {
+        return enableDefaultFormatter;
+    }
+
+    public void setEnableDefaultFormatter(boolean enableDefaultFormatter) {
+        this.enableDefaultFormatter = enableDefaultFormatter;
+    }
 
     @Override
     public String getDateFormat() {

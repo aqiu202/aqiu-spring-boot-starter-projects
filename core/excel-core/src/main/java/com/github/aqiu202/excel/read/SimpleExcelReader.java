@@ -1,34 +1,32 @@
 package com.github.aqiu202.excel.read;
 
 import com.github.aqiu202.excel.analyse.AnnotationMetaAnalyzer;
-import com.github.aqiu202.excel.analyse.FieldMetaAnalyzer;
-import com.github.aqiu202.excel.analyse.MetaAnalyzer;
 import com.github.aqiu202.excel.convert.ConverterFactory;
-import com.github.aqiu202.excel.model.ReadConfiguration;
-
-import java.util.HashMap;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 
 public class SimpleExcelReader implements ExcelReader {
 
     private final ConverterFactory converterFactory;
-    private final ReadConfiguration configuration;
+    private final SheetReadConfiguration configuration;
 
-    public SimpleExcelReader(ConverterFactory converterFactory, ReadConfiguration configuration) {
+    private final ExcelBeforeReadHandler beforeReadHandler;
+
+    public SimpleExcelReader(ConverterFactory converterFactory, SheetReadConfiguration configuration, ExcelBeforeReadHandler beforeReadHandler) {
         this.converterFactory = converterFactory;
         this.configuration = configuration;
+        this.beforeReadHandler = beforeReadHandler;
     }
 
     public ConverterFactory getConverterFactory() {
         return converterFactory;
     }
 
-    public ReadConfiguration getConfiguration() {
+    public SheetReadConfiguration getConfiguration() {
         return configuration;
     }
 
-    @Override
-    public <T> ExcelSheetReader<T> type(Class<T> type) {
-        return this.custom(type, FieldMetaAnalyzer.INSTANCE);
+    public ExcelBeforeReadHandler getBeforeReadHandler() {
+        return beforeReadHandler;
     }
 
     @Override
@@ -36,17 +34,17 @@ public class SimpleExcelReader implements ExcelReader {
         if (type.isInterface()) {
             throw new RuntimeException("暂不支持接口类型");
         }
-        return new AnnotationExcelSheetReader<>(type, new AnnotationMetaAnalyzer(), this.getConverterFactory(), this.getConfiguration());
+        return new AnnotationExcelSheetReader<>(type, new AnnotationMetaAnalyzer(), this.getConverterFactory(),
+                this.getConfiguration(), this.getBeforeReadHandler());
     }
 
     @Override
-    @SuppressWarnings("rawtypes")
-    public ExcelSheetReader<HashMap> map() {
-        return this.type(HashMap.class);
+    public <T> ExcelSheetReader<T> custom(Class<T> type, DataAnalyser dataAnalyser) {
+        return new SimpleExcelSheetReader<>(type, dataAnalyser, this.getConverterFactory(), this.getConfiguration(), this.getBeforeReadHandler());
     }
 
     @Override
-    public <T> ExcelSheetReader<T> custom(Class<T> type, MetaAnalyzer<?> metaAnalyzer) {
-        return new SimpleExcelSheetReader<>(type, metaAnalyzer, this.getConverterFactory(), this.getConfiguration());
+    public RowExcelSheetReader rows() {
+        return new RowExcelSheetReader(this.getConverterFactory(), this.getConfiguration(), this.getBeforeReadHandler());
     }
 }

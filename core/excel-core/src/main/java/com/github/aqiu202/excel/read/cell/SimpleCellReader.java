@@ -1,13 +1,13 @@
 package com.github.aqiu202.excel.read.cell;
 
-import com.github.aqiu202.excel.model.ReadConfiguration;
+import com.github.aqiu202.excel.model.SheetReadConfiguration;
 import com.github.aqiu202.util.StringUtils;
 import org.apache.poi.ss.usermodel.*;
 
 public class SimpleCellReader implements CellReader {
 
     @Override
-    public CellVal<?> readCell(Cell cell, ReadConfiguration configuration) {
+    public CellVal<?> readCell(Cell cell, SheetReadConfiguration configuration) {
         if (cell == null) {
             return new NullCellVal();
         }

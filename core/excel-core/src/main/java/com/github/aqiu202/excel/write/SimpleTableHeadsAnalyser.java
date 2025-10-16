@@ -19,7 +19,7 @@ public class SimpleTableHeadsAnalyser implements TableHeadsAnalyser {
         for (int i = 0; i < headColumns; i++) {
             TableMeta meta = metas.get(i);
             HeadDescriptor hd = meta.getHeadDescriptor();
-            String[] paddedContents = padding(hd.getContents(), headRows);
+            String[] paddedContents = this.padding(hd.getContents(), headRows);
             for (int j = 0; j < headRows; j++) {
                 String paddedContent = paddedContents[j];
                 if (paddedContent != null) {

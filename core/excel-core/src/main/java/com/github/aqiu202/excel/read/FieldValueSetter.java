@@ -18,7 +18,7 @@ public interface FieldValueSetter {
             targetValue = ((NumberCellVal) cellVal).convertAs(type);
         } else if (ClassUtils.isDate(type) && cellVal instanceof DateCellVal) {
             targetValue = ((DateCellVal) cellVal).convertAs(type);
-        } else if ((type.equals(Boolean.class) || type.equals(Boolean.TYPE)) && cellVal instanceof BooleanCellVal) {
+        } else if (ClassUtils.isAssignableFrom(Boolean.class, type) && cellVal instanceof BooleanCellVal) {
             targetValue = ((BooleanCellVal) cellVal).getValue();
         } else if (type.equals(String.class)) {
             targetValue = cellVal.getValue();

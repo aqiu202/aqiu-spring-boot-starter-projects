@@ -1,7 +1,7 @@
 package com.github.aqiu202.excel.read;
 
 import com.github.aqiu202.excel.meta.IndexedTableMeta;
-import com.github.aqiu202.excel.meta.PropertyTableMeta;
+import com.github.aqiu202.excel.meta.MapPropertyMeta;
 import com.github.aqiu202.excel.meta.TableMeta;
 import com.github.aqiu202.excel.read.cell.HeadMeta;
 
@@ -25,13 +25,16 @@ public class SimpleIndexedMetaResolver implements IndexedMetaResolver {
                 .collect(Collectors.toList());
     }
 
-    private IndexedTableMeta buildMapIndexedTableMeta(HeadMeta headMeta) {
-        return new IndexedTableMeta(headMeta.getColIndex(), new PropertyTableMeta(headMeta.asText()));
+    protected IndexedTableMeta buildMapIndexedTableMeta(HeadMeta headMeta) {
+        return new IndexedTableMeta(headMeta.getColIndex(), new MapPropertyMeta(headMeta.asText()));
     }
 
-    private IndexedTableMeta resolveIndexedTableMeta(TableMeta meta, HeadMeta[] headMetas) {
+    protected IndexedTableMeta resolveIndexedTableMeta(TableMeta meta, HeadMeta[] headMetas) {
+        if (meta instanceof IndexedTableMeta) {
+            return (IndexedTableMeta) meta;
+        }
         HeadMeta headMeta = Stream.of(headMetas)
-                .filter(hm -> hm.isMatched(meta))
+                .filter(hm -> hm.matches(meta))
                 .findFirst()
                 .orElse(null);
         return headMeta == null ? null : new IndexedTableMeta(headMeta.getColIndex(), meta);

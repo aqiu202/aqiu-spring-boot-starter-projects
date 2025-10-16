@@ -24,6 +24,10 @@ public interface TableMeta {
         return false;
     }
 
+    default int getWidth() {
+        return 0;
+    }
+
     /**
      * 数据的读写描述
      */

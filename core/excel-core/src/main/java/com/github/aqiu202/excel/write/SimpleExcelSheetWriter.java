@@ -3,6 +3,7 @@ package com.github.aqiu202.excel.write;
 import com.github.aqiu202.excel.model.SheetWriteConfiguration;
 import com.github.aqiu202.excel.model.WorkbookSheetWriteConfiguration;
 import com.github.aqiu202.excel.write.extract.DataExtractor;
+import com.github.aqiu202.util.CollectionUtils;
 import com.github.aqiu202.util.StringUtils;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -26,7 +27,15 @@ public class SimpleExcelSheetWriter<T> implements ExcelSheetWriter<T> {
     }
 
     @Override
+    public ExcelBeforeExportHandler getBeforeExportHandler() {
+        return this.configurer.getBeforeExportHandler();
+    }
+
+    @Override
     public ExcelSheetWriter<T> write(Collection<T> data) {
+        if (CollectionUtils.isEmpty(data)) {
+            return this;
+        }
         ExcelSheetConfigurer<T> configurer = this.getConfigurer();
         WorkbookWriter writer = configurer.getWorkbookWriter();
         Class<T> dataType = configurer.getDataType();

@@ -1,6 +1,5 @@
 package com.github.aqiu202.excel.style;
 
-import org.apache.poi.common.Duplicatable;
 import org.apache.poi.ss.usermodel.*;
 
 import java.util.Map;
@@ -26,9 +25,9 @@ public class SimpleStyleProcessor implements StyleProcessor {
             this.baseCellStyle = this.workbook.createCellStyle();
         }
         // 默认使用拷贝方式创建样式
-        if (this.baseCellStyle instanceof Duplicatable) {
-            return (CellStyle) ((Duplicatable) this.baseCellStyle).copy();
-        }
+//        if (this.baseCellStyle instanceof Duplicatable) {
+//            return (CellStyle) ((Duplicatable) this.baseCellStyle).copy();
+//        }
         return this.workbook.createCellStyle();
     }
 

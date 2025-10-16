@@ -1,6 +1,6 @@
 package com.github.aqiu202.excel.model;
 
-public class ReadConfiguration extends DataConfiguration {
+public class SheetReadConfiguration extends DataConfiguration {
 
     /**
      * 是否读取公式
