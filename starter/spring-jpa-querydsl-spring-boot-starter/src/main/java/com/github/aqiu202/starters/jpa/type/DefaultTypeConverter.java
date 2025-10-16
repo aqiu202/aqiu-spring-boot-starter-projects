@@ -57,7 +57,7 @@ public final class DefaultTypeConverter implements TypeConverter {
         @Override
         public void convert(ObjectWrapper wrapper, Class<?> type) {
             Object value = wrapper.get();
-            if (Number.class.isAssignableFrom(type) || String.class.isAssignableFrom(type)) {
+            if (Number.class.isAssignableFrom(type) || type.isPrimitive() || String.class.isAssignableFrom(type)) {
                 if(value instanceof Number) {
                     Number n = (Number) value;
                     if (type.equals(Long.class) || type.equals(long.class)) {
@@ -108,7 +108,7 @@ public final class DefaultTypeConverter implements TypeConverter {
     static class Java8DateTypeConverter implements TypeConverter {
 
         private static final List<Class<?>> java8DateTypes = Arrays.asList(LocalDateTime.class,
-                LocalDate.class, LocalTime.class);
+            LocalDate.class, LocalTime.class);
 
         @Override
         public void convert(ObjectWrapper wrapper, Class<?> type) {
