@@ -193,7 +193,7 @@ public abstract class HttpHeaderUtils {
         response.setContentType(contentType);
 
         if (StringUtils.isNotBlank(fileName)) {
-            response.setHeader("Content-Disposition", "attachment;filename=" + formatAttachmentFileName(fileName));
+            response.setHeader("Content-Disposition", buildContentDisposition(fileName));
             //需要暴露给前端js
             response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
         }
@@ -227,18 +227,20 @@ public abstract class HttpHeaderUtils {
         return suffixName;
     }
 
-    public static String formatAttachmentFileName(String str) {
-        if (StringUtils.isBlank(str)) {
+    public static String buildContentDisposition(String fileName) {
+        String formatted = formatAttachmentFileName(fileName);
+        return String.format("attachment; filename=\"%s\"; filename*=UTF-8''%s", formatted, formatted);
+    }
+
+    public static String formatAttachmentFileName(String fileName) {
+        if (StringUtils.isBlank(fileName)) {
             return "";
         }
         try {
-            //new String(fileName.getBytes(), "ISO8859-1")
-            //return new String(str.getBytes("UTF-8"), "iso8859-1");
-            return URLEncoder.encode(str, StandardCharsets.UTF_8.name());
+            return URLEncoder.encode(fileName, StandardCharsets.UTF_8.name()).replace("+", "%20");
         } catch (Exception e) {
-            return str;
+            return fileName;
         }
-        //return str;
     }
 
     public static void main(String[] args) {
