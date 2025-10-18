@@ -21,7 +21,9 @@ public class SimpleAnnotationInterceptor<T extends Annotation> implements
         this.beforeIntercept(invocation, t);
         Throwable throwable = null;
         try {
-            return this.doIntercept(invocation, t);
+            Object result = this.doIntercept(invocation, t);
+            this.afterReturning(invocation, t, result);
+            return result;
         } catch (Throwable th) {
             log.error("", th);
             throwable = th;
@@ -29,6 +31,9 @@ public class SimpleAnnotationInterceptor<T extends Annotation> implements
         } finally {
             this.afterIntercept(invocation, t, throwable);
         }
+    }
+
+    protected void afterReturning(MethodInvocation invocation, T t, Object result) {
     }
 
     protected void beforeIntercept(MethodInvocation invocation, T t) {

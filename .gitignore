@@ -3,3 +3,5 @@
 /**/*.jar
 /**/*.iml
 /**/.DS_Store
+
+/**/.*.pom.xml
