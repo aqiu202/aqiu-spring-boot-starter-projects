@@ -2,19 +2,19 @@ package com.github.aqiu202.util.scan;
 
 import java.net.URL;
 
-public class SimpleScanResourceItem implements ScanResourceItem {
+public class SimpleScanResourceInput implements ScanResourceInput {
 
     private final URL resource;
     private final String basePackage;
 
     private boolean recursive;
 
-    public SimpleScanResourceItem(URL resource, String basePackage) {
+    public SimpleScanResourceInput(URL resource, String basePackage) {
         this.resource = resource;
         this.basePackage = basePackage;
     }
 
-    public SimpleScanResourceItem(URL resource, String basePackage, boolean recursive) {
+    public SimpleScanResourceInput(URL resource, String basePackage, boolean recursive) {
         this(resource, basePackage);
         this.recursive = recursive;
     }

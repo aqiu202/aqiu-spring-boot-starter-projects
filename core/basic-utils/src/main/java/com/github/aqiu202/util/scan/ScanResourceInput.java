@@ -2,7 +2,7 @@ package com.github.aqiu202.util.scan;
 
 import java.net.URL;
 
-public interface ScanResourceItem {
+public interface ScanResourceInput {
     URL getResource();
 
     String getBasePackage();

@@ -1,18 +1,18 @@
 package com.github.aqiu202.util.scan.filter;
 
 import java.util.Collection;
-/**
- * 多重class过滤器（需要所有过滤器同时满足）
- */
+
 public class AndClassFilters extends AbstractFilters<Class<?>> {
 
     public AndClassFilters(ClassFilter... filters) {
         super(filters);
     }
 
-    public AndClassFilters(Collection<ScanFilter<Class<?>>> filters) {
-        super(filters);
-    }
+// --Commented out by Inspection START (2024/10/16 10:39):
+//    public AndClassFilters(Collection<Filter<Class<?>>> filters) {
+//        super(filters);
+//    }
+// --Commented out by Inspection STOP (2024/10/16 10:39)
 
     @Override
     public boolean matches(Class<?> param) {

@@ -2,18 +2,16 @@ package com.github.aqiu202.util.scan.filter;
 
 import java.util.Collection;
 
-/**
- * 多重className过滤器（需要所有过滤器同时满足）
- */
-public class AndNameFilters extends AbstractFilters<String> {
+public class AndStringFilters extends AbstractFilters<String> {
 
-    public AndNameFilters(ClassNameFilter... matchers) {
+    public AndStringFilters(ClassNameFilter... matchers) {
         super(matchers);
     }
 
-    public AndNameFilters(Collection<ScanFilter<String>> filters) {
+    public AndStringFilters(Collection<ScanFilter<String>> filters) {
         super(filters);
     }
+
 
     @Override
     public boolean matches(String param) {
