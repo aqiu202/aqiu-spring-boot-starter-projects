@@ -11,13 +11,13 @@ public class AndNameFilters extends AbstractFilters<String> {
         super(matchers);
     }
 
-    public AndNameFilters(Collection<Filter<String>> filters) {
+    public AndNameFilters(Collection<ScanFilter<String>> filters) {
         super(filters);
     }
 
     @Override
     public boolean matches(String param) {
-        Collection<Filter<String>> filters = this.getFilters();
+        Collection<ScanFilter<String>> filters = this.getFilters();
         if (filters.isEmpty()) {
             return true;
         }

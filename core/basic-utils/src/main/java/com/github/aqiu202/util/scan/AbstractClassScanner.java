@@ -15,22 +15,22 @@ public abstract class AbstractClassScanner implements ClassScanner {
     private static final Logger log = LoggerFactory.getLogger(AbstractClassScanner.class);
 
     protected ClassLoader cl;
-    protected Filters<String> nameFilters = new AndNameFilters();
-    protected Filters<Class<?>> classFilters = new AndClassFilters();
+    protected ScanFilters<String> nameFilters = new AndNameFilters();
+    protected ScanFilters<Class<?>> classFilters = new AndClassFilters();
 
     protected AbstractClassScanner() {
         this.loadClassLoader();
     }
 
     @Override
-    public void setClassFilters(Filters<Class<?>> classFilters) {
+    public void setClassFilters(ScanFilters<Class<?>> classFilters) {
         if (classFilters != null) {
             this.classFilters = classFilters;
         }
     }
 
     @Override
-    public void setNameFilters(Filters<String> nameFilters) {
+    public void setNameFilters(ScanFilters<String> nameFilters) {
         if (nameFilters != null) {
             this.nameFilters = nameFilters;
         }
@@ -61,12 +61,12 @@ public abstract class AbstractClassScanner implements ClassScanner {
     }
 
     @Override
-    public Filters<String> getNameFilters() {
+    public ScanFilters<String> getNameFilters() {
         return nameFilters;
     }
 
     @Override
-    public Filters<Class<?>> getClassFilters() {
+    public ScanFilters<Class<?>> getClassFilters() {
         return classFilters;
     }
 

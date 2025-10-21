@@ -6,13 +6,13 @@ import java.util.Collection;
  * 多重的过滤器
  * @param <T> 决策参数类型
  */
-public interface Filters<T> extends Filter<T>, Collection<Filter<T>> {
+public interface ScanFilters<T> extends ScanFilter<T>, Collection<ScanFilter<T>> {
 
     /**
      * 添加过滤器
      * @param filter 过滤器
      */
-    default void addFilter(Filter<T> filter) {
+    default void addFilter(ScanFilter<T> filter) {
         this.add(filter);
     }
 
@@ -20,11 +20,11 @@ public interface Filters<T> extends Filter<T>, Collection<Filter<T>> {
      * 批量添加过滤器
      * @param filters 过滤器集合
      */
-    default void addFilters(Collection<Filter<T>> filters) {
+    default void addFilters(Collection<ScanFilter<T>> filters) {
         this.addAll(filters);
     }
 
-    default Collection<Filter<T>> getFilters() {
+    default Collection<ScanFilter<T>> getFilters() {
         return this;
     }
 }

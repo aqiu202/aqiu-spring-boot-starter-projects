@@ -2,7 +2,7 @@ package com.github.aqiu202.util.scan;
 
 import com.github.aqiu202.util.scan.filter.ClassFilter;
 import com.github.aqiu202.util.scan.filter.ClassNameFilter;
-import com.github.aqiu202.util.scan.filter.Filters;
+import com.github.aqiu202.util.scan.filter.ScanFilters;
 
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -37,13 +37,13 @@ public interface ClassScanner {
         return result;
     }
 
-    void setClassFilters(Filters<Class<?>> classFilters);
+    void setClassFilters(ScanFilters<Class<?>> classFilters);
 
-    void setNameFilters(Filters<String> nameFilters);
+    void setNameFilters(ScanFilters<String> nameFilters);
 
-    Filters<String> getNameFilters();
+    ScanFilters<String> getNameFilters();
 
-    Filters<Class<?>> getClassFilters();
+    ScanFilters<Class<?>> getClassFilters();
 
     /**
      * 添加 className的过滤器

@@ -11,7 +11,7 @@ public class OrClassFilters extends AbstractFilters<Class<?>> {
         super(matchers);
     }
 
-    public OrClassFilters(Collection<Filter<Class<?>>> filters) {
+    public OrClassFilters(Collection<ScanFilter<Class<?>>> filters) {
         super(filters);
     }
 

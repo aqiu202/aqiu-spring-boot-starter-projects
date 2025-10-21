@@ -10,13 +10,13 @@ public class AndClassFilters extends AbstractFilters<Class<?>> {
         super(filters);
     }
 
-    public AndClassFilters(Collection<Filter<Class<?>>> filters) {
+    public AndClassFilters(Collection<ScanFilter<Class<?>>> filters) {
         super(filters);
     }
 
     @Override
     public boolean matches(Class<?> param) {
-        Collection<Filter<Class<?>>> filters = this.getFilters();
+        Collection<ScanFilter<Class<?>>> filters = this.getFilters();
         if (filters.isEmpty()) {
             return true;
         }

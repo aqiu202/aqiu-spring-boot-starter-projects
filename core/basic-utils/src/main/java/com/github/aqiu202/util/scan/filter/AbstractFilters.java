@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 
-public abstract class AbstractFilters<T> extends LinkedHashSet<Filter<T>> implements Filters<T> {
+public abstract class AbstractFilters<T> extends LinkedHashSet<ScanFilter<T>> implements ScanFilters<T> {
 
     @SafeVarargs
-    protected AbstractFilters(Filter<T>... filters) {
+    protected AbstractFilters(ScanFilter<T>... filters) {
         this.addFilters(Arrays.asList(filters));
     }
 
-    protected AbstractFilters(Collection<Filter<T>> filters) {
+    protected AbstractFilters(Collection<ScanFilter<T>> filters) {
         this.addFilters(filters);
     }
 

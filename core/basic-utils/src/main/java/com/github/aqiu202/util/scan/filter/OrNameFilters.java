@@ -10,7 +10,7 @@ public class OrNameFilters extends AbstractFilters<String> {
         super(matchers);
     }
 
-    public OrNameFilters(Collection<Filter<String>> filters) {
+    public OrNameFilters(Collection<ScanFilter<String>> filters) {
         super(filters);
     }
 
