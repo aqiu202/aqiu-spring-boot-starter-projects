@@ -45,6 +45,12 @@ public class DebugLoggingFilter extends OncePerRequestFilter {
             headers.put(headerName, enumerationToString(request.getHeaders(headerName)));
         }
         log.info("{}Request--Headers: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, headers);
+        Map<String, String[]> map = request.getParameterMap();
+        Map<String, List<String>> parameters = new HashMap<>();
+        map.forEach(
+            (key, value) -> parameters.put(key, Arrays.asList(value))
+        );
+        log.info("{}Request--Parameters: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, parameters);
         LogHttpServletRequestWrapper requestWrapper = null;
         switch (HttpMethod.valueOf(method)) {
             case POST:
@@ -52,7 +58,7 @@ public class DebugLoggingFilter extends OncePerRequestFilter {
             case PATCH:
             case DELETE:
                 String contentType = request.getContentType();
-                if (StringUtils.isNotBlank(contentType)) {
+                if (StringUtils.hasText(contentType)) {
                     MediaType mediaType = MediaType.valueOf(contentType);
                     if (mediaType.isCompatibleWith(MediaType.MULTIPART_FORM_DATA)) {
                         Map<String, List<String>> files = new HashMap<>();
@@ -73,17 +79,9 @@ public class DebugLoggingFilter extends OncePerRequestFilter {
                     requestWrapper = new LogHttpServletRequestWrapper(request);
                     if (mediaType.isCompatibleWith(MediaType.APPLICATION_JSON)) {
                         log.info("{}Request--Body: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
-                                requestWrapper.getBody());
+                            requestWrapper.getBody());
                     }
-                } else {
-                    requestWrapper = new LogHttpServletRequestWrapper(request);
                 }
-                Map<String, String[]> map = request.getParameterMap();
-                Map<String, List<String>> parameters = new HashMap<>();
-                map.forEach(
-                        (key, value) -> parameters.put(key, Arrays.asList(value))
-                );
-                log.info("{}Request--Parameters: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, parameters);
                 break;
             default:
                 break;
@@ -97,9 +95,16 @@ public class DebugLoggingFilter extends OncePerRequestFilter {
         responseWrapper.flushBuffer();
         log.info("{}Response--Status: {}", LOG_PREFIX, response.getStatus());
         log.info("{}Response--Headers: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
-                responseWrapper.getHeaderMap());
-        log.info("{}Response--Content:{}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
-                responseWrapper.getResponseDataAsString());
+            responseWrapper.getHeaderMap());
+        String resContentType = responseWrapper.getContentType();
+        if (StringUtils.hasText(resContentType)) {
+            MediaType mediaType = MediaType.parseMediaType(resContentType);
+            if (mediaType.isCompatibleWith(MediaType.APPLICATION_JSON) || mediaType.isCompatibleWith(MediaType.TEXT_HTML)
+                || mediaType.isCompatibleWith(MediaType.TEXT_PLAIN)) {
+                log.info("{}Response--Content:{}{}", LOG_PREFIX, DefaultIndenter.SYS_LF,
+                    responseWrapper.getResponseDataAsString());
+            }
+        }
     }
 
     @Override
