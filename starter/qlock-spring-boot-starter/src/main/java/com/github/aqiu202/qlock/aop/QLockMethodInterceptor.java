@@ -48,6 +48,6 @@ public class QLockMethodInterceptor extends AbstractKeyAnnotationInterceptor<QLo
 
     @Override
     protected void afterIntercept(MethodInvocation invocation, QLock qLock, String key, Throwable throwable) {
-        this.keyLock.release(key, qLock.timeout(), qLock.timeUnit());
+        this.keyLock.release(key);
     }
 }

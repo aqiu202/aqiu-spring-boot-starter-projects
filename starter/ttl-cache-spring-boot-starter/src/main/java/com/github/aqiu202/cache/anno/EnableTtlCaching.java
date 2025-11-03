@@ -4,10 +4,8 @@ import com.github.aqiu202.cache.config.TtlCacheConfigRegistrar;
 import com.github.aqiu202.ttl.data.StringTtlCache;
 import com.github.aqiu202.ttl.data.TtlCache;
 import com.github.aqiu202.ttl.data.impl.CaffeineCache;
-import com.github.aqiu202.ttl.data.impl.GuavaCache;
 import com.github.aqiu202.ttl.data.impl.RedisCache;
 import com.github.aqiu202.ttl.data.str.StringCaffeineCache;
-import com.github.aqiu202.ttl.data.str.StringGuavaCache;
 import com.github.aqiu202.ttl.data.str.StringRedisCache;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -27,7 +25,6 @@ public @interface EnableTtlCaching {
     enum CacheMode {
 
         redis(RedisCache.class, StringRedisCache.class),
-        guava(GuavaCache.class, StringGuavaCache.class),
         caffeine(CaffeineCache.class, StringCaffeineCache.class),
         none(null, null);
 

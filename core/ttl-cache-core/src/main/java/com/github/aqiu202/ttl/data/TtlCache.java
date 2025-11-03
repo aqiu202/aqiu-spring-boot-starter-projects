@@ -16,11 +16,7 @@ public interface TtlCache<K, V> {
 
     V get(@NonNull K key);
 
-    V get(@NonNull K key, long expired, @NonNull TimeUnit unit);
-
     Boolean exists(@NonNull K key);
-
-    Boolean exists(@NonNull K key, long expired, @NonNull TimeUnit unit);
 
     @Nullable
     Boolean setIfAbsent(@NonNull K key, @NonNull V value, long expired, @NonNull TimeUnit unit);
@@ -28,8 +24,6 @@ public interface TtlCache<K, V> {
     Boolean setIfAbsent(@NonNull K key, @NonNull V value);
 
     Boolean delete(@NonNull K key);
-
-    Boolean delete(@NonNull K key, long expired, @NonNull TimeUnit unit);
 
     void setTimeout(long timeout);
 

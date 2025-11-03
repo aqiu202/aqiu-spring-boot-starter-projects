@@ -1,11 +1,9 @@
 package com.github.aqiu202.ttl.data.impl;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
 public class RedisCache<K, V> extends AbstractTtlCache<K, V> implements InitializingBean {
@@ -20,36 +18,27 @@ public class RedisCache<K, V> extends AbstractTtlCache<K, V> implements Initiali
     }
 
     @Override
-    public void set(@NonNull K key, @NonNull V value, long expired, @NonNull TimeUnit unit) {
-        if (this.inDefaultCache(expired)) {
-            this.cache.opsForValue().set(key, value, this.timeout, this.timeUnit);
-        } else {
-            this.cache.opsForValue().set(key, value, expired, unit);
-        }
+    public void set(@Nonnull K key, @Nonnull V value, long expired, @Nonnull TimeUnit unit) {
+        this.cache.opsForValue().set(key, value, expired, unit);
     }
 
     @Override
-    public V get(@Nonnull K key, long expired, @Nonnull TimeUnit unit) {
+    public V get(K key) {
         return this.cache.opsForValue().get(key);
     }
 
     @Override
-    public Boolean exists(@Nonnull K key, long expired, @Nonnull TimeUnit unit) {
-        return Objects.isNull(this.get(key, expired, unit));
+    public Boolean exists(K key) {
+        return this.cache.hasKey(key);
     }
 
     @Override
-    public Boolean setIfAbsent(@NonNull K key, @NonNull V value, long expired,
-            @NonNull TimeUnit unit) {
-        if (this.inDefaultCache(expired)) {
-            return this.cache.opsForValue().setIfAbsent(key, value, this.timeout, this.timeUnit);
-        } else {
-            return this.cache.opsForValue().setIfAbsent(key, value, expired, unit);
-        }
+    public Boolean setIfAbsent(@Nonnull K key, @Nonnull V value, long expired, @Nonnull TimeUnit unit) {
+        return this.cache.opsForValue().setIfAbsent(key, value, expired, unit);
     }
 
     @Override
-    public Boolean delete(@Nonnull K key, long expired, @Nonnull TimeUnit unit) {
+    public Boolean delete(K key) {
         return this.cache.delete(key);
     }
 

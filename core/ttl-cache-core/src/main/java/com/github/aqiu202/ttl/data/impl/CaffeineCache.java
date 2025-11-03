@@ -1,83 +1,96 @@
 package com.github.aqiu202.ttl.data.impl;
 
-
-import com.github.aqiu202.util.wrap.BooleanWrapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Expiry;
+import com.github.benmanes.caffeine.cache.Policy.VarExpiration;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import javax.annotation.Nonnull;
+import org.checkerframework.checker.index.qual.NonNegative;
 import org.springframework.lang.NonNull;
 
 public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
 
-    private final Map<Long, Cache<K, V>> cacheMap = new HashMap<>();
+    private volatile Cache<K, V> defaultCache;
 
-    private Cache<K, V> defaultCache;
-
+    private VarExpiration<K, V> expiration;
 
     public CaffeineCache() {
     }
 
     @Override
     public void set(@NonNull K key, @NonNull V value, long expired, @NonNull TimeUnit unit) {
-        this.getCache(expired, unit).put(key, value);
+        this.initializeCache();
+        this.expiration.put(key, value, expired, unit);
     }
 
     @Override
-    public V get(@Nonnull K key, long expired, @Nonnull TimeUnit unit) {
-        return this.getCache(expired, unit).getIfPresent(key);
+    public V get(K key) {
+        return this.getCache().getIfPresent(key);
     }
 
     @Override
-    public Boolean exists(@Nonnull K key, long expired, @Nonnull TimeUnit unit) {
-        return Objects.nonNull(this.get(key, expired, unit));
+    public Boolean exists(K key) {
+        return this.get(key) != null;
     }
 
     @Override
-    public Boolean setIfAbsent(@NonNull K key, @NonNull V value, long expired,
-            @NonNull TimeUnit unit) {
-        BooleanWrapper flag = new BooleanWrapper();
-        this.getCache(expired, unit).get(key, (k) -> {
-            flag.not();
-            return value;
-        });
-        return flag.get();
+    public synchronized Boolean setIfAbsent(@NonNull K key, @NonNull V value, long expired, @NonNull TimeUnit unit) {
+        V oldValue = this.get(key);
+        if (oldValue != null) {
+            return Boolean.FALSE;
+        }
+        this.expiration.put(key, value, expired, unit);
+        return Boolean.TRUE;
     }
 
     @Override
-    public Boolean delete(@Nonnull K key, long expired, @Nonnull TimeUnit unit) {
-        this.getCache(expired, unit).invalidate(key);
+    public Boolean delete(K key) {
+        this.getCache().invalidate(key);
         return Boolean.TRUE;
     }
 
     private Cache<K, V> newCacheInstance(long expired, TimeUnit unit) {
         return Caffeine.newBuilder().initialCapacity(1)
-                .expireAfterWrite(expired, unit).build();
+            .expireAfter(new Expiry<Object, Object>() {
+                @Override
+                public long expireAfterCreate(@NonNull Object key,
+                    @NonNull Object value, long currentTime) {
+                    return unit.toNanos(expired);
+                }
+
+                @Override
+                public long expireAfterUpdate(@NonNull Object key,
+                    @NonNull Object value, long currentTime, @NonNegative long currentDuration) {
+                    return currentDuration;
+                }
+
+                @Override
+                public long expireAfterRead(@NonNull Object key,
+                    @NonNull Object value, long currentTime, @NonNegative long currentDuration) {
+                    return currentDuration;
+                }
+            })
+            .build();
     }
 
-    private Cache<K, V> getCache(long expired, TimeUnit timeUnit) {
-        if (this.inDefaultCache(expired)) {
-            if(Objects.isNull(this.defaultCache)) {
-                synchronized (this) {
-                    if (Objects.isNull(this.defaultCache)) {
-                        this.defaultCache = this.newCacheInstance(this.timeout, this.timeUnit);
-                    }
-                }
-            }
-            return this.defaultCache;
-        }
-        long key = this.convertToSeconds(expired, timeUnit);
-        Cache<K, V> cache = this.cacheMap.get(key);
-        if(Objects.isNull(cache)) {
+    private void initializeCache() {
+        if (this.defaultCache == null) {
             synchronized (this) {
-                cache = this.newCacheInstance(expired, timeUnit);
-                this.cacheMap.put(key, cache);
+                if (this.defaultCache == null) {
+                    this.defaultCache = this.newCacheInstance(this.timeout, this.timeUnit);
+                }
+                this.expiration = this.defaultCache.policy()
+                    .expireVariably()
+                    .orElseThrow(() -> new IllegalArgumentException("请设置缓存超时时间"));
             }
         }
-        return cache;
+    }
+
+    private Cache<K, V> getCache() {
+        this.initializeCache();
+        return this.defaultCache;
     }
 
 }

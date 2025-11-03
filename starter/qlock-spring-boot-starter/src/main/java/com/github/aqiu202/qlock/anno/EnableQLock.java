@@ -55,8 +55,6 @@ public @interface EnableQLock {
     LockValueStrategyMode lockValueStrategyMode() default LockValueStrategyMode.thread;
 
     enum LockMode {
-        guava(CacheMode.guava, SimpleCacheKeyLock.class),
-        guava_reentrant(CacheMode.guava, ReentrantCacheKeyLock.class, true),
         caffeine(CacheMode.caffeine, SimpleCacheKeyLock.class),
         caffeine_reentrant(CacheMode.caffeine, ReentrantCacheKeyLock.class, true),
         redis(CacheMode.redis, SimpleCacheKeyLock.class),

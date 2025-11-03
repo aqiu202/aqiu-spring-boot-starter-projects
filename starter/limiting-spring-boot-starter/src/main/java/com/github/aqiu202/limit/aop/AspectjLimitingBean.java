@@ -134,7 +134,7 @@ public class AspectjLimitingBean implements SPelKeyHandler, ApplicationContextAw
             throw throwable;
         } finally {
             if (error != null) {
-                keyLock.release(key, timeout, timeUnit);
+                keyLock.release(key);
             }
         }
         return result;

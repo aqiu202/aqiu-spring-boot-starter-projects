@@ -20,36 +20,14 @@ public abstract class AbstractTtlCache<K, V> implements TtlCache<K, V> {
         this.timeUnit = timeUnit;
     }
 
-    protected boolean inDefaultCache(long expired) {
-        return expired <= 0;
-    }
-
-    protected long convertToSeconds(long expired, TimeUnit timeUnit) {
-        return TimeUnit.SECONDS.convert(expired, timeUnit);
-    }
-
     @Override
     public void set(@Nonnull K key, @Nonnull V value) {
-        this.set(key, value, 0, DEFAULT_TIME_UNIT);
+        this.set(key, value, this.timeout, this.timeUnit);
     }
 
     @Override
     public Boolean setIfAbsent(@Nonnull K key, @Nonnull V value) {
-        return this.setIfAbsent(key, value, 0, DEFAULT_TIME_UNIT);
+        return this.setIfAbsent(key, value, this.timeout, this.timeUnit);
     }
 
-    @Override
-    public V get(@Nonnull K key) {
-        return this.get(key, 0, DEFAULT_TIME_UNIT);
-    }
-
-    @Override
-    public Boolean exists(@Nonnull K key) {
-        return this.exists(key, 0, DEFAULT_TIME_UNIT);
-    }
-
-    @Override
-    public Boolean delete(@Nonnull K key) {
-        return this.delete(key, 0, DEFAULT_TIME_UNIT);
-    }
 }

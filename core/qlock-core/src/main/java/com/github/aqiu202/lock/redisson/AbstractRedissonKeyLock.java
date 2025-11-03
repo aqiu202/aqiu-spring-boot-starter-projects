@@ -26,11 +26,6 @@ public abstract class AbstractRedissonKeyLock implements KeyLock {
     }
 
     @Override
-    public Boolean release(String key, long expired, TimeUnit timeUnit) {
-        return this.release(key);
-    }
-
-    @Override
     public Boolean release(String key) {
         try {
             this.currentLock(key).unlock();

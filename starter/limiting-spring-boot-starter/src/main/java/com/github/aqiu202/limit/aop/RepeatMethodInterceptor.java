@@ -51,7 +51,7 @@ public class RepeatMethodInterceptor extends AbstractKeyAnnotationInterceptor<Re
     protected Object onError(MethodInvocation invocation, RepeatLimiting repeatLimiting, String key,
             Throwable throwable) throws Throwable {
         //只有等到过期或者出现异常才释放锁，不会主动释放锁
-        this.keyLock.release(key, repeatLimiting.timeout(), repeatLimiting.timeUnit());
+        this.keyLock.release(key);
         throw throwable;
     }
 }

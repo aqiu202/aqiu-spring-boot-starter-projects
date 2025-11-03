@@ -33,11 +33,6 @@ public class SimpleCacheKeyLock implements CacheKeyLock, InitializingBean {
     }
 
     @Override
-    public Boolean release(String key, long expired, TimeUnit timeUnit) {
-        return this.cache.delete(key, expired, timeUnit);
-    }
-
-    @Override
     public Boolean release(String key) {
         return this.cache.delete(key);
     }

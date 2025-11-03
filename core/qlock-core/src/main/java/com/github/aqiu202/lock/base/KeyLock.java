@@ -15,5 +15,4 @@ public interface KeyLock {
 
     Boolean release(String key);
 
-    Boolean release(String key, long expired, TimeUnit timeUnit);
 }
