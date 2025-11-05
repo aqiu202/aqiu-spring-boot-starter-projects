@@ -3,20 +3,20 @@ package com.github.aqiu202.lock.base;
 import java.util.Objects;
 
 /**
- * <pre>{@link LockValueStrategy}</pre>
+ * <pre>{@link ValueHoldStrategy}</pre>
  *
  * @author aqiu 2020/12/21 13:08
  **/
-public interface LockValueStrategy {
+public interface ValueHoldStrategy<T> {
 
-    void setValue(String value);
+    void setValue(T value);
 
-    String getValue();
+    T getValue();
 
     void remove();
 
-    default String setIfAbsent(String value) {
-        String old = this.getValue();
+    default T setIfAbsent(T value) {
+        T old = this.getValue();
         if (old == null) {
             this.setValue(value);
             return value;

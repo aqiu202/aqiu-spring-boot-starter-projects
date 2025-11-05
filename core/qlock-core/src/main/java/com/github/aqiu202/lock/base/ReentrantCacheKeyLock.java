@@ -43,7 +43,7 @@ public class ReentrantCacheKeyLock extends SimpleCacheKeyLock {
     @Override
     public Boolean release(String key) {
         final String value = this.cache.get(key);
-        if (Objects.equals(value, LockValueHolder.getValue())) {
+        if (Objects.equals(value, LockOwnerHolder.consumeLockOwner())) {
             return this.doRelease(key);
         }
         return false;
@@ -52,6 +52,7 @@ public class ReentrantCacheKeyLock extends SimpleCacheKeyLock {
     @Override
     public Boolean acquire(String key, long expired, TimeUnit timeUnit) {
         String value = String.valueOf(this.idGenerator.nextId());
+        LockOwnerHolder.addLockOwner(value);
         value = LockValueHolder.setIfAbsent(value);
         final Boolean result = this.doAcquire(key, value, expired, timeUnit);
         if (result != null && !result) {
@@ -63,6 +64,7 @@ public class ReentrantCacheKeyLock extends SimpleCacheKeyLock {
     @Override
     public Boolean acquire(String key) {
         String value = String.valueOf(this.idGenerator.nextId());
+        LockOwnerHolder.addLockOwner(value);
         value = LockValueHolder.setIfAbsent(value);
         final Boolean result = this.doAcquire(key, value);
         if (result != null && !result) {

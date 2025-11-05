@@ -1,21 +1,21 @@
 package com.github.aqiu202.lock.base;
 
 /**
- * <pre>{@link AbstractLockValueThreadStrategy}</pre>
+ * <pre>{@link AbstractValueHoldThreadStrategy}</pre>
  *
  * @author aqiu 2020/12/23 16:21
  **/
-public abstract class AbstractLockValueThreadStrategy implements LockValueStrategy {
+public abstract class AbstractValueHoldThreadStrategy<T> implements ValueHoldStrategy<T> {
 
-    public abstract ThreadLocal<String> getThreadLocal();
+    public abstract ThreadLocal<T> getThreadLocal();
 
     @Override
-    public void setValue(String value) {
+    public void setValue(T value) {
         this.getThreadLocal().set(value);
     }
 
     @Override
-    public String getValue() {
+    public T getValue() {
         return this.getThreadLocal().get();
     }
 

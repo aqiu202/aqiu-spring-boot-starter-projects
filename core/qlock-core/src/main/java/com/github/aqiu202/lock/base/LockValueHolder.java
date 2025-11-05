@@ -9,17 +9,12 @@ import java.util.Objects;
  **/
 public abstract class LockValueHolder {
 
-    private static volatile LockValueStrategy strategy;
+    private static volatile ValueHoldStrategy<String> strategy;
 
     static LockValueStrategyMode mode = LockValueStrategyMode.thread;
 
     public static String setIfAbsent(String value) {
-        String old = getValue();
-        if (old == null) {
-            setValue(value);
-            return value;
-        }
-        return old;
+        return getStrategy().setIfAbsent(value);
     }
 
     public static void setValue(String value) {
@@ -31,14 +26,14 @@ public abstract class LockValueHolder {
     }
 
     public static boolean hasValue() {
-        return Objects.nonNull(getValue());
+        return getStrategy().hasValue();
     }
 
     public static void remove() {
         getStrategy().remove();
     }
 
-    private static LockValueStrategy getStrategy() {
+    private static ValueHoldStrategy<String> getStrategy() {
         if (strategy == null) {
             synchronized (LockValueHolder.class) {
                 if (strategy == null) {
@@ -49,7 +44,7 @@ public abstract class LockValueHolder {
         return strategy;
     }
 
-    private static LockValueStrategy switchStrategy(LockValueStrategyMode mode) {
+    private static ValueHoldStrategy<String> switchStrategy(LockValueStrategyMode mode) {
         switch (mode) {
             case inheritable_thread:
                 return new LockValueInheritableThreadStrategy();
