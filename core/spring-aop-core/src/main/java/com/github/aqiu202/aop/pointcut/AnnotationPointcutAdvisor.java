@@ -31,6 +31,23 @@ public class AnnotationPointcutAdvisor<T extends Annotation> extends AbstractPoi
         this(new ClassOrMethodAnnotationPointcut<>(annotationType), interceptor);
     }
 
+    public static <S extends Annotation> AnnotationPointcutAdvisor<S> ofClassOrMethod(Class<S> annotationType,
+            AnnotationMethodInterceptor<S> interceptor) {
+        return new AnnotationPointcutAdvisor<>(annotationType, interceptor);
+    }
+
+    public static <S extends Annotation> AnnotationPointcutAdvisor<S> ofMethod(Class<S> annotationType,
+            AnnotationMethodInterceptor<S> interceptor) {
+        return new AnnotationPointcutAdvisor<>(new MethodAnnotationPointcut<>(annotationType),
+                interceptor);
+    }
+
+    public static <S extends Annotation> AnnotationPointcutAdvisor<S> ofClass(Class<S> annotationType,
+            AnnotationMethodInterceptor<S> interceptor) {
+        return new AnnotationPointcutAdvisor<>(new ClassAnnotationPointcut<>(annotationType),
+                interceptor);
+    }
+
     @Override
     public Pointcut getPointcut() {
         return this.pointcut;
