@@ -23,12 +23,12 @@ public class RedisCache<K, V> extends AbstractTtlCache<K, V> implements Initiali
     }
 
     @Override
-    public V get(K key) {
+    public V get(@Nonnull K key) {
         return this.cache.opsForValue().get(key);
     }
 
     @Override
-    public Boolean exists(K key) {
+    public Boolean exists(@Nonnull K key) {
         return this.cache.hasKey(key);
     }
 
@@ -38,7 +38,7 @@ public class RedisCache<K, V> extends AbstractTtlCache<K, V> implements Initiali
     }
 
     @Override
-    public Boolean delete(K key) {
+    public Boolean delete(@Nonnull K key) {
         return this.cache.delete(key);
     }
 

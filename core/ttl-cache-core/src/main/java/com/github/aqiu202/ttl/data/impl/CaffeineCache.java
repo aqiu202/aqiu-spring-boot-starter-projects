@@ -4,11 +4,11 @@ import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Expiry;
 import com.github.benmanes.caffeine.cache.Policy.VarExpiration;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import org.checkerframework.checker.index.qual.NonNegative;
 import org.springframework.lang.NonNull;
+
+import javax.annotation.Nonnull;
 
 public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
 
@@ -26,12 +26,12 @@ public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
     }
 
     @Override
-    public V get(K key) {
+    public V get(@Nonnull K key) {
         return this.getCache().getIfPresent(key);
     }
 
     @Override
-    public Boolean exists(K key) {
+    public Boolean exists(@Nonnull K key) {
         return this.get(key) != null;
     }
 
@@ -46,7 +46,7 @@ public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
     }
 
     @Override
-    public Boolean delete(K key) {
+    public Boolean delete(@Nonnull K key) {
         this.getCache().invalidate(key);
         return Boolean.TRUE;
     }

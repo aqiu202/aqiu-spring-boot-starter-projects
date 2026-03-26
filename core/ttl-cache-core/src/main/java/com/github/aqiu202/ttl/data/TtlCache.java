@@ -1,8 +1,9 @@
 package com.github.aqiu202.ttl.data;
 
 import java.util.concurrent.TimeUnit;
-import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
+
+import javax.annotation.Nonnull;
 
 public interface TtlCache<K, V> {
 
@@ -10,20 +11,20 @@ public interface TtlCache<K, V> {
 
     TimeUnit DEFAULT_TIME_UNIT = TimeUnit.SECONDS;
 
-    void set(@NonNull K key, @NonNull V value);
+    void set(@Nonnull K key, @Nonnull V value);
 
-    void set(@NonNull K key, @NonNull V value, long expired, @NonNull TimeUnit unit);
+    void set(@Nonnull K key, @Nonnull V value, long expired, @Nonnull TimeUnit unit);
 
-    V get(@NonNull K key);
+    V get(@Nonnull K key);
 
-    Boolean exists(@NonNull K key);
+    Boolean exists(@Nonnull K key);
 
     @Nullable
-    Boolean setIfAbsent(@NonNull K key, @NonNull V value, long expired, @NonNull TimeUnit unit);
+    Boolean setIfAbsent(@Nonnull K key, @Nonnull V value, long expired, @Nonnull TimeUnit unit);
 
-    Boolean setIfAbsent(@NonNull K key, @NonNull V value);
+    Boolean setIfAbsent(@Nonnull K key, @Nonnull V value);
 
-    Boolean delete(@NonNull K key);
+    Boolean delete(@Nonnull K key);
 
     void setTimeout(long timeout);
 
