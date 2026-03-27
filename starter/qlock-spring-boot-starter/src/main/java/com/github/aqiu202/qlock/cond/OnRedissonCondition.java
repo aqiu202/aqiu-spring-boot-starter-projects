@@ -17,6 +17,6 @@ public class OnRedissonCondition extends SpringBootCondition {
         if (AbstractRedissonKeyLock.class.isAssignableFrom(lockMode.getLockClass())) {
             return ConditionOutcome.match();
         }
-        return ConditionOutcome.noMatch("未找到Zookeeper的配置");
+        return ConditionOutcome.noMatch("未找到Redisson的配置");
     }
 }

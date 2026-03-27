@@ -8,7 +8,7 @@ import org.redisson.api.RLock;
  */
 public class RedissonKeyLock extends AbstractRedissonKeyLock {
     @Override
-    protected RLock createLock(String key) {
+    protected RLock getLock(String key) {
         return this.redissonClient.getLock(key);
     }
 }

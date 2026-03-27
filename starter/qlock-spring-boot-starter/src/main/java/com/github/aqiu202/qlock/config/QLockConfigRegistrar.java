@@ -7,7 +7,6 @@ import com.github.aqiu202.lock.base.KeyLock;
 import com.github.aqiu202.lock.base.ReentrantCacheKeyLock;
 import com.github.aqiu202.lock.base.LockValueStrategyMode;
 import com.github.aqiu202.lock.redisson.AbstractRedissonKeyLock;
-import com.github.aqiu202.lock.zk.AbstractZookeeperKeyLock;
 import com.github.aqiu202.qlock.anno.EnableQLock;
 import com.github.aqiu202.qlock.anno.EnableQLock.LockMode;
 import com.github.aqiu202.qlock.id.SimpleIdGeneratorFactory;
@@ -48,9 +47,7 @@ public class QLockConfigRegistrar implements ImportBeanDefinitionRegistrar {
                 bdb.addAutowiredProperty("idGenerator");
             }
         }
-        if (AbstractZookeeperKeyLock.class.isAssignableFrom(lockClass)) {
-            bdb.addAutowiredProperty("curatorFramework");
-        } else if (AbstractRedissonKeyLock.class.isAssignableFrom(lockClass)) {
+        if (AbstractRedissonKeyLock.class.isAssignableFrom(lockClass)) {
             bdb.addAutowiredProperty("redissonClient");
         } else {
             final boolean otherCaching = attributes.getBoolean("otherCaching");

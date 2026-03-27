@@ -27,10 +27,6 @@
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>
-            <artifactId>zk-curator-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.github.aqiu202</groupId>
             <artifactId>id-generator-spring-boot-starter</artifactId>
         </dependency>
         <dependency>

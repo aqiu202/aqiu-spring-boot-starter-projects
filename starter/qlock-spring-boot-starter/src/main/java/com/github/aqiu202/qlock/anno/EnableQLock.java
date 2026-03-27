@@ -8,11 +8,8 @@ import com.github.aqiu202.lock.base.ReentrantCacheKeyLock;
 import com.github.aqiu202.lock.cache.SimpleCacheKeyLock;
 import com.github.aqiu202.lock.redisson.RedissonKeyLock;
 import com.github.aqiu202.lock.redisson.ReentrantRedissonKeyLock;
-import com.github.aqiu202.lock.zk.ReentrantZookeeperKeyLock;
-import com.github.aqiu202.lock.zk.ZookeeperKeyLock;
 import com.github.aqiu202.qlock.config.QLockAutoConfiguration;
 import com.github.aqiu202.qlock.config.QLockConfigRegistrar;
-import com.github.aqiu202.qlock.config.QLockZkCuratorSelector;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 
@@ -27,8 +24,7 @@ import java.util.concurrent.TimeUnit;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-@Import({QLockZkCuratorSelector.class,
-        QLockConfigRegistrar.class,
+@Import({QLockConfigRegistrar.class,
         QLockAutoConfiguration.class})
 public @interface EnableQLock {
 
@@ -39,7 +35,7 @@ public @interface EnableQLock {
     LockMode lockMode() default LockMode.caffeine;
 
     /**
-     * 该时间后自动释放锁（zookeeper模式重试最大时长）
+     * 该时间后自动释放锁
      *
      * @return timeout
      */
@@ -59,8 +55,6 @@ public @interface EnableQLock {
         caffeine_reentrant(CacheMode.caffeine, ReentrantCacheKeyLock.class, true),
         redis(CacheMode.redis, SimpleCacheKeyLock.class),
         redis_reentrant(CacheMode.redis, ReentrantCacheKeyLock.class, true),
-        zookeeper(CacheMode.none, ZookeeperKeyLock.class),
-        zookeeper_reentrant(CacheMode.none, ReentrantZookeeperKeyLock.class),
         redisson(CacheMode.none, RedissonKeyLock.class),
         redisson_reentrant(CacheMode.none, ReentrantRedissonKeyLock.class);
 
