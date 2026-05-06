@@ -144,7 +144,8 @@ public class SimpleJPAQueryExecutor implements JPAQueryExecutor {
         if ((entityInformation = (EntityInformation<T, ?>) this.entityInformationMap.get(classKey))
                 == null) {
             entityInformation = new JpaMetamodelEntityInformation<>(aClass,
-                    this.entityManager.get().getMetamodel());
+                    entityManager.getMetamodel(),
+                    entityManager.getEntityManagerFactory().getPersistenceUnitUtil());
             synchronized (this.entityInformationMap) {
                 this.entityInformationMap.put(classKey, entityInformation);
             }

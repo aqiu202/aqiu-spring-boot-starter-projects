@@ -105,7 +105,7 @@ public final class BeanTransformerAdapter<T> implements ResultTransformer {
                 }
                 this.methods[i] = method;
                 setters[i] = propertyAccessStrategy
-                    .buildPropertyAccess(resultClass, method.getFieldName())
+                    .buildPropertyAccess(resultClass, method.getFieldName(), false)
                     .getSetter();
             }
         }

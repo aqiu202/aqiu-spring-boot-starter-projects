@@ -35,7 +35,8 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends JpaBaseRepos
      */
     public BaseRepositoryImpl(Class<T> entityClass,
         EntityManager entityManager) {
-        super(new JpaMetamodelEntityInformation<>(entityClass, entityManager.getMetamodel()),
+        super(new JpaMetamodelEntityInformation<>(entityClass, entityManager.getMetamodel(),
+                        entityManager.getEntityManagerFactory().getPersistenceUnitUtil()),
             entityManager);
         this.entityClass = entityClass;
         this.entityManager = entityManager;
