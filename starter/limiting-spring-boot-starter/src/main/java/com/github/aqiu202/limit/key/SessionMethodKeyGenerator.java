@@ -3,7 +3,7 @@ package com.github.aqiu202.limit.key;
 import com.github.aqiu202.aop.keygen.impl.MethodKeyGenerator;
 import com.github.aqiu202.util.ServletRequestUtils;
 import java.lang.reflect.Method;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * <pre>{@link SessionMethodKeyGenerator}</pre>

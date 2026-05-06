@@ -3,7 +3,7 @@ package com.github.aqiu202.starters.jpa.factory;
 
 import com.github.aqiu202.starters.jpa.dao.impl.BaseRepositoryImpl;
 import java.io.Serializable;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;

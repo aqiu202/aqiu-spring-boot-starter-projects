@@ -15,10 +15,10 @@
     </description>
 
     <properties>
-        <base.version>1.3.1</base.version>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <spring-boot.version>2.7.18</spring-boot.version>
+        <base.version>2.0.0</base.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <spring-boot.version>3.5.14</spring-boot.version>
         <guava.version>30.1-jre</guava.version>
         <curator.version>5.1.0</curator.version>
         <reflectasm.version>1.11.9</reflectasm.version>
@@ -77,9 +77,7 @@
         <module>core</module>
         <module>starter</module>
         <module>api</module>
-        <module>aurora</module>
         <module>aliyun</module>
-        <module>huawei</module>
         <module>wechat</module>
     </modules>
 
@@ -166,6 +164,25 @@
                 <groupId>com.github.aqiu202.wechat</groupId>
                 <artifactId>wechat-pay-spring-boot-starter</artifactId>
                 <version>${wechat-pay.version}</version>
+            </dependency>
+            <!-- Source: https://mvnrepository.com/artifact/jakarta.servlet/jakarta.servlet-api -->
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>6.1.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>4.5.14</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>commons-codec</artifactId>
+                        <groupId>commons-codec</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.google.guava</groupId>
@@ -291,14 +308,14 @@
 
     <distributionManagement>
         <repository>
-            <id>nexus-release</id>
-            <name>nexus-release</name>
+            <id>oss-release</id>
+            <name>oss-release</name>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
             <uniqueVersion>true</uniqueVersion>
         </repository>
         <snapshotRepository>
-            <id>nexus-snapshot</id>
-            <name>nexus-snapshot</name>
+            <id>oss-snapshot</id>
+            <name>oss-snapshot</name>
 <!--            <url>https://oss.sonatype.org/content/repositories/snapshots</url>-->
             <url>https://central.sonatype.com/repository/maven-snapshots/</url>
         </snapshotRepository>
@@ -368,35 +385,35 @@
                     </execution>
                 </executions>
             </plugin>
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-javadoc-plugin</artifactId>-->
-<!--                <version>3.4.0</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>package</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>jar</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--                <configuration>-->
-<!--                    <additionalOptions>-Xdoclint:-missing</additionalOptions>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-gpg-plugin</artifactId>-->
-<!--                <version>3.2.7</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <phase>verify</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>sign</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <additionalOptions>-Xdoclint:-missing</additionalOptions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.2.7</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
@@ -414,7 +431,7 @@
             <id>release</id>
             <properties>
                 <revision>${base.version}</revision>
-                <publish-server>nexus-release</publish-server>
+                <publish-server>oss-release</publish-server>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
@@ -424,7 +441,7 @@
             <id>snapshot</id>
             <properties>
                 <revision>${base.version}-SNAPSHOT</revision>
-                <publish-server>nexus-snapshot</publish-server>
+                <publish-server>oss-snapshot</publish-server>
             </properties>
         </profile>
     </profiles>

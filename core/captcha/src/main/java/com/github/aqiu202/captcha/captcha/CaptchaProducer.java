@@ -4,7 +4,7 @@ import com.github.aqiu202.captcha.exp.CaptchaServletException;
 import com.github.aqiu202.captcha.text.TextWrapper;
 import java.awt.image.BufferedImage;
 import javax.annotation.Nonnull;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Responsible for creating captcha image with a text drawn on it.

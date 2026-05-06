@@ -9,11 +9,11 @@ import org.springframework.http.MediaType;
 import org.springframework.lang.NonNull;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
 import java.io.IOException;
 import java.util.*;
 
@@ -52,11 +52,11 @@ public class DebugLoggingFilter extends OncePerRequestFilter {
         );
         log.info("{}Request--Parameters: {}{}", LOG_PREFIX, DefaultIndenter.SYS_LF, parameters);
         LogHttpServletRequestWrapper requestWrapper = null;
-        switch (HttpMethod.valueOf(method)) {
-            case POST:
-            case PUT:
-            case PATCH:
-            case DELETE:
+        switch (method) {
+            case "POST":
+            case "PUT":
+            case "PATCH":
+            case "DELETE":
                 String contentType = request.getContentType();
                 if (StringUtils.hasText(contentType)) {
                     MediaType mediaType = MediaType.valueOf(contentType);

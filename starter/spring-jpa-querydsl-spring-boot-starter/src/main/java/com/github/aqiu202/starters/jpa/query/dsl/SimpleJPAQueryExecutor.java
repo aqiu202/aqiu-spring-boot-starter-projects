@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.Nullable;
 import javax.inject.Provider;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.JpaMetamodelEntityInformation;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.transaction.annotation.Transactional;

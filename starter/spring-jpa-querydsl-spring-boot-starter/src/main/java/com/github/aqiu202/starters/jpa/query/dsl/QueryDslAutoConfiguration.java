@@ -2,10 +2,10 @@ package com.github.aqiu202.starters.jpa.query.dsl;
 
 import com.github.aqiu202.starters.jpa.sql.SQLExecutor;
 import com.github.aqiu202.starters.jpa.sql.SimpleSQLExecutor;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.PersistenceUnit;
 import javax.sql.DataSource;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;

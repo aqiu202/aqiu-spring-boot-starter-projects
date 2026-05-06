@@ -2,7 +2,7 @@ package com.github.aqiu202.util.http;
 
 import com.github.aqiu202.util.StringUtils;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;

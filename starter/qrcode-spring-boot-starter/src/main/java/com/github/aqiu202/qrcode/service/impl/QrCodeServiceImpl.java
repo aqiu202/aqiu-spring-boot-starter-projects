@@ -9,7 +9,7 @@ import com.google.zxing.WriterException;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 public class QrCodeServiceImpl implements QrCodeService {
 

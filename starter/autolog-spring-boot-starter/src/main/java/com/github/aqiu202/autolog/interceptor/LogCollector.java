@@ -2,7 +2,7 @@ package com.github.aqiu202.autolog.interceptor;
 
 import com.github.aqiu202.autolog.anno.AutoLog;
 import com.github.aqiu202.autolog.result.LogRequestParam;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * <pre>日志采集器</pre>

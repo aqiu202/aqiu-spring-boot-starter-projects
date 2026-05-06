@@ -15,7 +15,6 @@
     <name>aliyun-tts-spring-boot-starter</name>
 
     <properties>
-        <java.version>1.8</java.version>
         <aliyun-tts-sdk.version>2.1.9</aliyun-tts-sdk.version>
     </properties>
 

@@ -5,7 +5,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Expiry;
 import com.github.benmanes.caffeine.cache.Policy.VarExpiration;
 import java.util.concurrent.TimeUnit;
-import org.checkerframework.checker.index.qual.NonNegative;
 import org.springframework.lang.NonNull;
 
 import javax.annotation.Nonnull;
@@ -62,13 +61,13 @@ public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
 
                 @Override
                 public long expireAfterUpdate(@NonNull Object key,
-                    @NonNull Object value, long currentTime, @NonNegative long currentDuration) {
+                    @NonNull Object value, long currentTime, long currentDuration) {
                     return currentDuration;
                 }
 
                 @Override
                 public long expireAfterRead(@NonNull Object key,
-                    @NonNull Object value, long currentTime, @NonNegative long currentDuration) {
+                    @NonNull Object value, long currentTime, long currentDuration) {
                     return currentDuration;
                 }
             })

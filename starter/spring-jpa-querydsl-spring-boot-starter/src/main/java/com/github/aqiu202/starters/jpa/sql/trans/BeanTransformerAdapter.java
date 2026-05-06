@@ -71,7 +71,7 @@ public final class BeanTransformerAdapter<T> implements ResultTransformer {
                     }
                     Setter setter = setters[i];
                     if (setter != null) {
-                        setter.set(result, value, null);
+                        setter.set(result, value);
                     }
                 }
             }

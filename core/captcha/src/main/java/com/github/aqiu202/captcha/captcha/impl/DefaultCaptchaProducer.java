@@ -23,7 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.annotation.Nonnull;
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Default {@link CaptchaProducer} implementation which draws a captcha image using

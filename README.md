@@ -14,6 +14,4 @@
 - [阿里云TTS语音合成组件 -- aliyun-tts-spring-boot-starter](https://github.com/aqiu202/aqiu-spring-boot-starter-projects/tree/master/aliyun/aliyun-tts-spring-boot-starter)
 - [微信支付组件 -- wechat-pay-spring-boot-starter](https://github.com/aqiu202/aqiu-spring-boot-starter-projects/tree/master/wechat/wechat-pay-spring-boot-starter)
 - [微信公众号、小程序相关解编码组件 -- wechat-codec-spring-boot-starter](https://github.com/aqiu202/aqiu-spring-boot-starter-projects/tree/master/wechat/wechat-codec-spring-boot-starter)
-- [华为云短信封装组件 -- huawei-sms-spring-boot-starter](https://github.com/aqiu202/aqiu-spring-boot-starter-projects/tree/master/huawei/huawei-sms-spring-boot-starter)
-- [极光推送Rest API封装组件 -- jpush-rest-api-spring-boot-starter](https://github.com/aqiu202/aqiu-spring-boot-starter-projects/tree/master/aurora/jpush-rest-api-spring-boot-starter)
 - [Excel导入/导出功能封装 -- excel-spring-boot-starter](https://github.com/aqiu202/aqiu-spring-boot-starter-projects/tree/master/starter/excel-spring-boot-starter)

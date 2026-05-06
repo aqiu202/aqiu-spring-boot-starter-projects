@@ -1,7 +1,7 @@
 package com.github.aqiu202.starters.jpa.sql;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 
 public final class HqlQuery<T> extends AbstractQuery<T> {
 

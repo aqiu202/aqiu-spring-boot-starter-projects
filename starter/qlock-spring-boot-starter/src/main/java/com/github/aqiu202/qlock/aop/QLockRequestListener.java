@@ -1,8 +1,8 @@
 package com.github.aqiu202.qlock.aop;
 
 import com.github.aqiu202.lock.base.LockValueHolder;
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.ServletRequestListener;
+import jakarta.servlet.ServletRequestEvent;
+import jakarta.servlet.ServletRequestListener;
 
 /**
  * <pre>QLockRequestListener</pre>

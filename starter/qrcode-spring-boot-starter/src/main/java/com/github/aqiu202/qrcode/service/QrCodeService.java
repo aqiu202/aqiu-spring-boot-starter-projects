@@ -4,7 +4,7 @@ import com.github.aqiu202.qrcode.exp.QrCodeException;
 import com.github.aqiu202.qrcode.exp.QrCodeServletException;
 import com.github.aqiu202.qrcode.param.QrCodeProperties;
 import java.awt.image.BufferedImage;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 public interface QrCodeService {
 

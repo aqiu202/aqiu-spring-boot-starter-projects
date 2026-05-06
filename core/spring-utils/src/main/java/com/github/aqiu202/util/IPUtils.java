@@ -1,6 +1,6 @@
 package com.github.aqiu202.util;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * <pre>{@link IPUtils}</pre>

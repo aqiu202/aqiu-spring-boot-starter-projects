@@ -7,7 +7,7 @@ import com.github.aqiu202.starters.jpa.sql.HqlQuery;
 import com.github.aqiu202.starters.jpa.sql.NativeSqlQuery;
 import java.io.Serializable;
 import java.util.Map;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.support.JpaMetamodelEntityInformation;
 

@@ -47,8 +47,8 @@ public abstract class AbstractSpringHttpExchanger<T> extends AbstractHttpExchang
     protected <S> HttpResponseEntity<S> convertResponse(ResponseEntity<S> response) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.getValues().putAll(response.getHeaders());
-        return new HttpResponseEntity<>(response.getStatusCode().value(),
-                response.getBody(), httpHeaders);
+        int value = response.getStatusCode().value();
+        return new HttpResponseEntity<>(value, response.getBody(), httpHeaders);
     }
 
     protected void checkFilename(String filename) {

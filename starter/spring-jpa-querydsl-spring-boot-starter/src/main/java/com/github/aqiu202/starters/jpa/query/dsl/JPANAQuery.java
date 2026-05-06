@@ -9,7 +9,7 @@ import com.querydsl.jpa.JPQLTemplates;
 import com.querydsl.jpa.impl.AbstractJPAQuery;
 import com.querydsl.jpa.impl.JPAProvider;
 import javax.annotation.Nonnull;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.querydsl.QSort;

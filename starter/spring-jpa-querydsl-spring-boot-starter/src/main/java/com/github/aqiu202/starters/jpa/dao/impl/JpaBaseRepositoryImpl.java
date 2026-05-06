@@ -13,7 +13,7 @@ import org.springframework.data.querydsl.SimpleEntityPathResolver;
 import org.springframework.data.repository.query.FluentQuery;
 
 import javax.annotation.Nonnull;
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 import java.util.Optional;
 import java.util.function.Function;
 
