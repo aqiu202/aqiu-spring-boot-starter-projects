@@ -313,7 +313,7 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     private void printRequestDebugInfo() {
-        this.log.debug("**************************************************************************\n" +
+        this.log.debug("\n**************************************************************************\n" +
                         "                        **********     HttpService ---- HTTP Request Info      *************\n" +
                         "                        **********     Exchanger ---- {}      *************\n" +
                         "                        **********     TraceID ---- {}      *************\n" +
@@ -323,7 +323,7 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     private void printResponseDebugInfo(HttpResponseEntity<?> response) {
-        this.log.debug("**************************************************************************\n" +
+        this.log.debug("\n**************************************************************************\n" +
                         "                        **********     HttpService ---- HTTP Response Info      *************\n" +
                         "                        **********     TraceID ---- {}      *************\n" +
                         "                        {}\n" +
