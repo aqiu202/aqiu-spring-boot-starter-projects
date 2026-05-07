@@ -413,15 +413,15 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <passphraseServerId>${publish-server}</passphraseServerId>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.sonatype.central</groupId>
                 <artifactId>central-publishing-maven-plugin</artifactId>
                 <version>0.9.0</version>
                 <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>${publish-server}</publishingServerId>
-                </configuration>
             </plugin>
         </plugins>
     </build>
