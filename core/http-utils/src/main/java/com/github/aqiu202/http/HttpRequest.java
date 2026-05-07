@@ -11,6 +11,7 @@ import com.github.aqiu202.http.util.ParameterizedTypeRef;
 import com.github.aqiu202.http.util.RequestDescriptor;
 import com.github.aqiu202.http.util.TypeSpec;
 import com.github.aqiu202.http.util.URIBuilder;
+import com.github.aqiu202.util.CollectionUtils;
 import com.github.aqiu202.util.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -197,40 +198,43 @@ public class HttpRequest<T extends HttpRequest<?>> {
         return Optional.ofNullable(this.exchange());
     }
 
-    public<S> Optional<S> tryExchange(Class<S> responseType) {
+    public <S> Optional<S> tryExchange(Class<S> responseType) {
         return Optional.ofNullable(this.exchange(responseType));
     }
 
-    public<S> Optional<S> tryExchange(ParameterizedTypeRef<S> responseType) {
+    public <S> Optional<S> tryExchange(ParameterizedTypeRef<S> responseType) {
         return Optional.ofNullable(this.exchange(responseType));
     }
 
     /**
      * 自定义反序列化
+     *
      * @param customizer 自定义反序列化逻辑
      * @return 返回值
      */
-    public<S> S exchangeForType(Function<byte[], S> customizer) {
+    public <S> S exchangeForType(Function<byte[], S> customizer) {
         byte[] original = this.exchange(byte[].class);
         return customizer.apply(original);
     }
 
     /**
      * 强制反序列化（从字节数组二次反序列化）
+     *
      * @param responseType 目标类型
      * @return 返回值
      */
-    public<S> S exchangeForType(Class<S> responseType) {
+    public <S> S exchangeForType(Class<S> responseType) {
         byte[] original = this.exchange(byte[].class);
         return JacksonUtils.toObject(original, responseType);
     }
 
     /**
      * 强制反序列化（从字节数组二次反序列化）
+     *
      * @param responseType 目标类型
      * @return 返回值
      */
-    public<S> S exchangeForType(ParameterizedTypeRef<S> responseType) {
+    public <S> S exchangeForType(ParameterizedTypeRef<S> responseType) {
         byte[] original = this.exchange(byte[].class);
         return JacksonUtils.toObject(original, new TypeReference<S>() {
             @Override
@@ -239,19 +243,20 @@ public class HttpRequest<T extends HttpRequest<?>> {
             }
         });
     }
+
     public <S> S exchange(ParameterizedTypeRef<S> responseType) {
         return this.exchange(new TypeSpec<>(responseType));
     }
 
     public <S> S exchange(TypeSpec<S> responseType) {
         try {
-            this.processInterceptors();
-            this.invokeConsumers();
-            if (this.enableDebug) {
+            List<HttpInterceptor> resolvedInterceptors = this.resolveInterceptors();
+            this.processInterceptors(resolvedInterceptors);
+            if (this.enableDebug || log.isDebugEnabled()) {
                 this.printRequestDebugInfo();
             }
             HttpResponseEntity<S> response = this.exchanger.exchange(this, responseType);
-            if (this.enableDebug) {
+            if (this.enableDebug || log.isDebugEnabled()) {
                 this.printResponseDebugInfo(response);
             }
             this.invokeResponseConsumer(this, response);
@@ -261,10 +266,10 @@ public class HttpRequest<T extends HttpRequest<?>> {
         }
     }
 
-    protected void processInterceptors() {
-        if (this.interceptors != null && !this.interceptors.isEmpty()) {
+    protected void processInterceptors(List<HttpInterceptor> interceptors) {
+        if (CollectionUtils.isNotEmpty(interceptors)) {
             InterceptorContext interceptorContext = this.buildInterceptorContext();
-            for (HttpInterceptor interceptor : this.interceptors) {
+            for (HttpInterceptor interceptor : interceptors) {
                 interceptor.intercept(interceptorContext, this);
             }
         }
@@ -281,13 +286,19 @@ public class HttpRequest<T extends HttpRequest<?>> {
         return InterceptorContext.fromThreadContext();
     }
 
-    protected void invokeConsumers() {
-        if (this.optionsConsumer != null) {
-            this.optionsConsumer.accept((T) this);
+    protected List<HttpInterceptor> resolveInterceptors() {
+        List<HttpInterceptor> interceptors = this.interceptors == null ? Collections.emptyList()
+                : this.interceptors;
+        if (this.optionsConsumer == null && this.headersConsumer == null) {
+            if (!interceptors.isEmpty()) {
+                interceptors.sort(Comparator.comparingInt(HttpInterceptor::getOrder));
+            }
+            return interceptors;
         }
-        if (this.headersConsumer != null) {
-            this.headersConsumer.accept(this.getHeaders());
-        }
+        List<HttpInterceptor> resolvedInterceptors = new ArrayList<>(interceptors);
+        resolvedInterceptors.add(new ConfigureInterceptor((Consumer<HttpRequest<?>>) this.optionsConsumer, this.headersConsumer));
+        resolvedInterceptors.sort(Comparator.comparingInt(HttpInterceptor::getOrder));
+        return resolvedInterceptors;
     }
 
     private String getTraceId() {
@@ -302,7 +313,7 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     private void printRequestDebugInfo() {
-        this.log.warn("\n**************************************************************************\n" +
+        this.log.debug("**************************************************************************\n" +
                         "                        **********     HttpService ---- HTTP Request Info      *************\n" +
                         "                        **********     Exchanger ---- {}      *************\n" +
                         "                        **********     TraceID ---- {}      *************\n" +
@@ -312,7 +323,7 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     private void printResponseDebugInfo(HttpResponseEntity<?> response) {
-        this.log.warn("\n**************************************************************************\n" +
+        this.log.debug("**************************************************************************\n" +
                         "                        **********     HttpService ---- HTTP Response Info      *************\n" +
                         "                        **********     TraceID ---- {}      *************\n" +
                         "                        {}\n" +
@@ -335,6 +346,31 @@ public class HttpRequest<T extends HttpRequest<?>> {
         joiner.add(String.format("Url：%s", this.getUriString()));
         joiner.add(String.format("Headers：%s", this.getHeaders()));
         return joiner.toString();
+    }
+
+    static class ConfigureInterceptor implements HttpInterceptor {
+        private final Consumer<HttpRequest<?>> optionsConsumer;
+        private final Consumer<HttpHeaders> headersConsumer;
+
+        public ConfigureInterceptor(Consumer<HttpRequest<?>> optionsConsumer, Consumer<HttpHeaders> headersConsumer) {
+            this.optionsConsumer = optionsConsumer;
+            this.headersConsumer = headersConsumer;
+        }
+
+        @Override
+        public void intercept(InterceptorContext context, HttpRequest<?> request) {
+            if (this.headersConsumer != null)
+                this.headersConsumer.accept(request.getHeaders()
+                );
+            if (this.optionsConsumer != null) {
+                this.optionsConsumer.accept(request);
+            }
+        }
+
+        @Override
+        public int getOrder() {
+            return DEFAULT_CONFIGURE_ORDER;
+        }
     }
 
 }
