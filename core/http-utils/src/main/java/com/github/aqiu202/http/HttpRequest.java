@@ -309,25 +309,25 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     private String generateTraceId() {
-        return UUID.randomUUID().toString();
+        return UUID.randomUUID().toString().replace("-", "");
     }
 
     private void printRequestDebugInfo() {
         this.log.debug("\n**************************************************************************\n" +
-                        "                        **********     HttpService ---- HTTP Request Info      *************\n" +
-                        "                        **********     Exchanger ---- {}      *************\n" +
-                        "                        **********     TraceID ---- {}      *************\n" +
-                        "                        {}\n" +
-                        "                        **************************************************************************",
+                        "**********     HttpService ---- HTTP Request Info      *************\n" +
+                        "**********     Exchanger ---- {}      *************\n" +
+                        "**********     TraceID ---- {}      *************\n" +
+                        "{}\n" +
+                        "**************************************************************************",
                 this.getExchangerName(), this.getTraceId(), this);
     }
 
     private void printResponseDebugInfo(HttpResponseEntity<?> response) {
         this.log.debug("\n**************************************************************************\n" +
-                        "                        **********     HttpService ---- HTTP Response Info      *************\n" +
-                        "                        **********     TraceID ---- {}      *************\n" +
-                        "                        {}\n" +
-                        "                        **************************************************************************",
+                        "**********     HttpService ---- HTTP Response Info      *************\n" +
+                        "**********     TraceID ---- {}      *************\n" +
+                        "{}\n" +
+                        "**************************************************************************",
                 this.getTraceId(), this.getResponseString(response));
     }
 
