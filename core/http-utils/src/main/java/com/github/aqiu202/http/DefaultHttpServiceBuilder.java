@@ -29,7 +29,7 @@ public class DefaultHttpServiceBuilder implements HttpService.Builder {
         int statusCode = responseEntity.getStatusCode();
         HttpStatus httpStatus = HttpStatus.valueOf(statusCode);
         if (!httpStatus.is2xxSuccessful()) {
-            throw new RuntimeException("HTTP请求失败：" + httpStatus.getReasonPhrase());
+            throw new RuntimeException(String.format("HTTP请求失败：[%d] %s", statusCode, httpStatus.getReasonPhrase()));
         }
     };
 

@@ -44,6 +44,7 @@
         <spring-utils.version>${revision}</spring-utils.version>
         <bean-utils.version>${revision}</bean-utils.version>
         <basic-utils.version>${revision}</basic-utils.version>
+        <http-utils.version>${revision}</http-utils.version>
         <codec-utils.version>${revision}</codec-utils.version>
         <excel-core.version>${revision}</excel-core.version>
         <excel-starter.version>${revision}</excel-starter.version>
@@ -104,6 +105,11 @@
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>ttl-cache-core</artifactId>
                 <version>${ttl-cache.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>http-utils</artifactId>
+                <version>${http-utils.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
