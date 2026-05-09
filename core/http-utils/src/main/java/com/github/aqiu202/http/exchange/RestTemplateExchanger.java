@@ -10,6 +10,9 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
+import org.springframework.util.Assert;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,9 +23,20 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
 
     public static final RestTemplateExchanger INSTANCE = new RestTemplateExchanger();
 
+    private final ClientHttpRequestFactory requestFactory;
+
+    public RestTemplateExchanger() {
+        this(new JdkClientHttpRequestFactory());
+    }
+
+    public RestTemplateExchanger(ClientHttpRequestFactory requestFactory) {
+        Assert.notNull(requestFactory, "requestFactory must not be null");
+        this.requestFactory = requestFactory;
+    }
+
     @Override
     protected RestTemplate createRequestInstance() {
-        return new RestTemplate();
+        return new RestTemplate(this.requestFactory);
     }
 
     @Override
