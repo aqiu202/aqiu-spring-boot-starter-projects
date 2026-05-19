@@ -50,6 +50,7 @@
         <excel-starter.version>${revision}</excel-starter.version>
         <pageable-core.version>${revision}</pageable-core.version>
         <jpa-querydsl.version>${revision}</jpa-querydsl.version>
+        <gpg.skip>false</gpg.skip>
     </properties>
 
     <licenses>
@@ -420,6 +421,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <skip>${gpg.skip}</skip>
                     <passphraseServerId>${publish-server}</passphraseServerId>
                 </configuration>
             </plugin>
