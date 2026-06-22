@@ -27,6 +27,7 @@
         <module>excel-core</module>
         <module>http-utils</module>
         <module>sql-parser</module>
+        <module>cron-parser</module>
     </modules>
 
 </project>
