@@ -5,7 +5,7 @@ import java.time.ZonedDateTime;
 
 public class SimpleCronExpressionParser implements CronExpressionParser<Clock, ZonedDateTime> {
     @Override
-    public CronExpression<Clock, ZonedDateTime> parser(String expression) {
+    public CronExpression<Clock, ZonedDateTime> parse(String expression) {
         return new NewCronExpression(expression);
     }
 }
