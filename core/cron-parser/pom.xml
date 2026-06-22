@@ -2,17 +2,14 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.github.aqiu202</groupId>
-  <artifactId>cron-parser</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <packaging>jar</packaging>
-
   <parent>
     <artifactId>core</artifactId>
     <groupId>com.github.aqiu202</groupId>
     <version>${revision}</version>
   </parent>
 
+  <artifactId>cron-parser</artifactId>
+  <packaging>jar</packaging>
 
   <name>cron-parser</name>
   <url>http://maven.apache.org</url>
