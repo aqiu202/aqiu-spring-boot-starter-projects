@@ -8,6 +8,7 @@ import com.github.aqiu202.http.intercept.HttpInterceptor;
 import com.github.aqiu202.http.util.JsonSerializer;
 import com.github.aqiu202.http.util.RequestDescriptor;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -67,6 +68,46 @@ public interface HttpService {
 
     default HttpBodyRequest patch() {
         return this.method(HttpMethod.PATCH);
+    }
+
+    default HttpRequest<?> get(String path, Object... uriVariables) {
+        return this.get().path(path, uriVariables);
+    }
+
+    default HttpBodyRequest post(String path, Object... uriVariables) {
+        return this.post().path(path, uriVariables);
+    }
+
+    default HttpBodyRequest put(String path, Object... uriVariables) {
+        return this.put().path(path, uriVariables);
+    }
+
+    default HttpBodyRequest delete(String path, Object... uriVariables) {
+        return this.delete().path(path, uriVariables);
+    }
+
+    default HttpBodyRequest patch(String path, Object... uriVariables) {
+        return this.patch().path(path, uriVariables);
+    }
+
+    default HttpRequest<?> get(URI uri) {
+        return this.get().uri(uri);
+    }
+
+    default HttpBodyRequest post(URI uri) {
+        return this.post().uri(uri);
+    }
+
+    default HttpBodyRequest put(URI uri) {
+        return this.put().uri(uri);
+    }
+
+    default HttpBodyRequest delete(URI uri) {
+        return this.delete().uri(uri);
+    }
+
+    default HttpBodyRequest patch(URI uri) {
+        return this.patch().uri(uri);
     }
 
     static Builder builder() {

@@ -40,6 +40,13 @@ public class HttpRequest<T extends HttpRequest<?>> {
     private final RequestDescriptor descriptor;
     private String traceId;
 
+    private static final String PREFIX_HTTP = "http://";
+    private static final String PREFIX_HTTPS = "https://";
+
+    private static boolean isAbsoluteUrl(String url) {
+        return url.startsWith(PREFIX_HTTP) || url.startsWith(PREFIX_HTTPS);
+    }
+
     public HttpRequest(RequestDescriptor descriptor) {
         this.descriptor = descriptor;
         this.uriBuilder
@@ -117,6 +124,9 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     public T path(String path, Object... uriVariables) {
+        if (isAbsoluteUrl(path)) {
+            return this.uri(path, uriVariables);
+        }
         this.uriBuilder.path(path);
         return this.uriVariables(uriVariables);
     }
