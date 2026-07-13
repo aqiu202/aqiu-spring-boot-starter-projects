@@ -23,20 +23,24 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
 
     public static final RestTemplateExchanger INSTANCE = new RestTemplateExchanger();
 
-    private final ClientHttpRequestFactory requestFactory;
+    private final RestTemplate restTemplate;
 
     public RestTemplateExchanger() {
         this(new JdkClientHttpRequestFactory());
     }
 
+    public RestTemplateExchanger(RestTemplate restTemplate) {
+        Assert.notNull(restTemplate, "restTemplate must not be null");
+        this.restTemplate = restTemplate;
+    }
+
     public RestTemplateExchanger(ClientHttpRequestFactory requestFactory) {
-        Assert.notNull(requestFactory, "requestFactory must not be null");
-        this.requestFactory = requestFactory;
+        this(new RestTemplate(requestFactory));
     }
 
     @Override
     protected RestTemplate createRequestInstance() {
-        return new RestTemplate(this.requestFactory);
+        return this.restTemplate;
     }
 
     @Override
