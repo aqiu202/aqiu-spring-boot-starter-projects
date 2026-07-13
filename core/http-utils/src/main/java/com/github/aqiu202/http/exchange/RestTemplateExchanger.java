@@ -23,6 +23,8 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
 
     public static final RestTemplateExchanger INSTANCE = new RestTemplateExchanger();
 
+    public static final RestTemplateExchanger STATEFUL = new RestTemplateExchanger(new StatefulRestTemplate());
+
     private final RestTemplate restTemplate;
 
     public RestTemplateExchanger() {
