@@ -18,12 +18,19 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.Duration;
 
 public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTemplate> {
 
     public static final RestTemplateExchanger INSTANCE = new RestTemplateExchanger();
 
-    public static final RestTemplateExchanger STATEFUL = new RestTemplateExchanger(new StatefulRestTemplate());
+    public static RestTemplateExchanger stateful() {
+        return new RestTemplateExchanger(new StatefulRestTemplate());
+    }
+
+    public static RestTemplateExchanger stateful(Duration timeout) {
+        return new RestTemplateExchanger(new StatefulRestTemplate(timeout));
+    }
 
     private final RestTemplate restTemplate;
 

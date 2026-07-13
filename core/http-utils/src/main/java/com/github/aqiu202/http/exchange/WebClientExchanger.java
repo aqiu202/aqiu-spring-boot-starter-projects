@@ -9,19 +9,24 @@ import com.github.aqiu202.http.util.TypeSpec;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.Duration;
 
 public class WebClientExchanger extends AbstractSpringHttpExchanger<WebClient> {
 
     public static final WebClientExchanger INSTANCE = new WebClientExchanger();
 
+    public static WebClientExchanger stateful() {
+        return new StatefulWebClientExchanger();
+    }
 
+    public static WebClientExchanger stateful(Duration timeout) {
+        return new StatefulWebClientExchanger(timeout);
+    }
 
     @Override
     protected WebClient createRequestInstance() {
