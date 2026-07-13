@@ -259,6 +259,23 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     public <S> S exchange(TypeSpec<S> responseType) {
+        HttpResponseEntity<S> response = this.exchangeForResponse(responseType);
+        return response.getBody();
+    }
+
+    public HttpResponseEntity<String> exchangeForResponse() {
+        return this.exchangeForResponse(String.class);
+    }
+
+    public <S> HttpResponseEntity<S> exchangeForResponse(ParameterizedTypeRef<S> responseType) {
+        return this.exchangeForResponse(new TypeSpec<>(responseType));
+    }
+
+    public <S> HttpResponseEntity<S> exchangeForResponse(Class<S> responseType) {
+        return this.exchangeForResponse(new TypeSpec<>(responseType));
+    }
+
+    public <S> HttpResponseEntity<S> exchangeForResponse(TypeSpec<S> responseType) {
         try {
             List<HttpInterceptor> resolvedInterceptors = this.resolveInterceptors();
             this.processInterceptors(resolvedInterceptors);
@@ -270,7 +287,7 @@ public class HttpRequest<T extends HttpRequest<?>> {
                 this.printResponseDebugInfo(response);
             }
             this.invokeResponseConsumer(this, response);
-            return response.getBody();
+            return response;
         } catch (IOException e) {
             throw new RuntimeException("Http请求异常", e);
         }
