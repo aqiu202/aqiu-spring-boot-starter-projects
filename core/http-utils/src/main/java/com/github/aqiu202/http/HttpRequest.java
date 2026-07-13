@@ -325,11 +325,10 @@ public class HttpRequest<T extends HttpRequest<?>> {
     private void printRequestDebugInfo() {
         this.log.debug("\n**************************************************************************\n" +
                         "**********     HttpService ---- HTTP Request Info      *************\n" +
-                        "**********     Exchanger ---- {}      *************\n" +
                         "**********     TraceID ---- {}      *************\n" +
                         "{}\n" +
                         "**************************************************************************",
-                this.getExchangerName(), this.getTraceId(), this);
+                this.getTraceId(), this);
     }
 
     private void printResponseDebugInfo(HttpResponseEntity<?> response) {
