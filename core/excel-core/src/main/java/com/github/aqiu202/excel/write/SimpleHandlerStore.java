@@ -2,7 +2,7 @@ package com.github.aqiu202.excel.write;
 
 import com.github.aqiu202.excel.write.hand.*;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class SimpleHandlerStore implements HandlerStore {
 

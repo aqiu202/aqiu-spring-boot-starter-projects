@@ -3,7 +3,7 @@ package com.github.aqiu202.ttl.data;
 import java.util.concurrent.TimeUnit;
 import org.springframework.lang.Nullable;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface TtlCache<K, V> {
 

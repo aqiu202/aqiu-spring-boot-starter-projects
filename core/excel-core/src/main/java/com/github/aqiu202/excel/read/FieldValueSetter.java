@@ -3,7 +3,7 @@ package com.github.aqiu202.excel.read;
 import com.github.aqiu202.excel.read.cell.*;
 import com.github.aqiu202.util.ClassUtils;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public interface FieldValueSetter {
     void set(Object instance, @Nullable MappedCellValue mappedCellValue);

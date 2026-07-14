@@ -1,6 +1,6 @@
 package com.github.aqiu202.starters.jpa.page;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 

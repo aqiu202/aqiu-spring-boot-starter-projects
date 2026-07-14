@@ -2,7 +2,7 @@ package com.github.aqiu202.excel.read.cell;
 
 import org.apache.poi.ss.usermodel.Cell;
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 public class SimpleCellVal<T> implements CellVal<T> {
 

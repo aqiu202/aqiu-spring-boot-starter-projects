@@ -7,7 +7,7 @@ import com.github.benmanes.caffeine.cache.Policy.VarExpiration;
 import java.util.concurrent.TimeUnit;
 import org.springframework.lang.NonNull;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
 

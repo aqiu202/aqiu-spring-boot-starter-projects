@@ -21,7 +21,7 @@ import com.github.aqiu202.captcha.text.impl.DefaultTextCreator;
 import com.github.aqiu202.captcha.text.impl.DefaultWordRenderer;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.imageio.ImageIO;
 import jakarta.servlet.http.HttpServletResponse;
 

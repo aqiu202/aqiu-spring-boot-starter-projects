@@ -3,7 +3,7 @@ package com.github.aqiu202.excel.read.convert;
 import com.github.aqiu202.excel.format.FormatterProvider;
 import com.github.aqiu202.excel.read.cell.MappedCellValue;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface MappedCellValueConverter {
 

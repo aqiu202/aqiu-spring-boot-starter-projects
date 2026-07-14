@@ -9,7 +9,7 @@ import com.querydsl.core.types.FactoryExpressionBase;
 import com.querydsl.core.types.Visitor;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * <pre>workplan</pre>

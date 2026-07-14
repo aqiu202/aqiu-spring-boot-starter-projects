@@ -9,7 +9,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * <b>加密算法的公共方法</b>

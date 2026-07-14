@@ -1,7 +1,7 @@
 package com.github.aqiu202.util.wrap;
 
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class BooleanWrapper implements Wrapper<Boolean> {
 

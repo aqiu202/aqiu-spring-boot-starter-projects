@@ -7,7 +7,7 @@ import com.github.aqiu202.util.RandomUtils;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class PointNoise implements SimpleNoiseProducer {
 

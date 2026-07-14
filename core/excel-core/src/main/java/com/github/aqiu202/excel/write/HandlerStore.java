@@ -4,7 +4,7 @@ import com.github.aqiu202.excel.write.hand.CellHandler;
 import com.github.aqiu202.excel.write.hand.RowHandler;
 import com.github.aqiu202.excel.write.hand.SheetHandler;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public interface HandlerStore {
 

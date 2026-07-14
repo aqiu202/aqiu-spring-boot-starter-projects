@@ -5,7 +5,7 @@ import com.github.aqiu202.captcha.props.CaptchaProperties.ShearProperties;
 import com.github.aqiu202.util.RandomUtils;
 import com.jhlabs.image.ShearFilter;
 import java.awt.image.BufferedImage;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class ShearNoise extends AbstractFilterableNoiseProducer {
 

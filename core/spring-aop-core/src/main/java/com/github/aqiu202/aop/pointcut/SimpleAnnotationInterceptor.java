@@ -1,7 +1,7 @@
 package com.github.aqiu202.aop.pointcut;
 
 import java.lang.annotation.Annotation;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

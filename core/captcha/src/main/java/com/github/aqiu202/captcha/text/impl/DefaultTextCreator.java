@@ -3,7 +3,7 @@ package com.github.aqiu202.captcha.text.impl;
 import com.github.aqiu202.captcha.props.CaptchaProperties.WordProperties;
 import com.github.aqiu202.captcha.text.TextProducer;
 import com.github.aqiu202.util.RandomUtils;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 /**
  * {@link DefaultTextCreator} creates random text from an array of characters

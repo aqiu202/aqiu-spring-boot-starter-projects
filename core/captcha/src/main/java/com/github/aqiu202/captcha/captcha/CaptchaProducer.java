@@ -3,7 +3,7 @@ package com.github.aqiu202.captcha.captcha;
 import com.github.aqiu202.captcha.exp.CaptchaServletException;
 import com.github.aqiu202.captcha.text.TextWrapper;
 import java.awt.image.BufferedImage;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**

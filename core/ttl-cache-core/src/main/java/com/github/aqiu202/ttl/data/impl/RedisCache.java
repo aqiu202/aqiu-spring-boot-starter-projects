@@ -1,7 +1,7 @@
 package com.github.aqiu202.ttl.data.impl;
 
 import java.util.concurrent.TimeUnit;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;

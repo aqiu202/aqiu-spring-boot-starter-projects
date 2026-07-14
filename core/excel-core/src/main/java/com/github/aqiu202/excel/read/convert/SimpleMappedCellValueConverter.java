@@ -12,7 +12,7 @@ import com.github.aqiu202.excel.read.cell.*;
 import com.github.aqiu202.util.ClassUtils;
 import org.apache.poi.ss.usermodel.Cell;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.math.BigDecimal;
 
 public class SimpleMappedCellValueConverter implements MappedCellValueConverter {

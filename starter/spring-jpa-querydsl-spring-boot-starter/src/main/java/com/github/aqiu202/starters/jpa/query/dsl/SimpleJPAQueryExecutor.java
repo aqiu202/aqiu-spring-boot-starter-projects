@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import javax.inject.Provider;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.JpaMetamodelEntityInformation;

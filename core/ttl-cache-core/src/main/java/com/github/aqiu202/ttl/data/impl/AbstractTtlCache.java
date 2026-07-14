@@ -2,7 +2,7 @@ package com.github.aqiu202.ttl.data.impl;
 
 import com.github.aqiu202.ttl.data.TtlCache;
 import java.util.concurrent.TimeUnit;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public abstract class AbstractTtlCache<K, V> implements TtlCache<K, V> {
 

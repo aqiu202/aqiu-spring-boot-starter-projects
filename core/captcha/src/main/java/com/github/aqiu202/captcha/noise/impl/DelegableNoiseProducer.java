@@ -5,7 +5,7 @@ import com.github.aqiu202.captcha.noise.abs.AbstractFilterableNoiseProducer;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 public class DelegableNoiseProducer extends AbstractFilterableNoiseProducer {
 
