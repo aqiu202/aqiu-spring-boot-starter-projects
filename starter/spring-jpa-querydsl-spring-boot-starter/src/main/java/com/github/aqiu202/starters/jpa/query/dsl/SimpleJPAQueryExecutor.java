@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import jakarta.annotation.Nullable;
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.JpaMetamodelEntityInformation;
 import org.springframework.data.repository.core.EntityInformation;

@@ -1,7 +1,7 @@
 package com.github.aqiu202.starters.jpa.sql;
 
 import java.util.Map;
-import javax.inject.Provider;
+import jakarta.inject.Provider;
 import jakarta.persistence.EntityManager;
 
 public class SimpleSQLExecutor implements SQLExecutor {
