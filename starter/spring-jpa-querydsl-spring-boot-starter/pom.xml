@@ -18,11 +18,11 @@
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
         <!-- querydsl -->
+        <!-- Source: https://mvnrepository.com/artifact/io.github.openfeign.querydsl/querydsl-jpa -->
         <dependency>
-            <groupId>com.querydsl</groupId>
+            <groupId>io.github.openfeign.querydsl</groupId>
             <artifactId>querydsl-jpa</artifactId>
-            <version>5.1.0</version>
-            <classifier>jakarta</classifier>
+            <version>7.1</version>
         </dependency>
         <dependency>
             <groupId>com.github.aqiu202</groupId>
