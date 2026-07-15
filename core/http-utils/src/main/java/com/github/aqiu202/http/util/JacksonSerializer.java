@@ -45,8 +45,8 @@ public class JacksonSerializer implements JsonSerializer {
         this.objectMapper = JsonMapper.builder()
                 .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES,
-                        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                .enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+                        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                        DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
                 .addModule(new JavaTimeModule())
                 .addModule(simpleModule)
                 .build();
