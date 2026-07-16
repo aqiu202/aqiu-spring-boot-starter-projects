@@ -1,8 +1,9 @@
 package com.github.aqiu202.util;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -23,32 +24,44 @@ public class JacksonUtils {
     private static final ObjectMapper MAPPER = createObjectMapper();
 
     public static ObjectMapper createObjectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-        objectMapper.disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES,
-                DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-        objectMapper.registerModule(new JavaTimeModule());
-        SimpleModule simpleModule = new SimpleModule();
         DateFormatters dateFormatters = DateFormatters.INSTANCE;
-        List<JsonSerializer> jsonSerializers = Arrays.asList(
+        SimpleModule simpleModule = new SimpleModule();
+        List<JsonSerializer<?>> jsonSerializers = Arrays.asList(
                 new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormatters.getDate())),
                 new LocalTimeSerializer(DateTimeFormatter.ofPattern(dateFormatters.getTime())),
                 new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormatters.getDateTime())));
 
-        List<JsonDeserializer> jsonDeserializers = Arrays.asList(
+        List<JsonDeserializer<?>> jsonDeserializers = Arrays.asList(
                 new LocalDateDeserializer(DateTimeFormatter.ofPattern(dateFormatters.getDate())),
                 new LocalTimeDeserializer(DateTimeFormatter.ofPattern(dateFormatters.getTime())),
                 new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormatters.getDateTime()))
         );
-        jsonSerializers.forEach(js -> simpleModule.addSerializer(js.handledType(), js));
-        jsonDeserializers.forEach(jd -> simpleModule.addDeserializer(jd.handledType(), jd));
-        return objectMapper.registerModules(simpleModule);
+        jsonSerializers.forEach(js -> addSerializer(simpleModule, js));
+        jsonDeserializers.forEach(jd -> addDeserializer(simpleModule, jd));
+        return JsonMapper.builder()
+                .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES,
+                        DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
+                        DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
+                .addModule(new JavaTimeModule())
+                .addModule(simpleModule)
+                .build();
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void addSerializer(SimpleModule module, JsonSerializer<?> serializer) {
+        module.addSerializer((Class) serializer.handledType(), (JsonSerializer) serializer);
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    private static void addDeserializer(SimpleModule module, JsonDeserializer<?> deserializer) {
+        module.addDeserializer((Class) deserializer.handledType(), (JsonDeserializer) deserializer);
     }
 
     public static byte[] toBytes(Object target) {
         try {
             return MAPPER.writeValueAsBytes(target);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException("Json序列化异常", e);
         }
     }
