@@ -1,7 +1,7 @@
 package com.github.aqiu202.http.util;
 
 import com.github.aqiu202.http.data.HttpQueries;
-import tools.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.aqiu202.util.JacksonUtils;
 import org.springframework.lang.Nullable;
 

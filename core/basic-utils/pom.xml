@@ -19,7 +19,7 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>tools.jackson.core</groupId>
+            <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
@@ -35,19 +35,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>tools.jackson.datatype</groupId>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>3.0.0-rc2</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>tools.jackson.core</groupId>
-                    <artifactId>jackson-databind</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>tools.jackson.core</groupId>
-                    <artifactId>jackson-core</artifactId>
-                </exclusion>
-            </exclusions>
+            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
 </project>
