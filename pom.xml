@@ -15,7 +15,7 @@
     </description>
 
     <properties>
-        <base.version>2.0.2</base.version>
+        <base.version>2.0.1</base.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <spring-boot.version>3.5.14</spring-boot.version>
@@ -51,7 +51,9 @@
         <excel-starter.version>${revision}</excel-starter.version>
         <pageable-core.version>${revision}</pageable-core.version>
         <jpa-querydsl.version>${revision}</jpa-querydsl.version>
+        <jpa-curd.version>${revision}</jpa-curd.version>
         <skip-publish>false</skip-publish>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <licenses>
@@ -286,6 +288,11 @@
                 <groupId>com.github.aqiu202</groupId>
                 <artifactId>spring-jpa-querydsl-spring-boot-starter</artifactId>
                 <version>${jpa-querydsl.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.aqiu202</groupId>
+                <artifactId>spring-jpa-curd-spring-boot-starter</artifactId>
+                <version>${jpa-curd.version}</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.annotation</groupId>

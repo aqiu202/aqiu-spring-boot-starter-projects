@@ -11,7 +11,7 @@ import org.springframework.lang.NonNull;
  **/
 public class SnowFlakeIdGenerator implements IdGenerator<Long> {
 
-    private final long epoch = 1577836800000L;
+    private final long epoch = 1704067200000L;
 
     /**
      * 机器id所占的位数
