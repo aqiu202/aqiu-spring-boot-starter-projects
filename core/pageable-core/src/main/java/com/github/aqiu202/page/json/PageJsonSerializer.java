@@ -17,23 +17,23 @@ public class PageJsonSerializer extends JsonSerializer<PageableOutput<?>> {
 
     private static final String FIELD_ROWS = "rows";
     private static final String FIELD_TOTAL = "total";
-    private static final String FIELD_PAGE = "page";
-    private static final String FIELD_SIZE = "size";
+    private static final String FIELD_PAGE = "pageNumber";
+    private static final String FIELD_SIZE = "pageSize";
 
     @Override
     public void serialize(PageableOutput<?> value, JsonGenerator gen,
             SerializerProvider serializers)
-            throws IOException, JsonProcessingException {
+            throws IOException {
         gen.writeStartObject();
         gen.writeObjectField(FIELD_ROWS, value.getRows());
         gen.writeNumberField(FIELD_TOTAL, value.getTotal());
-        final Integer page = value.getPage();
-        if (page != null) {
-            gen.writeNumberField(FIELD_PAGE, page);
+        final Integer pageNumber = value.getPageNumber();
+        if (pageNumber != null) {
+            gen.writeNumberField(FIELD_PAGE, pageNumber);
         }
-        final Integer size = value.getSize();
-        if (size != null) {
-            gen.writeNumberField(FIELD_SIZE, size);
+        final Integer pageSize = value.getPageSize();
+        if (pageSize != null) {
+            gen.writeNumberField(FIELD_SIZE, pageSize);
         }
         gen.writeEndObject();
     }

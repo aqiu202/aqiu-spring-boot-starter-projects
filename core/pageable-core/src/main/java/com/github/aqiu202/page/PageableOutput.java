@@ -16,8 +16,8 @@ public interface PageableOutput<E> {
 
     long getTotal();
 
-    Integer getPage();
+    Integer getPageNumber();
 
-    Integer getSize();
+    Integer getPageSize();
 
 }

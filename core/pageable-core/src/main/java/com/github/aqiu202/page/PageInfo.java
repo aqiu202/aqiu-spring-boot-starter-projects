@@ -7,27 +7,27 @@ public class PageInfo<E> extends AbstractList<E> implements PageableOutput<E> {
 
     private final long total;
     private final List<E> rows;
-    private Integer page;
-    private Integer size;
+    private Integer pageNumber;
+    private Integer pageSize;
 
     private PageInfo(List<E> rows, long total) {
         this.rows = rows;
         this.total = total;
     }
 
-    private PageInfo(List<E> rows, long total, int page, int size) {
+    private PageInfo(List<E> rows, long total, int pageNumber, int pageSize) {
         this.rows = rows;
         this.total = total;
-        this.page = page;
-        this.size = size;
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
     }
 
     public static <T> PageInfo<T> of(List<T> results, long total) {
         return new PageInfo<>(results, total);
     }
 
-    public static <T> PageInfo<T> of(List<T> results, long total, int page, int size) {
-        return new PageInfo<>(results, total, page, size);
+    public static <T> PageInfo<T> of(List<T> results, long total, int pageNumber, int pageSize) {
+        return new PageInfo<>(results, total, pageNumber, pageSize);
     }
 
     public List<E> getRows() {
@@ -38,12 +38,14 @@ public class PageInfo<E> extends AbstractList<E> implements PageableOutput<E> {
         return total;
     }
 
-    public Integer getPage() {
-        return page;
+    @Override
+    public Integer getPageNumber() {
+        return pageNumber;
     }
 
-    public Integer getSize() {
-        return size;
+    @Override
+    public Integer getPageSize() {
+        return pageSize;
     }
 
     @Override

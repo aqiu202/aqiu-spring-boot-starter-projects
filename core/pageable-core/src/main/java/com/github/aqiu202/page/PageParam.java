@@ -1,18 +1,24 @@
 package com.github.aqiu202.page;
 
-
 /**
  * PageParam pageable实现
  * @author aqiu 2018/11/26 2:44 PM
  **/
 public class PageParam implements PageableInput {
 
-    private int page;
-    private final int size;
+    public static final int DEFAULT_PAGE_SIZE = 20;
+    public static final int MIN_PAGE_NUM = 1;
+    public static final int MIN_PAGE_SIZE = 1;
 
-    protected PageParam(int page, int size) {
-        this.page = Math.max(page, 1);
-        this.size = size < 1 ? 10 : size;
+    private int page = MIN_PAGE_SIZE;
+    private int size = DEFAULT_PAGE_SIZE;
+
+    public PageParam() {
+    }
+
+    public PageParam(int page, int size) {
+        this.setPage(page);
+        this.setSize(size);
     }
 
     public static PageParam of(int page, int size) {
@@ -39,7 +45,7 @@ public class PageParam implements PageableInput {
     }
 
     public boolean hasPrevious() {
-        return this.page > 1;
+        return this.page > MIN_PAGE_NUM;
     }
 
     @Override
@@ -58,13 +64,19 @@ public class PageParam implements PageableInput {
 
     @Override
     public PageableInput first() {
-        this.page = 1;
+        this.page = MIN_PAGE_NUM;
         return this;
     }
 
     @Override
     public PageableInput setPage(int pageNumber) {
-        this.page = pageNumber;
+        this.page = Math.max(page, MIN_PAGE_NUM);
+        return this;
+    }
+
+    @Override
+    public PageableInput setSize(int pageSize) {
+        this.size = size < MIN_PAGE_SIZE ? DEFAULT_PAGE_SIZE : size;
         return this;
     }
 }

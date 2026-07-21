@@ -22,4 +22,14 @@ public interface PageableInput {
     PageableInput first();
 
     PageableInput setPage(int pageNumber);
+
+    PageableInput setSize(int pageSize);
+
+    default PageableInput setPageNumber(int pageNumber) {
+        return setPage(pageNumber);
+    }
+
+    default PageableInput setPageSize(int pageSize) {
+        return setSize(pageSize);
+    }
 }
