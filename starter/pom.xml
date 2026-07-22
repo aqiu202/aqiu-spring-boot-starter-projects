@@ -23,7 +23,7 @@
         <module>spring-jpa-querydsl-spring-boot-starter</module>
         <module>zk-curator-spring-boot-starter</module>
         <module>excel-spring-boot-starter</module>
-        <module>spring-jpa-curd-spring-boot-starter</module>
+        <module>spring-jpa-crud-spring-boot-starter</module>
     </modules>
 
     <dependencies>

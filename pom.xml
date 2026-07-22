@@ -51,7 +51,7 @@
         <excel-starter.version>${revision}</excel-starter.version>
         <pageable-core.version>${revision}</pageable-core.version>
         <jpa-querydsl.version>${revision}</jpa-querydsl.version>
-        <jpa-curd.version>${revision}</jpa-curd.version>
+        <jpa-crud.version>${revision}</jpa-crud.version>
         <skip-publish>false</skip-publish>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -291,8 +291,8 @@
             </dependency>
             <dependency>
                 <groupId>com.github.aqiu202</groupId>
-                <artifactId>spring-jpa-curd-spring-boot-starter</artifactId>
-                <version>${jpa-curd.version}</version>
+                <artifactId>spring-jpa-crud-spring-boot-starter</artifactId>
+                <version>${jpa-crud.version}</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.annotation</groupId>
