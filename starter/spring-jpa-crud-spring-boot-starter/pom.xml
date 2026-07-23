@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>spring-jpa-crud-spring-boot-starter</artifactId>
-    <name>spring-jpa-curd-spring-boot-starter</name>
+    <name>spring-jpa-crud-spring-boot-starter</name>
     <description>A Spring Boot Starter for spring-jpa curd operation</description>
 
     <dependencies>
