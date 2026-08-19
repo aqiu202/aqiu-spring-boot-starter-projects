@@ -12,6 +12,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
@@ -70,24 +71,44 @@ public interface HttpService {
         return this.method(HttpMethod.PATCH);
     }
 
-    default HttpRequest<?> get(String path, Object... uriVariables) {
-        return this.get().path(path, uriVariables);
+    default HttpRequest<?> get(String url, Object... uriVariables) {
+        return this.get().path(url, uriVariables);
     }
 
-    default HttpBodyRequest post(String path, Object... uriVariables) {
-        return this.post().path(path, uriVariables);
+    default HttpBodyRequest post(String url, Object... uriVariables) {
+        return this.post().path(url, uriVariables);
     }
 
-    default HttpBodyRequest put(String path, Object... uriVariables) {
-        return this.put().path(path, uriVariables);
+    default HttpBodyRequest put(String url, Object... uriVariables) {
+        return this.put().path(url, uriVariables);
     }
 
-    default HttpBodyRequest delete(String path, Object... uriVariables) {
-        return this.delete().path(path, uriVariables);
+    default HttpBodyRequest delete(String url, Object... uriVariables) {
+        return this.delete().path(url, uriVariables);
     }
 
-    default HttpBodyRequest patch(String path, Object... uriVariables) {
-        return this.patch().path(path, uriVariables);
+    default HttpBodyRequest patch(String url, Object... uriVariables) {
+        return this.patch().path(url, uriVariables);
+    }
+
+    default HttpRequest<?> getWithVariables(String url, Map<String, Object> pathVariables) {
+        return this.get().path(url).uriVariables(pathVariables);
+    }
+
+    default HttpBodyRequest postWithVariables(String url, Map<String, Object> pathVariables) {
+        return this.post().path(url).uriVariables(pathVariables);
+    }
+
+    default HttpBodyRequest putWithVariables(String url, Map<String, Object> pathVariables) {
+        return this.put().path(url).uriVariables(pathVariables);
+    }
+
+    default HttpBodyRequest deleteWithVariables(String url, Map<String, Object> pathVariables) {
+        return this.delete().path(url).uriVariables(pathVariables);
+    }
+
+    default HttpBodyRequest patchWithVariables(String url, Map<String, Object> pathVariables) {
+        return this.patch().path(url).uriVariables(pathVariables);
     }
 
     default HttpRequest<?> get(URI uri) {
