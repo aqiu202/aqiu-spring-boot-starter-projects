@@ -11,6 +11,7 @@
 
     <name>basic-utils</name>
     <artifactId>basic-utils</artifactId>
+    <version>${revision}-2</version>
 
     <dependencies>
         <dependency>

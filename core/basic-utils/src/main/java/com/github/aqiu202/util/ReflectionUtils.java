@@ -26,33 +26,23 @@ public abstract class ReflectionUtils {
     /**
      * 方法描述的缓存，提高反射性能
      */
-    private static final ConcurrentMap<String, ClassMethods> methodsCache = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, ClassMethods> METHODS_CACHE = new ConcurrentHashMap<>();
     /**
      * 字段描述的缓存，提高反射性能
      */
-    private static final ConcurrentMap<String, ClassFields> fieldsCache = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<String, ClassFields> FIELDS_CACHE = new ConcurrentHashMap<>();
+
+    private static final ConcurrentMap<String, List<Method>> PUBLIC_METHOD_CACHE = new ConcurrentHashMap<>();
 
     /**
-     * 使构造器可访问
+     * 使构造器/方法可访问
      *
-     * @param ctor 构造器
+     * @param executable 构造器/方法
      */
-    public static void makeAccessible(@Nonnull Constructor<?> ctor) {
-        if ((!Modifier.isPublic(ctor.getModifiers()) ||
-                !Modifier.isPublic(ctor.getDeclaringClass().getModifiers())) && !ctor.isAccessible()) {
-            ctor.setAccessible(true);
-        }
-    }
-
-    /**
-     * 使方法可访问
-     *
-     * @param method 方法
-     */
-    public static void makeAccessible(@Nonnull Method method) {
-        if ((!Modifier.isPublic(method.getModifiers()) ||
-                !Modifier.isPublic(method.getDeclaringClass().getModifiers())) && !method.isAccessible()) {
-            method.setAccessible(true);
+    public static void makeAccessible(@Nonnull Executable executable) {
+        if ((!Modifier.isPublic(executable.getModifiers()) ||
+                !Modifier.isPublic(executable.getDeclaringClass().getModifiers())) && !executable.isAccessible()) {
+            executable.setAccessible(true);
         }
     }
 
@@ -64,7 +54,7 @@ public abstract class ReflectionUtils {
     public static void makeAccessible(@Nonnull Field field) {
         if ((!Modifier.isPublic(field.getModifiers()) ||
                 !Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
-                Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
+                !Modifier.isFinal(field.getModifiers())) && !field.isAccessible()) {
             field.setAccessible(true);
         }
     }
@@ -88,6 +78,36 @@ public abstract class ReflectionUtils {
         return getAllMethod(type, ScanDirection.DIRECTION_CHILD_FIRST);
     }
 
+    @Nullable
+    public static Class<?> findClass(@Nonnull String className) {
+        try {
+            switch (className) {
+                case "int":
+                    return int.class;
+                case "long":
+                    return long.class;
+                case "short":
+                    return short.class;
+                case "byte":
+                    return byte.class;
+                case "float":
+                    return float.class;
+                case "double":
+                    return double.class;
+                case "boolean":
+                    return boolean.class;
+                case "char":
+                    return char.class;
+                case "void":
+                    return void.class;
+                default:
+                    return Class.forName(className);
+            }
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
     /**
      * 获取所有的方法（包含私有方法，但不包含abstract和static修饰的方法）
      *
@@ -98,7 +118,7 @@ public abstract class ReflectionUtils {
     public static ClassMethods getAllMethod(@Nonnull Class<?> type, ScanDirection direction) {
         String className = type.getName();
         ClassMethods result;
-        if ((result = methodsCache.get(className)) != null) {
+        if ((result = METHODS_CACHE.get(className)) != null) {
             return result;
         }
         Class<?> clazz = type;
@@ -114,7 +134,7 @@ public abstract class ReflectionUtils {
                 .flatMap(ReflectionUtils::resolveMethods)
                 .collect(Collectors.toList());
         result = new ClassMethods(methods);
-        methodsCache.put(className, result);
+        METHODS_CACHE.put(className, result);
         return result;
     }
 
@@ -127,6 +147,26 @@ public abstract class ReflectionUtils {
     private static Stream<Method> resolveMethods(Class<?> type) {
         return Arrays.stream(type.getDeclaredMethods())
                 .filter(m -> !(Modifier.isAbstract(m.getModifiers()) || Modifier.isStatic(m.getModifiers())));
+    }
+
+    /**
+     * 获取类的所有公共非静态方法(包含抽象方法)
+     *
+     * @param clazz 类
+     * @return 方法集合
+     */
+    public static List<Method> getPublicMethods(Class<?> clazz) {
+        String clazzName = clazz.getName();
+        List<Method> methods;
+        if (PUBLIC_METHOD_CACHE.containsKey(clazzName)) {
+            methods = PUBLIC_METHOD_CACHE.get(clazzName);
+        } else {
+            methods = Arrays.stream(clazz.getMethods())
+                    .filter(m -> !Modifier.isStatic(m.getModifiers()))
+                    .collect(Collectors.toList());
+            PUBLIC_METHOD_CACHE.put(clazzName, methods);
+        }
+        return methods;
     }
 
     /**
@@ -170,7 +210,7 @@ public abstract class ReflectionUtils {
     public static ClassFields getAllField(@Nonnull Class<?> type, ScanDirection direction) {
         String className = type.getName();
         ClassFields result;
-        if ((result = fieldsCache.get(className)) != null) {
+        if ((result = FIELDS_CACHE.get(className)) != null) {
             return result;
         }
         List<Class<?>> types = new ArrayList<>();
@@ -186,7 +226,7 @@ public abstract class ReflectionUtils {
                 .flatMap(ReflectionUtils::resolveFields)
                 .collect(Collectors.toList());
         result = new ClassFields(fields);
-        fieldsCache.put(className, result);
+        FIELDS_CACHE.put(className, result);
         return result;
     }
 
@@ -389,6 +429,19 @@ public abstract class ReflectionUtils {
 
     public static boolean hasAnnotation(@Nonnull AnnotatedElement element, Class<? extends Annotation> annotationType) {
         return element.getAnnotationsByType(annotationType).length > 0;
+    }
+
+    public static <T extends Annotation> T tryFindAnnotation(Class<T> annotationType, AnnotatedElement... elements) {
+        if (elements == null) {
+            return null;
+        }
+        for (AnnotatedElement element : elements) {
+            T annotation = findAnnotation(element, annotationType);
+            if (annotation != null) {
+                return annotation;
+            }
+        }
+        return null;
     }
 
     public static String generateMethodKey(@Nonnull Method method) {

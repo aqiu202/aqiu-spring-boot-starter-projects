@@ -46,6 +46,10 @@ public final class RandomCodeUtils {
         return new String(chars);
     }
 
+    public static String generateCode(int length) {
+        return generateCode(length, true);
+    }
+
 
     public static String generateSecurityCode() {
         return generateSecurityCode(4, RandomCodeLevel.Simple, false);
