@@ -18,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.net.http.HttpClient;
 import java.time.Duration;
 
 public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTemplate> {
@@ -33,6 +34,27 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
     }
 
     private final RestTemplate restTemplate;
+
+    public static RestTemplateExchanger create() {
+        return new RestTemplateExchanger();
+    }
+
+    public static RestTemplateExchanger create(ClientHttpRequestFactory requestFactory) {
+        return new RestTemplateExchanger(requestFactory);
+    }
+
+    public static RestTemplateExchanger create(RestTemplate restTemplate) {
+        return new RestTemplateExchanger(restTemplate);
+    }
+
+    public static RestTemplateExchanger create(Duration connectTimeout, Duration readTimeout) {
+        HttpClient httpClient = HttpClient.newBuilder()
+                .connectTimeout(connectTimeout)
+                .build();
+        JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
+        requestFactory.setReadTimeout(readTimeout);
+        return new RestTemplateExchanger(requestFactory);
+    }
 
     public RestTemplateExchanger() {
         this(new JdkClientHttpRequestFactory());
