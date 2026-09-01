@@ -23,6 +23,14 @@ public class JacksonSerializer implements JsonSerializer {
 
     private final ObjectMapper objectMapper;
 
+    public static JacksonSerializer create(ObjectMapper objectMapper) {
+        return new JacksonSerializer(objectMapper);
+    }
+
+    public JacksonSerializer(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
+
     public JacksonSerializer() {
         JacksonUtils.DateFormatters dateFormatters = JacksonUtils.DateFormatters.INSTANCE;
         SimpleModule simpleModule = new SimpleModule();
