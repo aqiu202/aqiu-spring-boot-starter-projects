@@ -75,8 +75,7 @@ public class JpaQuery<T extends KeyEntity> extends PredicatesWrapper<JpaQuery<T>
         try {
             this.appendPredicates();
             return this.entityManager.createQuery(this.criteriaQuery).getSingleResult();
-        } catch (NoResultException | NonUniqueResultException e) {
-            log.error("查询结果异常", e);
+        } catch (NoResultException e) {
             return null;
         } finally {
             this.safeClose();
