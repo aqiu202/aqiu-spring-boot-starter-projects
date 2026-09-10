@@ -70,13 +70,13 @@ public class PageParam implements PageableInput {
 
     @Override
     public PageableInput setPage(int pageNumber) {
-        this.page = Math.max(page, MIN_PAGE_NUM);
+        this.page = Math.max(pageNumber, MIN_PAGE_NUM);
         return this;
     }
 
     @Override
     public PageableInput setSize(int pageSize) {
-        this.size = size < MIN_PAGE_SIZE ? DEFAULT_PAGE_SIZE : size;
+        this.size = pageSize < MIN_PAGE_SIZE ? DEFAULT_PAGE_SIZE : pageSize;
         return this;
     }
 }
