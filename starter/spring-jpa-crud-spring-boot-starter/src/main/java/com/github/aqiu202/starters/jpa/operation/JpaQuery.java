@@ -2,15 +2,13 @@ package com.github.aqiu202.starters.jpa.operation;
 
 import com.github.aqiu202.page.PageResult;
 import com.github.aqiu202.starters.jpa.entity.KeyEntity;
+import com.github.aqiu202.starters.jpa.lambda.LambdaField;
 import com.github.aqiu202.starters.jpa.predicate.PredicatesWrapper;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.NonUniqueResultException;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +23,8 @@ public class JpaQuery<T extends KeyEntity> extends PredicatesWrapper<JpaQuery<T>
     private final CriteriaBuilder criteriaBuilder;
     private final CriteriaQuery<T> criteriaQuery;
     private final Root<T> root;
+
+    private final List<Order> orders = new ArrayList<>();
     private final boolean autoClose;
 
     public JpaQuery(EntityManager entityManager, Class<T> entityClass) {
@@ -51,20 +51,39 @@ public class JpaQuery<T extends KeyEntity> extends PredicatesWrapper<JpaQuery<T>
         return this.criteriaBuilder;
     }
 
-    private void appendPredicates() {
-        this.appendPredicates(this.criteriaQuery);
-    }
-
     private void appendPredicates(CriteriaQuery<?> query) {
         query.where(this.buildPredicates().toArray(new Predicate[0]));
     }
 
-    private void appendPredicates(Root<?> root) {
-        this.appendPredicates(root, this.criteriaQuery);
+    private void appendOrders(CriteriaQuery<?> query) {
+        query.orderBy(this.orders);
     }
 
     private void appendPredicates(Root<?> root, CriteriaQuery<?> query) {
         query.where(this.buildPredicates(root).toArray(new Predicate[0]));
+    }
+
+    private JpaQuery<T> orderBy(Order order) {
+        this.orders.add(order);
+        return this;
+    }
+
+    public JpaQuery<T> orderByAsc(String path) {
+        CriteriaBuilder criteriaBuilder = this.getCriteriaBuilder();
+        return this.orderBy(criteriaBuilder.asc(root.get(path)));
+    }
+
+    public JpaQuery<T> orderByDesc(String path) {
+        CriteriaBuilder criteriaBuilder = this.getCriteriaBuilder();
+        return this.orderBy(criteriaBuilder.desc(root.get(path)));
+    }
+
+    public JpaQuery<T> orderByAsc(LambdaField<T, ?> field) {
+        return this.orderByAsc(this.resolvePath(field));
+    }
+
+    public JpaQuery<T> orderByDesc(LambdaField<T, ?> field) {
+        return this.orderByDesc(this.resolvePath(field));
     }
 
     public T queryOne(Object key) {
@@ -73,8 +92,9 @@ public class JpaQuery<T extends KeyEntity> extends PredicatesWrapper<JpaQuery<T>
 
     public T queryOne() {
         try {
-            this.appendPredicates();
-            return this.entityManager.createQuery(this.criteriaQuery).getSingleResult();
+            CriteriaQuery<T> query = this.criteriaQuery;
+            this.appendPredicates(query);
+            return this.entityManager.createQuery(query).getSingleResult();
         } catch (NoResultException e) {
             return null;
         } finally {
@@ -101,8 +121,10 @@ public class JpaQuery<T extends KeyEntity> extends PredicatesWrapper<JpaQuery<T>
 
     public List<? extends T> query() {
         try {
-            this.appendPredicates();
-            return this.entityManager.createQuery(this.criteriaQuery).getResultList();
+            CriteriaQuery<T> query = this.criteriaQuery;
+            this.appendPredicates(query);
+            this.appendOrders(query);
+            return this.entityManager.createQuery(query).getResultList();
         } finally {
             this.safeClose();
         }
@@ -110,8 +132,10 @@ public class JpaQuery<T extends KeyEntity> extends PredicatesWrapper<JpaQuery<T>
 
     public List<? extends T> limitQuery(int size) {
         try {
-            this.appendPredicates();
-            return this.entityManager.createQuery(this.criteriaQuery).setMaxResults(size).getResultList();
+            CriteriaQuery<T> query = this.criteriaQuery;
+            this.appendPredicates(query);
+            this.appendOrders(query);
+            return this.entityManager.createQuery(query).setMaxResults(size).getResultList();
         } finally {
             this.safeClose();
         }
@@ -124,8 +148,10 @@ public class JpaQuery<T extends KeyEntity> extends PredicatesWrapper<JpaQuery<T>
             if (total == 0) {
                 return PageResult.of(new ArrayList<>(), 0);
             }
-            this.appendPredicates(this.criteriaQuery);
-            TypedQuery<T> dataQuery = this.entityManager.createQuery(this.criteriaQuery);
+            CriteriaQuery<T> query = this.criteriaQuery;
+            this.appendPredicates(query);
+            this.appendOrders(query);
+            TypedQuery<T> dataQuery = this.entityManager.createQuery(query);
             List<T> rows = dataQuery.setFirstResult(offset).setMaxResults(size).getResultList();
             return PageResult.of(rows, total);
         } finally {
