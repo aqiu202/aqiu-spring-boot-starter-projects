@@ -1,5 +1,6 @@
 package com.github.aqiu202.starters.jpa.operation;
 
+import com.github.aqiu202.page.PageParam;
 import com.github.aqiu202.page.PageResult;
 import com.github.aqiu202.starters.jpa.entity.KeyEntity;
 import com.github.aqiu202.starters.jpa.lambda.LambdaField;
@@ -139,6 +140,10 @@ public class JpaQuery<T extends KeyEntity> extends PredicatesWrapper<JpaQuery<T>
         } finally {
             this.safeClose();
         }
+    }
+
+    public PageResult<? extends T> pagingQuery(PageParam pageParam) {
+        return this.pagingQuery(pageParam.getOffset(), pageParam.getPageSize());
     }
 
     public PageResult<? extends T> pagingQuery(int offset, int size) {
