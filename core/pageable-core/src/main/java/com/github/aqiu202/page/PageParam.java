@@ -40,7 +40,8 @@ public class PageParam implements PageableInput {
         return size;
     }
 
-    public int getOffset() {
+    @Override
+    public long getOffset() {
         return (page - 1) * size;
     }
 

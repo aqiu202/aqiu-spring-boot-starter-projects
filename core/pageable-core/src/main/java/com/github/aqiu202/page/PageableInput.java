@@ -11,7 +11,7 @@ public interface PageableInput {
 
     int getPageSize();
 
-    int getOffset();
+    long getOffset();
 
     boolean hasPrevious();
 
