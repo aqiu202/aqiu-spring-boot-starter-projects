@@ -143,7 +143,7 @@ public class JpaQuery<T extends KeyEntity> extends PredicatesWrapper<JpaQuery<T>
     }
 
     public PageResult<? extends T> pagingQuery(PageParam pageParam) {
-        return this.pagingQuery(pageParam.getOffset(), pageParam.getPageSize());
+        return this.pagingQuery((int) pageParam.getOffset(), pageParam.getPageSize());
     }
 
     public PageResult<? extends T> pagingQuery(int offset, int size) {
