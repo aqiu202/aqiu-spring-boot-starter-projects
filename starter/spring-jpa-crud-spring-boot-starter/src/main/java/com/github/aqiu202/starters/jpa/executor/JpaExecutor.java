@@ -87,6 +87,10 @@ public class JpaExecutor {
         return new JpaDelete<>(entityManager, entityClass, false);
     }
 
+    public EntityManager getEntityManager() {
+        return this.entityManager;
+    }
+
     public EntityManager buildNewEntityManager() {
         return this.entityManagerFactory.createEntityManager();
     }
