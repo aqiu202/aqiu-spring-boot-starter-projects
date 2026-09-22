@@ -2,7 +2,7 @@ package com.github.aqiu202.id.generator;
 
 import com.github.aqiu202.id.IdGenerator;
 import com.github.aqiu202.id.prop.SnowFlakeIdProperties;
-import org.springframework.lang.NonNull;
+import jakarta.annotation.Nonnull;
 
 /**
  * <pre>SnowFlakeIdGenerator</pre>
@@ -124,7 +124,7 @@ public class SnowFlakeIdGenerator implements IdGenerator<Long> {
      * @return SnowflakeId
      */
     @Override
-    @NonNull
+    @Nonnull
     public synchronized Long nextId() {
         long timestamp = this.generateTimestamp();
 

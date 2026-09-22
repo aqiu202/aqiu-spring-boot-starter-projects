@@ -9,7 +9,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.data.jpa.JpaRepositoriesAutoConfiguration;
+import org.springframework.boot.data.jpa.autoconfigure.DataJpaRepositoriesAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -17,7 +17,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
-@AutoConfiguration(after = JpaRepositoriesAutoConfiguration.class)
+@AutoConfiguration(after = DataJpaRepositoriesAutoConfiguration.class)
 @ConditionalOnProperty(prefix = "spring.jpa.curd", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class JpaCurdAutoConfiguration implements InitializingBean {
 

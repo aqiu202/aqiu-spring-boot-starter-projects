@@ -1,12 +1,11 @@
 package com.github.aqiu202.autolog.aop;
 
-import com.fasterxml.jackson.core.util.DefaultIndenter;
+import jakarta.annotation.Nonnull;
+import tools.jackson.core.util.DefaultIndenter;
 import com.github.aqiu202.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.lang.NonNull;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
@@ -30,8 +29,8 @@ public class DebugLoggingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    @NonNull HttpServletResponse response,
-                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
+                                    @Nonnull HttpServletResponse response,
+                                    @Nonnull FilterChain filterChain) throws ServletException, IOException {
         String query = request.getQueryString();
         log.info("{}Request--Query: {}", LOG_PREFIX, query);
         String method = request.getMethod();

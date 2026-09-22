@@ -1,7 +1,8 @@
 package com.github.aqiu202.id;
 
+import jakarta.annotation.Nonnull;
+
 import java.io.Serializable;
-import org.springframework.lang.NonNull;
 
 /**
  * <pre>IdGenerator</pre>
@@ -11,7 +12,7 @@ import org.springframework.lang.NonNull;
 @FunctionalInterface
 public interface IdGenerator<T extends Serializable> {
 
-    @NonNull
+    @Nonnull
     T nextId();
 
 }

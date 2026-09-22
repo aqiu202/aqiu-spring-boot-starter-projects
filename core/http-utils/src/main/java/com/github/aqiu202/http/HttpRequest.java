@@ -1,6 +1,6 @@
 package com.github.aqiu202.http;
 
-import com.fasterxml.jackson.core.type.TypeReference;
+import tools.jackson.core.type.TypeReference;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpQueries;
 import com.github.aqiu202.http.data.HttpResponseEntity;

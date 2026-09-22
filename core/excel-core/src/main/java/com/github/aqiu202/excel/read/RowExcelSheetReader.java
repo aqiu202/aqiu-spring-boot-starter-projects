@@ -52,7 +52,7 @@ public class RowExcelSheetReader extends SimpleExcelSheetReader<RowMappedCellVal
                         || cellVal instanceof UnknownCellVal) {
                     continue;
                 }
-                rowCellValues.setMappedCellValue(colIndex, new SimpleMappedCellValue(new MapPropertyMeta(headMeta.asText()), cellVal));
+                rowCellValues.setMappedCellValue(colIndex, new SimpleMappedCellValue(new MapPropertyMeta(headMeta.asString()), cellVal));
             }
             mappedCellValues.add(rowCellValues);
         }

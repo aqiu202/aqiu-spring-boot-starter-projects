@@ -8,11 +8,13 @@ import com.github.aqiu202.id.prop.IdProperties;
 import com.github.aqiu202.id.type.IdType;
 import com.github.aqiu202.id.prop.RedisIdProperties;
 import com.github.aqiu202.id.prop.SnowFlakeIdProperties;
-import java.io.Serializable;
+
+import jakarta.annotation.Nonnull;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.lang.NonNull;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <pre>DefaultIdGeneratorFactory</pre>
@@ -26,7 +28,7 @@ public class DefaultIdGeneratorFactory implements IdGeneratorFactory,
 
     private final IdProperties properties;
 
-    public DefaultIdGeneratorFactory(@NonNull IdProperties properties) {
+    public DefaultIdGeneratorFactory(@Nonnull IdProperties properties) {
         this.properties = properties;
     }
 
@@ -35,14 +37,15 @@ public class DefaultIdGeneratorFactory implements IdGeneratorFactory,
         this.applicationContext = applicationContext;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public IdGenerator<?> getIdGenerator() {
         final IdType type = this.properties.getType();
         IdGenerator<?> idGenerator;
         try {
-            idGenerator = type.getClazz().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            idGenerator = type.getClazz().getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException
+                 | InvocationTargetException | NoSuchMethodException  e) {
             throw new IllegalArgumentException("ID Generator实例化失败", e);
         }
         if (idGenerator instanceof SnowFlakeIdGenerator) {

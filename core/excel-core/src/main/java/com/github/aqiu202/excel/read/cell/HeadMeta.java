@@ -53,7 +53,7 @@ public class HeadMeta {
         return true;
     }
 
-    public String asText() {
+    public String asString() {
         CellVal<?>[] cells = this.getCells();
         if (cells == null || cells.length == 0) {
             return "";

@@ -2,10 +2,10 @@ package com.github.aqiu202.id.generator;
 
 import com.github.aqiu202.id.IdGenerator;
 import com.github.aqiu202.id.prop.RedisIdProperties;
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.support.atomic.RedisAtomicLong;
-import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
 /**
@@ -61,7 +61,7 @@ public class RedisIdGenerator implements IdGenerator<Long>, InitializingBean {
         this.initialValue = initialValue;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public Long nextId() {
         return this.counter.addAndGet(this.delta);

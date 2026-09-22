@@ -8,7 +8,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.Pointcut;
 import org.springframework.aop.support.AbstractPointcutAdvisor;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nullable;
 
 /**
  * <pre>{@link AnnotationPointcutAdvisor}</pre>

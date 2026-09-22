@@ -1,9 +1,9 @@
 package com.github.aqiu202.ttl.data;
 
 import java.util.concurrent.TimeUnit;
-import org.springframework.lang.Nullable;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 public interface TtlCache<K, V> {
 

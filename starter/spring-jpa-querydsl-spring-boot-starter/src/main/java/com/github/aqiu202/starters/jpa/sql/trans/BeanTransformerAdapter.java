@@ -14,9 +14,11 @@ import org.hibernate.property.access.internal.PropertyAccessStrategyFieldImpl;
 import org.hibernate.property.access.internal.PropertyAccessStrategyMapImpl;
 import org.hibernate.property.access.spi.Setter;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.hibernate.transform.ResultTransformer;
 
 /**
@@ -24,6 +26,7 @@ import org.hibernate.transform.ResultTransformer;
  *
  * @author AQIU 2018/11/28 1:42 PM
  **/
+@SuppressWarnings("deprecation")
 public final class BeanTransformerAdapter<T> implements ResultTransformer {
 
     private final TypeConverter typeConverter = DefaultTypeConverter.getDefaultTypeConverter();
@@ -56,7 +59,7 @@ public final class BeanTransformerAdapter<T> implements ResultTransformer {
                 initialize(aliases);
             }
 
-            result = resultClass.newInstance();
+            result = resultClass.getDeclaredConstructor().newInstance();
 
             for (int i = 0; i < aliases.length; i++) {
                 Object value = tuple[i];
@@ -75,9 +78,10 @@ public final class BeanTransformerAdapter<T> implements ResultTransformer {
                     }
                 }
             }
-        } catch (InstantiationException | IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException
+                 | InvocationTargetException | NoSuchMethodException e) {
             throw new HibernateException(
-                "Could not instantiate resultclass: " + resultClass.getName());
+                    "Could not instantiate resultclass: " + resultClass.getName());
         }
 
         return result;
@@ -89,9 +93,9 @@ public final class BeanTransformerAdapter<T> implements ResultTransformer {
 
     private void initialize(String[] aliases) {
         PropertyAccessStrategyChainedImpl propertyAccessStrategy = new PropertyAccessStrategyChainedImpl(
-            PropertyAccessStrategyBasicImpl.INSTANCE,
-            PropertyAccessStrategyFieldImpl.INSTANCE,
-            PropertyAccessStrategyMapImpl.INSTANCE
+                PropertyAccessStrategyBasicImpl.INSTANCE,
+                PropertyAccessStrategyFieldImpl.INSTANCE,
+                PropertyAccessStrategyMapImpl.INSTANCE
         );
         int size = aliases.length;
         setters = new Setter[size];
@@ -105,8 +109,8 @@ public final class BeanTransformerAdapter<T> implements ResultTransformer {
                 }
                 this.methods[i] = method;
                 setters[i] = propertyAccessStrategy
-                    .buildPropertyAccess(resultClass, method.getFieldName(), false)
-                    .getSetter();
+                        .buildPropertyAccess(resultClass, method.getFieldName(), false)
+                        .getSetter();
             }
         }
         isInitialized = true;

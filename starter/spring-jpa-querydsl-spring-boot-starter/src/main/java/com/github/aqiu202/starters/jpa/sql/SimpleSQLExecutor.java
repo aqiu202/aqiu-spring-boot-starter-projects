@@ -32,6 +32,7 @@ public class SimpleSQLExecutor implements SQLExecutor {
      * @author aqiu
      * @deprecated 不推荐使用
      */
+    @Deprecated
     @Override
     public AbstractQuery<?> hql(String hql, Map<String, Object> parameters) {
         return HqlQuery.of(this.entityManager.get()).init(hql, parameters);
@@ -43,6 +44,7 @@ public class SimpleSQLExecutor implements SQLExecutor {
      * @author aqiu
      * @deprecated 不推荐使用
      */
+    @Deprecated
     @Override
     public AbstractQuery<?> hql(String hql, Object... parameters) {
         return HqlQuery.of(this.entityManager.get()).init(hql, parameters);

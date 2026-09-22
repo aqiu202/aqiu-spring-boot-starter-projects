@@ -6,7 +6,7 @@ import com.github.aqiu202.lock.cache.SimpleCacheKeyLock;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.util.Assert;
 
 /**

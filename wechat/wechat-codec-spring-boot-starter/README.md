@@ -31,8 +31,8 @@ public class TestCodec {
         String code = "xxx";
         //小程序使用code换取session
         JsonNode session = decryptService.session(code);
-        String sessionKey = session.get("session_key").asText(); //获取sessionKey
-        String openid = session.get("openid").asText(); //获取openid
+        String sessionKey = session.get("session_key").asString(); //获取sessionKey
+        String openid = session.get("openid").asString(); //获取openid
         
         //解密小程序用户隐私信息
         String encryptedData = "xxx"; //密文
@@ -42,7 +42,7 @@ public class TestCodec {
         
         //如果仅用作解密小程序用户隐私信息，可以使用一下方法
         ObjectNode user = decryptService.decodeUser(encryptedData, iv, code);
-        openid = user.get("openid").asText();
+        openid = user.get("openid").asString();
         userInfo = user.get("data");
         
         //解密微信支付退款信息

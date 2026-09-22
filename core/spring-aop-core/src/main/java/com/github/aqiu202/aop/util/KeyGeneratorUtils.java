@@ -3,11 +3,11 @@ package com.github.aqiu202.aop.util;
 import com.github.aqiu202.aop.keygen.KeyGenerator;
 import com.github.aqiu202.aop.keygen.impl.MethodKeyGenerator;
 import com.github.aqiu202.util.StringUtils;
+import jakarta.annotation.Nonnull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
-import org.springframework.lang.NonNull;
 
 /**
  * <pre>KeyGeneratorUtils</pre>
@@ -20,7 +20,7 @@ public abstract class KeyGeneratorUtils {
 
     private static final KeyGenerator defaultKeyGenerator = new MethodKeyGenerator();
 
-    @NonNull
+    @Nonnull
     public static KeyGenerator getKeyGenerator(String keyGeneratorName,
             ApplicationContext applicationContext) {
         if (StringUtils.isEmpty(keyGeneratorName)) {

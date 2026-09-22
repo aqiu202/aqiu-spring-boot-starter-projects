@@ -1,6 +1,6 @@
 package com.github.aqiu202.page;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import tools.jackson.databind.annotation.JsonSerialize;
 import com.github.aqiu202.page.json.PageJsonSerializer;
 import java.util.List;
 

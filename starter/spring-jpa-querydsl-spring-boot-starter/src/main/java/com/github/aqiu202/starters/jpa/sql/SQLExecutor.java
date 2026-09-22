@@ -14,6 +14,7 @@ public interface SQLExecutor extends ExtendsRepository, SQLRepository {
      * @author aqiu
      * @deprecated 不推荐使用
      */
+    @Deprecated
     AbstractQuery<?> hql(String hql, Map<String, Object> parameters);
 
     /**
@@ -22,6 +23,7 @@ public interface SQLExecutor extends ExtendsRepository, SQLRepository {
      * @author aqiu
      * @deprecated 不推荐使用
      */
+    @Deprecated
     AbstractQuery<?> hql(String hql, Object... parameters);
 
     void clear();

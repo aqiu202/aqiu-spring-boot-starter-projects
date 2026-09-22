@@ -1,19 +1,17 @@
 package com.github.aqiu202.util;
 
-import com.fasterxml.jackson.core.JacksonException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.*;
+import tools.jackson.databind.ext.javatime.deser.LocalDateDeserializer;
+import tools.jackson.databind.ext.javatime.deser.LocalDateTimeDeserializer;
+import tools.jackson.databind.ext.javatime.deser.LocalTimeDeserializer;
+import tools.jackson.databind.ext.javatime.ser.LocalDateSerializer;
+import tools.jackson.databind.ext.javatime.ser.LocalDateTimeSerializer;
+import tools.jackson.databind.ext.javatime.ser.LocalTimeSerializer;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.module.SimpleModule;
 
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -26,12 +24,12 @@ public class JacksonUtils {
     public static ObjectMapper createObjectMapper() {
         DateFormatters dateFormatters = DateFormatters.INSTANCE;
         SimpleModule simpleModule = new SimpleModule();
-        List<JsonSerializer<?>> jsonSerializers = Arrays.asList(
+        List<ValueSerializer<?>> jsonSerializers = Arrays.asList(
                 new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormatters.getDate())),
                 new LocalTimeSerializer(DateTimeFormatter.ofPattern(dateFormatters.getTime())),
                 new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormatters.getDateTime())));
 
-        List<JsonDeserializer<?>> jsonDeserializers = Arrays.asList(
+        List<ValueDeserializer<?>> jsonDeserializers = Arrays.asList(
                 new LocalDateDeserializer(DateTimeFormatter.ofPattern(dateFormatters.getDate())),
                 new LocalTimeDeserializer(DateTimeFormatter.ofPattern(dateFormatters.getTime())),
                 new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormatters.getDateTime()))
@@ -43,19 +41,18 @@ public class JacksonUtils {
                 .disable(DeserializationFeature.FAIL_ON_IGNORED_PROPERTIES,
                         DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
                         DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
-                .addModule(new JavaTimeModule())
                 .addModule(simpleModule)
                 .build();
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void addSerializer(SimpleModule module, JsonSerializer<?> serializer) {
-        module.addSerializer((Class) serializer.handledType(), (JsonSerializer) serializer);
+    private static void addSerializer(SimpleModule module, ValueSerializer<?> serializer) {
+        module.addSerializer((Class) serializer.handledType(), (ValueSerializer) serializer);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void addDeserializer(SimpleModule module, JsonDeserializer<?> deserializer) {
-        module.addDeserializer((Class) deserializer.handledType(), (JsonDeserializer) deserializer);
+    private static void addDeserializer(SimpleModule module, ValueDeserializer<?> deserializer) {
+        module.addDeserializer((Class) deserializer.handledType(), (ValueDeserializer) deserializer);
     }
 
     public static byte[] toBytes(Object target) {
@@ -70,7 +67,7 @@ public class JacksonUtils {
     public static <T> T toObject(byte[] source, Class<T> targetType) {
         try {
             return MAPPER.readValue(source, targetType);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException("Json反序列化异常", e);
         }
     }
@@ -78,7 +75,7 @@ public class JacksonUtils {
     public static <T> T toObject(byte[] source, TypeReference<T> targetType) {
         try {
             return MAPPER.readValue(source, targetType);
-        } catch (IOException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException("Json反序列化异常", e);
         }
     }

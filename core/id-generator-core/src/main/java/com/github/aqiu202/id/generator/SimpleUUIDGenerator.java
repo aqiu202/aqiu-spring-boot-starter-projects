@@ -2,7 +2,8 @@ package com.github.aqiu202.id.generator;
 
 import com.github.aqiu202.id.IdGenerator;
 import java.util.UUID;
-import org.springframework.lang.NonNull;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <pre>SimpleUUIDGenerator</pre>
@@ -11,7 +12,7 @@ import org.springframework.lang.NonNull;
  **/
 public class SimpleUUIDGenerator implements IdGenerator<String> {
 
-    @NonNull
+    @Nonnull
     @Override
     public String nextId() {
         return UUID.randomUUID().toString().replace("-", "");

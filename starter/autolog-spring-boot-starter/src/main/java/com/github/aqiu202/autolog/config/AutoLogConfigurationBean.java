@@ -1,7 +1,7 @@
 package com.github.aqiu202.autolog.config;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import com.github.aqiu202.autolog.interceptor.LogCollector;
 import com.github.aqiu202.autolog.interceptor.LogHandler;
 import com.github.aqiu202.autolog.interceptor.ParamReader;
@@ -33,7 +33,7 @@ public class AutoLogConfigurationBean {
                 String s;
                 try {
                     s = objectMapper.writeValueAsString(obj);
-                } catch (JsonProcessingException e) {
+                } catch (JacksonException e) {
                     return null;
                 }
                 return s;

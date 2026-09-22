@@ -83,17 +83,17 @@ public final class DefaultTypeConverter implements TypeConverter {
                 } else if(value instanceof String) {
                     String s = (String) value;
                     if (type.equals(Long.class) || type.equals(long.class)) {
-                        value = new Long(s);
+                        value = Long.valueOf(s);
                     } else if (type.equals(Integer.class) || type.equals(int.class)) {
-                        value = new Integer(s);
+                        value = Integer.valueOf(s);
                     } else if (type.equals(Short.class) || type.equals(short.class)) {
-                        value = new Short(s);
+                        value = Short.valueOf(s);
                     } else if (type.equals(Byte.class) || type.equals(byte.class)) {
-                        value = new Byte(s);
+                        value = Byte.valueOf(s);
                     } else if (type.equals(Float.class) || type.equals(float.class)) {
-                        value = new Float(s);
+                        value = Float.valueOf(s);
                     } else if (type.equals(Double.class) || type.equals(double.class)) {
-                        value = new Double(s);
+                        value = Double.valueOf(s);
                     } else if (type.equals(BigInteger.class)) {
                         value = new BigInteger(s);;
                     } else if (type.equals(BigDecimal.class)) {

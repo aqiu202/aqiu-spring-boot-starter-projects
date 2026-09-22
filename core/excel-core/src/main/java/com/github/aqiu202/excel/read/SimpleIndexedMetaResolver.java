@@ -26,7 +26,7 @@ public class SimpleIndexedMetaResolver implements IndexedMetaResolver {
     }
 
     protected IndexedTableMeta buildMapIndexedTableMeta(HeadMeta headMeta) {
-        return new IndexedTableMeta(headMeta.getColIndex(), new MapPropertyMeta(headMeta.asText()));
+        return new IndexedTableMeta(headMeta.getColIndex(), new MapPropertyMeta(headMeta.asString()));
     }
 
     protected IndexedTableMeta resolveIndexedTableMeta(TableMeta meta, HeadMeta[] headMetas) {

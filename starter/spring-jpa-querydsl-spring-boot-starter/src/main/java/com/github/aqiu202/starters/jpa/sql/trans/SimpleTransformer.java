@@ -6,6 +6,7 @@ import java.util.Map;
 import org.hibernate.transform.ResultTransformer;
 import org.springframework.util.Assert;
 
+@SuppressWarnings("deprecation")
 public final class SimpleTransformer implements ResultTransformer {
 
     /**

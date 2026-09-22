@@ -4,10 +4,12 @@ import com.github.aqiu202.id.IdGenerator;
 import com.github.aqiu202.id.IdGeneratorFactory;
 import com.github.aqiu202.id.generator.RedisIdGenerator;
 import com.github.aqiu202.id.type.IdType;
-import java.io.Serializable;
+
+import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.lang.NonNull;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * <pre>SimpleIdGeneratorFactory</pre>
@@ -25,13 +27,14 @@ public class SimpleIdGeneratorFactory implements IdGeneratorFactory {
         this.idType = idType;
     }
 
-    @NonNull
+    @Nonnull
     @Override
     public IdGenerator<?> getIdGenerator() {
         IdGenerator<?> idGenerator;
         try {
-            idGenerator = this.idType.getClazz().newInstance();
-        } catch (InstantiationException | IllegalAccessException e) {
+            idGenerator = this.idType.getClazz().getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException
+                 | InvocationTargetException | NoSuchMethodException e) {
             throw new IllegalArgumentException("ID Generator实例化失败", e);
         }
         if (idGenerator instanceof RedisIdGenerator) {

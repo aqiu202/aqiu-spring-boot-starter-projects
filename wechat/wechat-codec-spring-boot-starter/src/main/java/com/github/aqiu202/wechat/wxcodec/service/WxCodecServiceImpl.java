@@ -1,9 +1,10 @@
 package com.github.aqiu202.wechat.wxcodec.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.springframework.http.HttpHeaders;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 import com.github.aqiu202.util.AESUtils;
 import com.github.aqiu202.util.MD5Utils;
 import com.github.aqiu202.util.StringUtils;
@@ -27,7 +28,7 @@ public class WxCodecServiceImpl implements WxCodecService {
 
     private final RestTemplate restTemplate;
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    private final JsonMapper mapper = JsonMapper.builder().build();
 
     public WxCodecServiceImpl(WxCodecProperty wxCodecProperty) {
         this.wxCodecProperty = wxCodecProperty;
@@ -49,7 +50,7 @@ public class WxCodecServiceImpl implements WxCodecService {
         JsonNode result;
         try {
             result = this.mapper.readTree(resultString);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new IllegalArgumentException("json解析失败，" + e.getMessage());
         }
         this.checkResult(result);
@@ -59,7 +60,7 @@ public class WxCodecServiceImpl implements WxCodecService {
     @Override
     public JsonNode getPhoneNumber(String code) {
         JsonNode jsonNode = this.obtainAccessToken();
-        String accessToken = jsonNode.get("access_token").asText();
+        String accessToken = jsonNode.get("access_token").asString();
         return this.getPhoneNumber(code, accessToken);
     }
 
@@ -71,10 +72,10 @@ public class WxCodecServiceImpl implements WxCodecService {
         String bodyString;
         try {
             bodyString = mapper.writeValueAsString(map);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
-        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
         HttpEntity<String> body = new HttpEntity<>(bodyString, headers);
         //{"errcode":0,"errmsg":"ok","phone_info":{"phoneNumber":"15764212419","purePhoneNumber":"15764212419","countryCode":"86","watermark":{"timestamp":1726847080,"appid":"wx1a94dcdb3490a778"}}}
@@ -113,9 +114,9 @@ public class WxCodecServiceImpl implements WxCodecService {
             if ((sessionKey = data.get("session_key")) != null
                     && (openId = data.get("openid")) != null) {
                 ObjectNode obj = mapper.createObjectNode();
-                JsonNode res = this.decrypt(encryptedData, sessionKey.asText(), iv);
+                JsonNode res = this.decrypt(encryptedData, sessionKey.asString(), iv);
                 obj.set("data", res);
-                obj.put("openid", openId.asText());
+                obj.put("openid", openId.asString());
                 return obj;
             }
         }
@@ -154,7 +155,7 @@ public class WxCodecServiceImpl implements WxCodecService {
                 .getForObject(url, String.class, appid, secret, code);
         try {
             return this.mapper.readTree(str);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new IllegalArgumentException("json解析失败，" + e.getMessage());
         }
     }
@@ -169,7 +170,7 @@ public class WxCodecServiceImpl implements WxCodecService {
         String str = this.restTemplate.getForObject(url, String.class);
         try {
             return this.mapper.readTree(str);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new IllegalArgumentException("json解析失败，" + e.getMessage());
         }
     }
@@ -193,7 +194,7 @@ public class WxCodecServiceImpl implements WxCodecService {
         Assert.notNull(result, "微信接口返回结果为空");
         if (result.has("errcode")) {
             int errcode = result.get("errcode").asInt();
-            Assert.isTrue(errcode == 0, result.get("errmsg").asText());
+            Assert.isTrue(errcode == 0, result.get("errmsg").asString());
         }
     }
 }

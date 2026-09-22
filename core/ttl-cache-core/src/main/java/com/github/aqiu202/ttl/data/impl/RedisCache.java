@@ -1,9 +1,11 @@
 package com.github.aqiu202.ttl.data.impl;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import jakarta.annotation.Nonnull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.util.Assert;
 
 public class RedisCache<K, V> extends AbstractTtlCache<K, V> implements InitializingBean {
@@ -19,7 +21,7 @@ public class RedisCache<K, V> extends AbstractTtlCache<K, V> implements Initiali
 
     @Override
     public void set(@Nonnull K key, @Nonnull V value, long expired, @Nonnull TimeUnit unit) {
-        this.cache.opsForValue().set(key, value, expired, unit);
+        this.cache.opsForValue().set(key, value, Expiration.from(expired, unit));
     }
 
     @Override
@@ -34,7 +36,7 @@ public class RedisCache<K, V> extends AbstractTtlCache<K, V> implements Initiali
 
     @Override
     public Boolean setIfAbsent(@Nonnull K key, @Nonnull V value, long expired, @Nonnull TimeUnit unit) {
-        return this.cache.opsForValue().setIfAbsent(key, value, expired, unit);
+        return this.cache.opsForValue().setIfAbsent(key, value, Expiration.from(expired, unit));
     }
 
     @Override

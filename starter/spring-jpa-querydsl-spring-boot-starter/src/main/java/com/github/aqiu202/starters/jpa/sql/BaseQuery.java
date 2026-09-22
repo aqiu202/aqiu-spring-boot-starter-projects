@@ -13,12 +13,12 @@ import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
 import org.springframework.data.domain.Pageable;
 
-@SuppressWarnings({"unchecked"})
+@SuppressWarnings({"unchecked", "deprecation"})
 public class BaseQuery<T> {
 
     protected Query query;
     protected Query countQuery;
-    protected ResultTransformer mapTransformer = MapBeanTransformer.INSTANCE;
+    protected ResultTransformer<?> mapTransformer = MapBeanTransformer.INSTANCE;
     protected BeanTransformerAdapter<?> beanTransformer;
     protected Pageable pageable;
 

@@ -1,7 +1,8 @@
 package com.github.aqiu202.zk.prop;
 
 import java.nio.charset.StandardCharsets;
-import org.springframework.lang.NonNull;
+
+import jakarta.annotation.Nonnull;
 
 /**
  * <pre>AuthInfoProperties</pre>
@@ -26,7 +27,7 @@ public class AuthInfoProperties {
         return auth;
     }
 
-    public void setAuth(@NonNull String auth) {
+    public void setAuth(@Nonnull String auth) {
         this.auth = auth.getBytes(StandardCharsets.UTF_8);
     }
 }

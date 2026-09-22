@@ -2,7 +2,7 @@ package com.github.aqiu202.http.file;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.lang.Nullable;
+import jakarta.annotation.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;

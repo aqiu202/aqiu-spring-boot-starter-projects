@@ -89,12 +89,16 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
     public HttpEntity<?> buildHttpEntityWithBody(HttpBodyRequest request) throws IOException {
         HttpHeaders httpHeaders = request.getHeaders();
         Object body = this.processBody(request.getBody());
-        return new HttpEntity<>(body, new LinkedMultiValueMap<>(httpHeaders.getValues()));
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.putAll(httpHeaders.getValues());
+        return new HttpEntity<>(body, headers);
     }
 
     public HttpEntity<?> buildHttpEntity(HttpRequest<?> request) {
         HttpHeaders httpHeaders = request.getHeaders();
-        return new HttpEntity<>(null, new LinkedMultiValueMap<>(httpHeaders.getValues()));
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.putAll(httpHeaders.getValues());
+        return new HttpEntity<>(null, headers);
     }
 
     protected <T> HttpResponseEntity<T> doRequest(RestTemplate client, HttpRequest<?> request, HttpEntity<?> entity, TypeSpec<T> responseType) {

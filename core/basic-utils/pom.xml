@@ -11,7 +11,6 @@
 
     <name>basic-utils</name>
     <artifactId>basic-utils</artifactId>
-    <version>${revision}-2</version>
 
     <dependencies>
         <dependency>
@@ -20,9 +19,8 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.ow2.asm/asm -->
         <dependency>
@@ -34,11 +32,6 @@
             <groupId>jakarta.servlet</groupId>
             <artifactId>jakarta.servlet-api</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-            <version>${jackson.version}</version>
         </dependency>
     </dependencies>
 </project>

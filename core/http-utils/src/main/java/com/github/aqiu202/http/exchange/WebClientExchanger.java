@@ -9,7 +9,6 @@ import com.github.aqiu202.http.util.TypeSpec;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
@@ -54,7 +53,7 @@ public class WebClientExchanger extends AbstractSpringHttpExchanger<WebClient> {
                 .headers(headers -> {
                     HttpHeaders requestHeaders = request.getHeaders();
                     if (!requestHeaders.isEmpty()) {
-                        headers.addAll(new LinkedMultiValueMap<>(requestHeaders.getValues()));
+                        requestHeaders.getValues().forEach(headers::addAll);
                     }
                 });
     }

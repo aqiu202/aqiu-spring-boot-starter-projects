@@ -7,6 +7,7 @@ import java.util.Map;
 import com.github.aqiu202.util.StringUtils;
 import org.hibernate.transform.ResultTransformer;
 
+@SuppressWarnings("all")
 public final class MapBeanTransformer implements ResultTransformer {
 
     public static final ResultTransformer INSTANCE = new MapBeanTransformer();

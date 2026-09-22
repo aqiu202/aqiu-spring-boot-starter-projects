@@ -53,11 +53,13 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends JpaBaseRepos
     }
 
     @Override
+    @Deprecated
     public AbstractQuery<T> of(String sql, Map<String, Object> parameters) {
         return NativeSqlQuery.of(this.getEntityManager()).as(this.entityClass).init(sql, parameters);
     }
 
     @Override
+    @Deprecated
     public AbstractQuery<T> of(String sql, Object... parameters) {
         return NativeSqlQuery.of(this.getEntityManager()).as(this.entityClass).init(sql, parameters);
     }
@@ -68,6 +70,7 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends JpaBaseRepos
      * @see BaseRepository#hql(java.lang.String, java.util.Map)
      */
     @Override
+    @Deprecated
     public AbstractQuery<T> hql(String hql, Map<String, Object> parameters) {
         return HqlQuery.of(this.getEntityManager()).as(this.entityClass).init(hql, parameters);
     }
@@ -77,6 +80,7 @@ public class BaseRepositoryImpl<T, ID extends Serializable> extends JpaBaseRepos
      * 不支持关联查询和子查询
      * @see BaseRepository#hql(java.lang.String, java.util.Map)
      */
+    @Deprecated
     @Override
     public AbstractQuery<T> hql(String hql, Object... parameters) {
         return HqlQuery.of(this.getEntityManager()).as(this.entityClass).init(hql, parameters);

@@ -5,8 +5,6 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.Expiry;
 import com.github.benmanes.caffeine.cache.Policy.VarExpiration;
 import java.util.concurrent.TimeUnit;
-import org.springframework.lang.NonNull;
-
 import jakarta.annotation.Nonnull;
 
 public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
@@ -19,7 +17,7 @@ public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
     }
 
     @Override
-    public void set(@NonNull K key, @NonNull V value, long expired, @NonNull TimeUnit unit) {
+    public void set(@Nonnull K key, @Nonnull V value, long expired, @Nonnull TimeUnit unit) {
         this.initializeCache();
         this.expiration.put(key, value, expired, unit);
     }
@@ -35,7 +33,7 @@ public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
     }
 
     @Override
-    public synchronized Boolean setIfAbsent(@NonNull K key, @NonNull V value, long expired, @NonNull TimeUnit unit) {
+    public synchronized Boolean setIfAbsent(@Nonnull K key, @Nonnull V value, long expired, @Nonnull TimeUnit unit) {
         V oldValue = this.get(key);
         if (oldValue != null) {
             return Boolean.FALSE;
@@ -54,20 +52,20 @@ public class CaffeineCache<K, V> extends AbstractTtlCache<K, V> {
         return Caffeine.newBuilder().initialCapacity(1)
             .expireAfter(new Expiry<Object, Object>() {
                 @Override
-                public long expireAfterCreate(@NonNull Object key,
-                    @NonNull Object value, long currentTime) {
+                public long expireAfterCreate(@Nonnull Object key,
+                    @Nonnull Object value, long currentTime) {
                     return unit.toNanos(expired);
                 }
 
                 @Override
-                public long expireAfterUpdate(@NonNull Object key,
-                    @NonNull Object value, long currentTime, long currentDuration) {
+                public long expireAfterUpdate(@Nonnull Object key,
+                    @Nonnull Object value, long currentTime, long currentDuration) {
                     return currentDuration;
                 }
 
                 @Override
-                public long expireAfterRead(@NonNull Object key,
-                    @NonNull Object value, long currentTime, long currentDuration) {
+                public long expireAfterRead(@Nonnull Object key,
+                    @Nonnull Object value, long currentTime, long currentDuration) {
                     return currentDuration;
                 }
             })

@@ -39,6 +39,7 @@ public abstract class ReflectionUtils {
      *
      * @param executable 构造器/方法
      */
+    @SuppressWarnings("deprecation")
     public static void makeAccessible(@Nonnull Executable executable) {
         if ((!Modifier.isPublic(executable.getModifiers()) ||
                 !Modifier.isPublic(executable.getDeclaringClass().getModifiers())) && !executable.isAccessible()) {
@@ -51,6 +52,7 @@ public abstract class ReflectionUtils {
      *
      * @param field 字段
      */
+    @SuppressWarnings("deprecation")
     public static void makeAccessible(@Nonnull Field field) {
         if ((!Modifier.isPublic(field.getModifiers()) ||
                 !Modifier.isPublic(field.getDeclaringClass().getModifiers()) ||
