@@ -10,7 +10,7 @@ public abstract class KeyEntity {
 
     @Id
     @SnowflakeId
-    @Column(length = 30)
+    @Column(length = 36)
     protected String id;
 
     public String getId() {
