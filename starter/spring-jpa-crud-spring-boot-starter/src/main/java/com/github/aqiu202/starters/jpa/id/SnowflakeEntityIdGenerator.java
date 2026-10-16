@@ -15,6 +15,10 @@ public class SnowflakeEntityIdGenerator implements BeforeExecutionGenerator {
 
     @Override
     public Object generate(SharedSessionContractImplementor session, Object owner, Object currentValue, EventType eventType) {
+        // 已赋值的主键直接使用（配合 allowAssignedIdentifiers 支持外部赋值）
+        if (currentValue != null) {
+            return currentValue;
+        }
         if (customKeyGenerator != null) {
             return customKeyGenerator.generate(owner, currentValue);
         }
@@ -24,6 +28,15 @@ public class SnowflakeEntityIdGenerator implements BeforeExecutionGenerator {
     @Override
     public EnumSet<EventType> getEventTypes() {
         return EnumSet.of(EventType.INSERT);
+    }
+
+    /**
+     * Hibernate 6.5+ 默认不允许 persist 前手动赋值主键（会判定为 detached 并抛出
+     * PersistentObjectException），此生成器显式支持外部赋值优先、否则自动生成
+     */
+    @Override
+    public boolean allowAssignedIdentifiers() {
+        return true;
     }
 
     public static void setCustomKeyGenerator(CustomKeyGenerator customKeyGenerator) {

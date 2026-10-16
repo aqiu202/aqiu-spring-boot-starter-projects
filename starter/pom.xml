@@ -24,6 +24,7 @@
         <module>zk-curator-spring-boot-starter</module>
         <module>excel-spring-boot-starter</module>
         <module>spring-jpa-crud-spring-boot-starter</module>
+        <module>http-logging-spring-boot-starter</module>
     </modules>
 
     <dependencies>

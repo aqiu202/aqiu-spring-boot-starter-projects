@@ -1,0 +1,3 @@
+logging:
+  pattern:
+    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(---){faint} [%X{traceId}] %clr([%12.12t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n"
