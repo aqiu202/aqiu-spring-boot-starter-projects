@@ -6,6 +6,8 @@ import com.github.aqiu202.util.JacksonUtils;
 import jakarta.annotation.Nullable;
 
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -69,6 +71,42 @@ public class URIBuilder {
         return this;
     }
 
+    /**
+     * 按分段追加路径：每个分段独立做 UTF-8 编码后再用 {@code /} 连接，
+     * 因此分段内的 {@code /}、空格、中文等字符不会破坏路径结构。
+     *
+     * @param segments 未编码的路径分段
+     */
+    public URIBuilder pathSegments(String... segments) {
+        if (segments != null) {
+            for (String segment : segments) {
+                this.addPathSegment(segment);
+            }
+        }
+        return this;
+    }
+
+    public URIBuilder pathSegments(Collection<String> segments) {
+        if (segments != null) {
+            segments.forEach(this::addPathSegment);
+        }
+        return this;
+    }
+
+    private void addPathSegment(@Nullable String segment) {
+        if (segment == null) {
+            return;
+        }
+        String encoded = encodePathSegment(segment);
+        if (Strings.isBlank(this.path)) {
+            this.path = "/" + encoded;
+        } else if (this.path.endsWith("/")) {
+            this.path = this.path + encoded;
+        } else {
+            this.path = this.path + "/" + encoded;
+        }
+    }
+
     public URIBuilder schema(String schema) {
         this.schema = schema;
         return this;
@@ -95,8 +133,7 @@ public class URIBuilder {
     }
 
     public URIBuilder addQueryBean(Object bean) {
-        Map<String, Object> map = JacksonUtils.convert(bean, new TypeReference<Map<String, Object>>() {
-        });
+        Map<String, Object> map = JacksonSerializer.INSTANCE.toMap(bean);
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
@@ -198,22 +235,44 @@ public class URIBuilder {
         return builder;
     }
 
+    /**
+     * 查询参数键 / 值统一做 UTF-8 编码（空格编码为 {@code +}）；
+     * {@link #query(String)} 设置的原始查询串保持原样，不做二次编码。
+     */
     public StringBuilder buildQuery() {
         StringBuilder builder = new StringBuilder();
         if (!this.queryParams.isEmpty()) {
-            builder.append("?");
-            this.queryParams.forEach((k, v) -> {
-                if (v != null) {
-                    v.forEach(value -> builder.append(k).append("=").append(value).append("&"));
+            this.queryParams.forEach((name, values) -> {
+                if (values == null || values.isEmpty()) {
+                    return;
+                }
+                String encodedName = encode(name);
+                for (String value : values) {
+                    if (builder.length() > 0) {
+                        builder.append('&');
+                    }
+                    builder.append(encodedName).append('=').append(encode(value));
                 }
             });
-            builder.deleteCharAt(builder.length() - 1);
         }
         if (Strings.isNotBlank(this.query)) {
-            String s = builder.length() == 0 ? "?" : "&";
-            builder.append(s).append(this.query);
+            if (builder.length() > 0) {
+                builder.append('&');
+            }
+            builder.append(this.query);
         }
-        return builder;
+        if (builder.length() == 0) {
+            return builder;
+        }
+        return new StringBuilder("?").append(builder);
+    }
+
+    private static String encodePathSegment(String segment) {
+        return encode(segment).replace("+", "%20");
+    }
+
+    private static String encode(String value) {
+        return URLEncoder.encode(value == null ? "" : value, StandardCharsets.UTF_8);
     }
 
     public String buildQueryString() {

@@ -1,23 +1,16 @@
 package com.github.aqiu202.http;
 
-import tools.jackson.core.type.TypeReference;
+import com.github.aqiu202.http.util.*;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpQueries;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.exchange.HttpExchanger;
 import com.github.aqiu202.http.intercept.HttpInterceptor;
 import com.github.aqiu202.http.intercept.InterceptorContext;
-import com.github.aqiu202.http.util.ParameterizedTypeRef;
-import com.github.aqiu202.http.util.RequestDescriptor;
-import com.github.aqiu202.http.util.TypeSpec;
-import com.github.aqiu202.http.util.URIBuilder;
-import com.github.aqiu202.util.CollectionUtils;
-import com.github.aqiu202.util.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -37,6 +30,7 @@ public class HttpRequest<T extends HttpRequest<?>> {
     private Consumer<HttpHeaders> headersConsumer;
     private boolean enableDebug;
     private BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer;
+    private RetryPolicy retryPolicy;
     private final RequestDescriptor descriptor;
     private String traceId;
 
@@ -57,11 +51,16 @@ public class HttpRequest<T extends HttpRequest<?>> {
         this.exchanger = descriptor.getExchanger();
         this.interceptors = descriptor.getInterceptors();
         this.responseConsumer = descriptor.getResponseConsumer();
+        this.retryPolicy = descriptor.getRetryPolicy();
         this.enableDebug = descriptor.isEnableDebug();
     }
 
     public HttpService.HttpMethod getMethod() {
         return method;
+    }
+
+    public JsonSerializer getJsonSerializer() {
+        return this.descriptor.getJsonSerializer();
     }
 
     public T addHeader(String name, Object... values) {
@@ -98,6 +97,14 @@ public class HttpRequest<T extends HttpRequest<?>> {
         return (T) this;
     }
 
+    /**
+     * 追加多值查询参数：集合中的每个元素都会生成一个同名参数。
+     */
+    public T addQueryParam(String name, Collection<?> values) {
+        this.uriBuilder.addQueryParam(name, values);
+        return (T) this;
+    }
+
     public T replaceQueryParam(String name, Object... values) {
         this.uriBuilder.setQueryParam(name, values);
         return (T) this;
@@ -129,6 +136,19 @@ public class HttpRequest<T extends HttpRequest<?>> {
         }
         this.uriBuilder.path(path);
         return this.uriVariables(uriVariables);
+    }
+
+    /**
+     * 按分段设置路径：每个分段独立编码后再以 {@code /} 连接，适合携带动态 id 等未编码值。
+     */
+    public T pathSegments(String... segments) {
+        this.uriBuilder.pathSegments(segments);
+        return (T) this;
+    }
+
+    public T pathSegments(Collection<String> segments) {
+        this.uriBuilder.pathSegments(segments);
+        return (T) this;
     }
 
     public T uriVariable(String name, Object value) {
@@ -169,6 +189,21 @@ public class HttpRequest<T extends HttpRequest<?>> {
     public T onResponse(BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer) {
         this.responseConsumer = responseConsumer;
         return (T) this;
+    }
+
+    /**
+     * 设置条件重试策略；在响应消费者之前判定，命中且未超过次数时重发当前请求。
+     * <p>
+     * 优先级：单个请求设置的重试策略覆盖 {@link HttpService.Builder#retry(RetryPolicy)}
+     * 配置的服务级策略；未设置时沿用服务级策略。
+     */
+    public T retry(RetryPolicy retryPolicy) {
+        this.retryPolicy = retryPolicy;
+        return (T) this;
+    }
+
+    public RetryPolicy getRetryPolicy() {
+        return this.retryPolicy;
     }
 
     public T debug(boolean enableDebug) {
@@ -228,30 +263,24 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     /**
-     * 强制反序列化（从字节数组二次反序列化）
+     * 强制反序列化（从原始响应文本二次反序列化）
      *
      * @param responseType 目标类型
      * @return 返回值
      */
     public <S> S exchangeForType(Class<S> responseType) {
-        byte[] original = this.exchange(byte[].class);
-        return JacksonUtils.toObject(original, responseType);
+        return this.descriptor.getJsonSerializer().deserialize(this.exchange(String.class), responseType);
     }
 
     /**
-     * 强制反序列化（从字节数组二次反序列化）
+     * 强制反序列化（从原始响应文本二次反序列化）
      *
      * @param responseType 目标类型
      * @return 返回值
      */
     public <S> S exchangeForType(ParameterizedTypeRef<S> responseType) {
-        byte[] original = this.exchange(byte[].class);
-        return JacksonUtils.toObject(original, new TypeReference<S>() {
-            @Override
-            public Type getType() {
-                return responseType.getType();
-            }
-        });
+        return this.descriptor.getJsonSerializer()
+                .deserialize(this.exchange(String.class), responseType.getType());
     }
 
     public <S> S exchange(ParameterizedTypeRef<S> responseType) {
@@ -282,19 +311,27 @@ public class HttpRequest<T extends HttpRequest<?>> {
             if (this.enableDebug || log.isDebugEnabled()) {
                 this.printRequestDebugInfo();
             }
-            HttpResponseEntity<S> response = this.exchanger.exchange(this, responseType);
-            if (this.enableDebug || log.isDebugEnabled()) {
-                this.printResponseDebugInfo(response);
+            int attempt = 0;
+            while (true) {
+                HttpResponseEntity<S> response = this.exchanger.exchange(this, responseType);
+                if (this.enableDebug || log.isDebugEnabled()) {
+                    this.printResponseDebugInfo(response);
+                }
+                if (this.retryPolicy == null || !this.retryPolicy.matches(response)
+                        || attempt >= this.retryPolicy.getMaxRetries()) {
+                    this.invokeResponseConsumer(this, response);
+                    return response;
+                }
+                attempt++;
+                this.retryPolicy.beforeRetry(this);
             }
-            this.invokeResponseConsumer(this, response);
-            return response;
         } catch (IOException e) {
             throw new RuntimeException("Http请求异常", e);
         }
     }
 
     protected void processInterceptors(List<HttpInterceptor> interceptors) {
-        if (CollectionUtils.isNotEmpty(interceptors)) {
+        if (interceptors != null && !interceptors.isEmpty()) {
             InterceptorContext interceptorContext = this.buildInterceptorContext();
             for (HttpInterceptor interceptor : interceptors) {
                 interceptor.intercept(interceptorContext, this);
@@ -314,17 +351,15 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     protected List<HttpInterceptor> resolveInterceptors() {
-        List<HttpInterceptor> interceptors = this.interceptors == null ? Collections.emptyList()
-                : this.interceptors;
-        if (this.optionsConsumer == null && this.headersConsumer == null) {
-            if (!interceptors.isEmpty()) {
-                interceptors.sort(Comparator.comparingInt(HttpInterceptor::getOrder));
-            }
-            return interceptors;
+        // 始终基于副本排序，避免并发请求同时修改服务级共享列表
+        List<HttpInterceptor> resolvedInterceptors = this.interceptors == null
+                ? new ArrayList<>() : new ArrayList<>(this.interceptors);
+        if (this.optionsConsumer != null || this.headersConsumer != null) {
+            resolvedInterceptors.add(new ConfigureInterceptor((Consumer<HttpRequest<?>>) this.optionsConsumer, this.headersConsumer));
         }
-        List<HttpInterceptor> resolvedInterceptors = new ArrayList<>(interceptors);
-        resolvedInterceptors.add(new ConfigureInterceptor((Consumer<HttpRequest<?>>) this.optionsConsumer, this.headersConsumer));
-        resolvedInterceptors.sort(Comparator.comparingInt(HttpInterceptor::getOrder));
+        if (!resolvedInterceptors.isEmpty()) {
+            resolvedInterceptors.sort(Comparator.comparingInt(HttpInterceptor::getOrder));
+        }
         return resolvedInterceptors;
     }
 

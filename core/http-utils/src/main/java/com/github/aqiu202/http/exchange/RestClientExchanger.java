@@ -6,7 +6,6 @@ import com.github.aqiu202.http.HttpService;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.util.TypeSpec;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -85,14 +84,14 @@ public class RestClientExchanger extends AbstractSpringHttpExchanger<RestClient>
     @Override
     public <T> HttpResponseEntity<T> request(RestClient client, HttpRequest<?> request, TypeSpec<T> responseType) throws IOException {
         RestClient.RequestBodySpec requestSpec = this.beforeRequest(client, request);
-        return this.forResponse(requestSpec, responseType);
+        return this.forResponse(request, requestSpec, responseType);
     }
 
     @Override
     public <T> HttpResponseEntity<T> requestWithBody(RestClient client, HttpBodyRequest request, TypeSpec<T> responseType) throws IOException {
         RestClient.RequestBodySpec requestSpec = this.beforeRequest(client, request);
         this.resolveRequestBody(requestSpec, request);
-        return this.forResponse(requestSpec, responseType);
+        return this.forResponse(request, requestSpec, responseType);
     }
 
     public RestClient.RequestBodySpec beforeRequest(RestClient client, HttpRequest<?> request) {
@@ -114,20 +113,16 @@ public class RestClientExchanger extends AbstractSpringHttpExchanger<RestClient>
         }
     }
 
-    public <T> HttpResponseEntity<T> forResponse(RestClient.RequestBodySpec requestSpec, TypeSpec<T> responseType) {
-        Type type = responseType.getType();
+    public <T> HttpResponseEntity<T> forResponse(HttpRequest<?> request, RestClient.RequestBodySpec requestSpec,
+                                                 TypeSpec<T> responseType) {
         // 覆盖默认的 4xx/5xx 异常处理，交给上层的 responseConsumer 统一处理
         RestClient.ResponseSpec responseSpec = requestSpec
                 .retrieve()
                 .onStatus(HttpStatusCode::isError, (req, res) -> {
                 });
-        ResponseEntity<T> responseEntity;
-        if (type instanceof Class<?>) {
-            responseEntity = responseSpec.toEntity((Class<T>) type);
-        } else {
-            responseEntity = responseSpec.toEntity(ParameterizedTypeReference.<T>forType(type));
-        }
-        return this.convertResponse(responseEntity);
+        // 先按原始字节接收，保证空 body / 非 JSON 响应也能保留原文
+        ResponseEntity<byte[]> responseEntity = responseSpec.toEntity(byte[].class);
+        return this.convertResponse(request, responseEntity, responseType);
     }
 
 }

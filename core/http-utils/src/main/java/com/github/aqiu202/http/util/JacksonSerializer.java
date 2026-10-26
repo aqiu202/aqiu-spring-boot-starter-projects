@@ -14,15 +14,21 @@ import tools.jackson.databind.ext.javatime.ser.LocalDateTimeSerializer;
 import tools.jackson.databind.ext.javatime.ser.LocalTimeSerializer;
 import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.module.SimpleModule;
-import com.github.aqiu202.util.JacksonUtils;
 
+import java.lang.reflect.Type;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class JacksonSerializer implements JsonSerializer {
 
     public static final JacksonSerializer INSTANCE = new JacksonSerializer();
+
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
+    private static final String TIME_PATTERN = "HH:mm:ss";
+    private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     private final ObjectMapper objectMapper;
 
@@ -35,17 +41,16 @@ public class JacksonSerializer implements JsonSerializer {
     }
 
     public JacksonSerializer() {
-        JacksonUtils.DateFormatters dateFormatters = JacksonUtils.DateFormatters.INSTANCE;
         SimpleModule simpleModule = new SimpleModule();
         List<ValueSerializer<?>> jsonSerializers = Arrays.asList(
-                new LocalDateSerializer(DateTimeFormatter.ofPattern(dateFormatters.getDate())),
-                new LocalTimeSerializer(DateTimeFormatter.ofPattern(dateFormatters.getTime())),
-                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(dateFormatters.getDateTime())));
+                new LocalDateSerializer(DateTimeFormatter.ofPattern(DATE_PATTERN)),
+                new LocalTimeSerializer(DateTimeFormatter.ofPattern(TIME_PATTERN)),
+                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN)));
 
         List<ValueDeserializer<?>> jsonDeserializers = Arrays.asList(
-                new LocalDateDeserializer(DateTimeFormatter.ofPattern(dateFormatters.getDate())),
-                new LocalTimeDeserializer(DateTimeFormatter.ofPattern(dateFormatters.getTime())),
-                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(dateFormatters.getDateTime()))
+                new LocalDateDeserializer(DateTimeFormatter.ofPattern(DATE_PATTERN)),
+                new LocalTimeDeserializer(DateTimeFormatter.ofPattern(TIME_PATTERN)),
+                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN))
         );
         jsonSerializers.forEach(js -> addSerializer(simpleModule, js));
         jsonDeserializers.forEach(jd -> addDeserializer(simpleModule, jd));
@@ -81,5 +86,30 @@ public class JacksonSerializer implements JsonSerializer {
         } catch (JacksonException e) {
             throw new RuntimeException("json序列化异常：", e);
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T deserialize(String json, Type type) {
+        if (json == null || json.isEmpty()) {
+            return null;
+        }
+        try {
+            return (T) this.objectMapper.readValue(json, this.objectMapper.getTypeFactory().constructType(type));
+        } catch (JacksonException e) {
+            throw new RuntimeException("json反序列化异常：", e);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> toMap(Object bean) {
+        if (bean == null) {
+            return Collections.emptyMap();
+        }
+        return this.objectMapper.convertValue(bean, Map.class);
+    }
+
+    public ObjectMapper getObjectMapper() {
+        return this.objectMapper;
     }
 }

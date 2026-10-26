@@ -6,13 +6,11 @@ import com.github.aqiu202.http.HttpService;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.util.TypeSpec;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.time.Duration;
 
 public class WebClientExchanger extends AbstractSpringHttpExchanger<WebClient> {
@@ -65,18 +63,12 @@ public class WebClientExchanger extends AbstractSpringHttpExchanger<WebClient> {
         }
     }
 
-    public <T> HttpResponseEntity<T> forResponse(HttpRequest<?> request, WebClient.RequestBodySpec requestBodySpec, TypeSpec<T> responseType) {
-        ResponseEntity<T> responseEntity = requestBodySpec
-                .exchangeToMono(response -> {
-                    Type type = responseType.getType();
-                    if (type instanceof Class<?>) {
-                        return response.toEntity((Class<T>) type);
-                    } else {
-                        ParameterizedTypeReference<T> typeRef = ParameterizedTypeReference.forType(type);
-                        return response.toEntity(typeRef);
-                    }
-                }).block();
-        return this.convertResponse(responseEntity);
+    public <T> HttpResponseEntity<T> forResponse(HttpRequest<?> request, WebClient.RequestBodySpec requestBodySpec,
+                                                 TypeSpec<T> responseType) {
+        ResponseEntity<byte[]> responseEntity = requestBodySpec
+                .exchangeToMono(response -> response.toEntity(byte[].class))
+                .block();
+        return this.convertResponse(request, responseEntity, responseType);
     }
 
 }

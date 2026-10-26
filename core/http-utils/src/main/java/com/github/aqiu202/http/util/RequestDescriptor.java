@@ -24,6 +24,7 @@ public class RequestDescriptor {
     private Predicate<HttpStatus> statusPredicate;
     private JsonSerializer jsonSerializer;
     private BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer;
+    private RetryPolicy retryPolicy;
 
     public RequestDescriptor() {
     }
@@ -32,16 +33,18 @@ public class RequestDescriptor {
                              HttpService.HttpMethod method, HttpHeaders defaultHeaders,
                              HttpQueries defaultQueryParams, HttpExchanger exchanger,
                              List<HttpInterceptor> interceptors, JsonSerializer jsonSerializer,
-                             BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer) {
+                             BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer,
+                             RetryPolicy retryPolicy) {
         this.enableDebug = enableDebug;
         this.baseUrl = baseUrl;
         this.method = method;
         this.defaultHeaders = defaultHeaders;
         this.defaultQueryParams = defaultQueryParams;
         this.exchanger = exchanger;
-        this.interceptors = interceptors;
+        this.interceptors = interceptors == null ? List.of() : List.copyOf(interceptors);
         this.responseConsumer = responseConsumer;
         this.jsonSerializer = jsonSerializer;
+        this.retryPolicy = retryPolicy;
     }
 
     public String getBaseUrl() {
@@ -97,7 +100,7 @@ public class RequestDescriptor {
     }
 
     public void setInterceptors(List<HttpInterceptor> interceptors) {
-        this.interceptors = interceptors;
+        this.interceptors = interceptors == null ? List.of() : List.copyOf(interceptors);
     }
 
     public Predicate<HttpStatus> getStatusPredicate() {
@@ -114,6 +117,14 @@ public class RequestDescriptor {
 
     public void setResponseConsumer(BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer) {
         this.responseConsumer = responseConsumer;
+    }
+
+    public RetryPolicy getRetryPolicy() {
+        return retryPolicy;
+    }
+
+    public void setRetryPolicy(RetryPolicy retryPolicy) {
+        this.retryPolicy = retryPolicy;
     }
 
     public boolean isEnableDebug() {

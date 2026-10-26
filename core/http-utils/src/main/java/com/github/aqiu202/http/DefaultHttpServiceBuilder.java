@@ -3,11 +3,13 @@ package com.github.aqiu202.http;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.exchange.HttpExchanger;
+import com.github.aqiu202.http.exchange.RestClientExchanger;
 import com.github.aqiu202.http.exchange.WebClientExchanger;
 import com.github.aqiu202.http.data.HttpQueries;
 import com.github.aqiu202.http.intercept.HttpInterceptor;
 import com.github.aqiu202.http.util.JacksonSerializer;
 import com.github.aqiu202.http.util.JsonSerializer;
+import com.github.aqiu202.http.util.RetryPolicy;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
@@ -24,7 +26,8 @@ public class DefaultHttpServiceBuilder implements HttpService.Builder {
     private final HttpQueries defaultQueryParams = new HttpQueries();
     private final List<HttpInterceptor> interceptors = new ArrayList<>();
     private JsonSerializer jsonSerializer = JacksonSerializer.INSTANCE;
-    private HttpExchanger exchanger = WebClientExchanger.INSTANCE;
+    private HttpExchanger exchanger = RestClientExchanger.INSTANCE;
+    private RetryPolicy retryPolicy;
     private BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer = (request, responseEntity) -> {
         int statusCode = responseEntity.getStatusCode();
         HttpStatus httpStatus = HttpStatus.valueOf(statusCode);
@@ -108,9 +111,15 @@ public class DefaultHttpServiceBuilder implements HttpService.Builder {
     }
 
     @Override
+    public HttpService.Builder retry(RetryPolicy retryPolicy) {
+        this.retryPolicy = retryPolicy;
+        return this;
+    }
+
+    @Override
     public HttpService build() {
         return new DefaultHttpService(this.enableDebug, this.baseUrl, this.jsonSerializer,
                 this.defaultHeaders, this.defaultQueryParams, this.exchanger,
-                this.interceptors, this.responseConsumer);
+                List.copyOf(this.interceptors), this.responseConsumer, this.retryPolicy);
     }
 }

@@ -7,6 +7,7 @@ import com.github.aqiu202.http.data.HttpQueries;
 import com.github.aqiu202.http.intercept.HttpInterceptor;
 import com.github.aqiu202.http.util.JsonSerializer;
 import com.github.aqiu202.http.util.RequestDescriptor;
+import com.github.aqiu202.http.util.RetryPolicy;
 
 import java.net.URI;
 import java.util.Arrays;
@@ -36,6 +37,8 @@ public interface HttpService {
 
     BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> getResponseConsumer();
 
+    RetryPolicy getRetryPolicy();
+
     boolean isEnableDebug();
 
     default RequestDescriptor buildRequestDescriptor(HttpMethod method) {
@@ -48,7 +51,8 @@ public interface HttpService {
                 this.getExchanger(),
                 this.getInterceptors(),
                 this.getJsonSerializer(),
-                this.getResponseConsumer());
+                this.getResponseConsumer(),
+                this.getRetryPolicy());
     }
 
     default HttpRequest<?> get() {
@@ -172,6 +176,11 @@ public interface HttpService {
         Builder exchanger(HttpExchanger agent);
 
         Builder onResponse(BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer);
+
+        /**
+         * 全局条件重试策略；单次请求可用 {@link HttpRequest#retry(RetryPolicy)} 覆盖。
+         */
+        Builder retry(RetryPolicy retryPolicy);
 
         HttpService build();
     }

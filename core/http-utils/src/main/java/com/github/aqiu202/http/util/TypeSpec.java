@@ -14,6 +14,13 @@ public class TypeSpec<T> {
         this.type = type.getType();
     }
 
+    /**
+     * 直接使用反射类型，例如 Jackson 的 {@code JavaType}（其实现了 {@link Type}）。
+     */
+    public TypeSpec(Type type) {
+        this.type = type;
+    }
+
     public Type getType() {
         return type;
     }

@@ -6,14 +6,12 @@ import com.github.aqiu202.http.HttpService;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.util.TypeSpec;
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.util.Assert;
-import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -103,16 +101,9 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
 
     protected <T> HttpResponseEntity<T> doRequest(RestTemplate client, HttpRequest<?> request, HttpEntity<?> entity, TypeSpec<T> responseType) {
         HttpService.HttpMethod method = request.getMethod();
-        ResponseEntity<T> responseEntity;
         HttpMethod httpMethod = HttpMethod.valueOf(method.getName());
-        Type type = responseType.getType();
-        if (type instanceof Class<?>) {
-            responseEntity = client.exchange(request.getUri(), httpMethod, entity, (Class<T>) type);
-        } else {
-            ParameterizedTypeReference<T> typeRef = ParameterizedTypeReference.forType(type);
-            responseEntity = client.exchange(request.getUri(), httpMethod, entity, typeRef);
-        }
-        return this.convertResponse(responseEntity);
+        ResponseEntity<byte[]> responseEntity = client.exchange(request.getUri(), httpMethod, entity, byte[].class);
+        return this.convertResponse(request, responseEntity, responseType);
     }
 
 }

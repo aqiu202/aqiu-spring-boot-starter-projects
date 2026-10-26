@@ -6,6 +6,7 @@ import com.github.aqiu202.http.exchange.HttpExchanger;
 import com.github.aqiu202.http.data.HttpQueries;
 import com.github.aqiu202.http.intercept.HttpInterceptor;
 import com.github.aqiu202.http.util.JsonSerializer;
+import com.github.aqiu202.http.util.RetryPolicy;
 
 import java.util.List;
 import java.util.function.BiConsumer;
@@ -20,6 +21,7 @@ public class DefaultHttpService implements HttpService {
     private final HttpExchanger exchanger;
     private final List<HttpInterceptor> interceptors;
     private final BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer;
+    private final RetryPolicy retryPolicy;
 
     public DefaultHttpService(boolean enableDebug,
                               String baseUrl,
@@ -27,15 +29,17 @@ public class DefaultHttpService implements HttpService {
                               HttpHeaders defaultHeaders,
                               HttpQueries defaultQueryParams, HttpExchanger exchanger,
                               List<HttpInterceptor> interceptors,
-                              BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer) {
+                              BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer,
+                              RetryPolicy retryPolicy) {
         this.enableDebug = enableDebug;
         this.baseUrl = baseUrl;
         this.jsonSerializer = jsonSerializer;
         this.defaultHeaders = defaultHeaders;
         this.defaultQueryParams = defaultQueryParams;
         this.exchanger = exchanger;
-        this.interceptors = interceptors;
+        this.interceptors = interceptors == null ? List.of() : List.copyOf(interceptors);
         this.responseConsumer = responseConsumer;
+        this.retryPolicy = retryPolicy;
     }
 
     @Override
@@ -75,5 +79,10 @@ public class DefaultHttpService implements HttpService {
     @Override
     public BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> getResponseConsumer() {
         return responseConsumer;
+    }
+
+    @Override
+    public RetryPolicy getRetryPolicy() {
+        return this.retryPolicy;
     }
 }
