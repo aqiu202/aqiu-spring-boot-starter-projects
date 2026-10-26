@@ -51,15 +51,19 @@ public interface FileParam {
     }
 
     static FileParam of(InputStreamResource isr) throws IOException {
-        return new DefaultFileParam(isr.getInputStream(), null);
+        DefaultFileParam fileParam = new DefaultFileParam(isr.getInputStream(), null);
+        fileParam.setFilename(isr.getFilename());
+        return fileParam;
     }
 
     static FileParam of(ByteArrayResource bar) {
-        return new DefaultFileParam(bar.getByteArray(), null);
+        DefaultFileParam fileParam = new DefaultFileParam(bar.getByteArray(), null);
+        fileParam.setFilename(bar.getFilename());
+        return fileParam;
     }
 
     static FileParam of(MultipartFile file) throws IOException {
-        DefaultFileParam fileParam = new DefaultFileParam(file.getInputStream(), file.getOriginalFilename());
+        DefaultFileParam fileParam = new DefaultFileParam(file.getBytes(), file.getContentType());
         fileParam.setFilename(file.getOriginalFilename());
         return fileParam;
     }

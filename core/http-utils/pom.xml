@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>http-utils</artifactId>
+    <version>${revision}-2</version>
     <name>http-utils</name>
 
     <properties>
@@ -22,6 +23,10 @@
         <dependency>
             <groupId>com.github.aqiu202</groupId>
             <artifactId>basic-utils</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

@@ -4,7 +4,6 @@ import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.exchange.HttpExchanger;
 import com.github.aqiu202.http.exchange.RestClientExchanger;
-import com.github.aqiu202.http.exchange.WebClientExchanger;
 import com.github.aqiu202.http.data.HttpQueries;
 import com.github.aqiu202.http.intercept.HttpInterceptor;
 import com.github.aqiu202.http.util.JacksonSerializer;
@@ -30,9 +29,11 @@ public class DefaultHttpServiceBuilder implements HttpService.Builder {
     private RetryPolicy retryPolicy;
     private BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer = (request, responseEntity) -> {
         int statusCode = responseEntity.getStatusCode();
-        HttpStatus httpStatus = HttpStatus.valueOf(statusCode);
-        if (!httpStatus.is2xxSuccessful()) {
-            throw new RuntimeException(String.format("HTTP请求失败：[%d] %s", statusCode, httpStatus.getReasonPhrase()));
+        if (statusCode < 200 || statusCode >= 300) {
+            // 非标准状态码（如 599）没有对应的 HttpStatus，不能使用 HttpStatus.valueOf
+            HttpStatus httpStatus = HttpStatus.resolve(statusCode);
+            throw new RuntimeException(String.format("HTTP请求失败：[%d] %s", statusCode,
+                    httpStatus == null ? "" : httpStatus.getReasonPhrase()).trim());
         }
     };
 

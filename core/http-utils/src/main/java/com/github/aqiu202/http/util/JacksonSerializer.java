@@ -17,6 +17,7 @@ import tools.jackson.databind.module.SimpleModule;
 
 import java.lang.reflect.Type;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -24,11 +25,22 @@ import java.util.Map;
 
 public class JacksonSerializer implements JsonSerializer {
 
-    public static final JacksonSerializer INSTANCE = new JacksonSerializer();
-
     private static final String DATE_PATTERN = "yyyy-MM-dd";
     private static final String TIME_PATTERN = "HH:mm:ss";
     private static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+    /**
+     * 反序列化时同时兼容 {@code yyyy-MM-dd HH:mm:ss} 与 ISO-8601（{@code yyyy-MM-dd'T'HH:mm:ss[.SSS]}）格式。
+     * 须声明在 {@link #INSTANCE} 之前，否则初始化 INSTANCE 时该字段尚为 null。
+     */
+    private static final DateTimeFormatter LENIENT_DATE_TIME_FORMATTER = new DateTimeFormatterBuilder()
+            .append(DateTimeFormatter.ISO_LOCAL_DATE)
+            .optionalStart().appendLiteral('T').optionalEnd()
+            .optionalStart().appendLiteral(' ').optionalEnd()
+            .append(DateTimeFormatter.ISO_LOCAL_TIME)
+            .toFormatter();
+
+    public static final JacksonSerializer INSTANCE = new JacksonSerializer();
 
     private final ObjectMapper objectMapper;
 
@@ -49,8 +61,8 @@ public class JacksonSerializer implements JsonSerializer {
 
         List<ValueDeserializer<?>> jsonDeserializers = Arrays.asList(
                 new LocalDateDeserializer(DateTimeFormatter.ofPattern(DATE_PATTERN)),
-                new LocalTimeDeserializer(DateTimeFormatter.ofPattern(TIME_PATTERN)),
-                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN))
+                new LocalTimeDeserializer(DateTimeFormatter.ISO_LOCAL_TIME),
+                new LocalDateTimeDeserializer(LENIENT_DATE_TIME_FORMATTER)
         );
         jsonSerializers.forEach(js -> addSerializer(simpleModule, js));
         jsonDeserializers.forEach(jd -> addDeserializer(simpleModule, jd));

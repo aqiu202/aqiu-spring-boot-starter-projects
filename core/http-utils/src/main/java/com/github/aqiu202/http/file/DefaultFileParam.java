@@ -1,13 +1,13 @@
 package com.github.aqiu202.http.file;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UncheckedIOException;
 
 public class DefaultFileParam implements FileParam {
     private String filename;
-    private final InputStream inputStream;
+    private InputStream inputStream;
     private byte[] data;
     private final String contentType;
 
@@ -17,7 +17,6 @@ public class DefaultFileParam implements FileParam {
     }
 
     public DefaultFileParam(byte[] data, String contentType) {
-        this.inputStream = new ByteArrayInputStream(data);
         this.data = data;
         this.contentType = contentType;
     }
@@ -31,9 +30,17 @@ public class DefaultFileParam implements FileParam {
         this.filename = filename;
     }
 
+    /**
+     * 原始流只能读取一次，因此首次读取时会缓存为字节数组，之后每次都返回新的流，
+     * 保证打印日志（读取大小）、请求重试等场景下内容不会被读空。
+     */
     @Override
     public InputStream getInputStream() {
-        return inputStream;
+        try {
+            return new ByteArrayInputStream(this.getBytes());
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     @Override
@@ -46,21 +53,17 @@ public class DefaultFileParam implements FileParam {
         try {
             return this.getBytes().length;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
     }
 
     @Override
-    public byte[] getBytes() throws IOException {
+    public synchronized byte[] getBytes() throws IOException {
         if (this.data == null) {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            InputStream inputStream = this.getInputStream();
-            int nRead;
-            byte[] data = new byte[2048]; // 缓冲区大小，可以根据需要调整
-            while ((nRead = inputStream.read(data, 0, data.length)) != -1) {
-                buffer.write(data, 0, nRead);
+            try (InputStream is = this.inputStream) {
+                this.data = is.readAllBytes();
             }
-            this.data = buffer.toByteArray();
+            this.inputStream = null;
         }
         return this.data;
     }

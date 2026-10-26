@@ -10,7 +10,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 public class URIBuilder {
 
@@ -21,6 +23,7 @@ public class URIBuilder {
     private String userInfo;
     private String host;
     private String query;
+    private String baseQuery;
     private Integer port;
     private final HttpQueries queryParams = new HttpQueries();
     private final Map<String, Object> uriVariables = new HashMap<>();
@@ -38,10 +41,15 @@ public class URIBuilder {
         return this;
     }
 
+    /**
+     * 设置基础地址：末尾的 {@code /} 会被去掉以便拼接路径，带有的查询串会被保留并追加在最终地址中。
+     */
     public URIBuilder baseUrl(String baseUrl) {
+        String baseQuery = null;
         if (Strings.isNotBlank(baseUrl)) {
             int index = baseUrl.indexOf("?");
             if (index > -1) {
+                baseQuery = baseUrl.substring(index + 1);
                 baseUrl = baseUrl.substring(0, index);
             }
             if (baseUrl.endsWith("/")) {
@@ -49,9 +57,13 @@ public class URIBuilder {
             }
         }
         this.baseUrl = baseUrl;
+        this.baseQuery = baseQuery;
         return this;
     }
 
+    /**
+     * 设置路径：缺少前导 {@code /} 时自动补全，末尾的 {@code /} 按原样保留；{@code ?} 之后的部分作为原始查询串。
+     */
     public URIBuilder path(String path) {
         if (Strings.isNotBlank(path)) {
             if (!path.startsWith("/")) {
@@ -62,9 +74,6 @@ public class URIBuilder {
                 // 设置query
                 this.query(path.substring(index + 1));
                 path = path.substring(0, index);
-            }
-            if (path.endsWith("/")) {
-                path = path.substring(0, path.length() - 1);
             }
         }
         this.path = path;
@@ -184,6 +193,24 @@ public class URIBuilder {
         return this;
     }
 
+    /**
+     * 按取值移除查询参数：只移除与给定参数相同的取值，同名参数的其他取值会被保留。
+     */
+    public URIBuilder removeQueryParams(HttpQueries params) {
+        if (params != null) {
+            params.forEach((name, values) -> {
+                List<String> current = this.queryParams.get(name);
+                if (current != null) {
+                    values.forEach(current::remove);
+                    if (current.isEmpty()) {
+                        this.queryParams.remove(name);
+                    }
+                }
+            });
+        }
+        return this;
+    }
+
     public URIBuilder uriVariables(Map<String, ?> uriVariables) {
         if (uriVariables != null) {
             uriVariables.forEach(this::uriVariable);
@@ -237,10 +264,14 @@ public class URIBuilder {
 
     /**
      * 查询参数键 / 值统一做 UTF-8 编码（空格编码为 {@code +}）；
-     * {@link #query(String)} 设置的原始查询串保持原样，不做二次编码。
+     * {@link #baseUrl(String)} 自带的查询串与 {@link #query(String)} 设置的原始查询串保持原样，不做二次编码。
      */
     public StringBuilder buildQuery() {
         StringBuilder builder = new StringBuilder();
+        // 使用绝对地址时不拼接基础地址，也就不带基础地址的查询串
+        if (Strings.isBlank(this.uri) && Strings.isNotBlank(this.baseQuery)) {
+            builder.append(this.baseQuery);
+        }
         if (!this.queryParams.isEmpty()) {
             this.queryParams.forEach((name, values) -> {
                 if (values == null || values.isEmpty()) {
@@ -348,75 +379,56 @@ public class URIBuilder {
         }
 
         /**
-         * 占位符替换
+         * 占位符按出现顺序依次替换，取值会按路径分段做 UTF-8 编码
          *
          * @param text      字符串
          * @param parameter 替换参数
          * @return 替换后的字符串
+         * @throws IllegalArgumentException 存在未提供取值（或取值为 {@code null}）的占位符时
          */
         public static String replaceVariables(String text, Object... parameter) {
-            if (isEmpty(text) || parameter == null || parameter.length == 0) {
-                return text;
-            }
-            StringBuilder builder = new StringBuilder(text);
-            int index = 0;
-            int startIndex = builder.indexOf(PLACEHOLDER_PREFIX);
-            while (startIndex != -1) {
-                int endIndex = builder
-                        .indexOf(PLACEHOLDER_SUFFIX, startIndex + PLACEHOLDER_PREFIX.length());
-                if (endIndex != -1) {
-                    int nextIndex = endIndex + PLACEHOLDER_SUFFIX.length();
-                    Object objectVal;
-                    if (index >= parameter.length || (objectVal = parameter[index++]) == null) {
-                        startIndex = nextIndex + 1;
-                        continue;
-                    }
-                    String stringVal = String.valueOf(objectVal);
-                    if (stringVal != null) {
-                        builder.replace(startIndex, endIndex + PLACEHOLDER_SUFFIX.length(), stringVal);
-                        nextIndex = startIndex + stringVal.length();
-                    }
-                    startIndex = builder.indexOf(PLACEHOLDER_PREFIX, nextIndex);
-                } else {
-                    startIndex = -1;
-                }
-            }
-            return builder.toString();
+            int[] index = {0};
+            return replaceVariables(text, name -> {
+                int i = index[0]++;
+                return parameter != null && i < parameter.length ? parameter[i] : null;
+            });
         }
 
         /**
-         * 占位符替换
+         * 占位符按名称替换，取值会按路径分段做 UTF-8 编码
          *
          * @param text      字符串
          * @param parameter 替换参数
          * @return 替换后的字符串
+         * @throws IllegalArgumentException 存在未提供取值（或取值为 {@code null}）的占位符时
          */
         public static String replaceVariables(String text, Map<?, ?> parameter) {
-            if (isEmpty(text) || parameter == null || parameter.isEmpty()) {
+            return replaceVariables(text, name -> parameter == null ? null : parameter.get(name));
+        }
+
+        private static String replaceVariables(String text, Function<String, Object> resolver) {
+            if (isEmpty(text)) {
                 return text;
             }
-            StringBuilder builder = new StringBuilder(text);
-            int startIndex = builder.indexOf(PLACEHOLDER_PREFIX);
+            StringBuilder builder = new StringBuilder(text.length());
+            int cursor = 0;
+            int startIndex = text.indexOf(PLACEHOLDER_PREFIX);
             while (startIndex != -1) {
-                int endIndex = builder
-                        .indexOf(PLACEHOLDER_SUFFIX, startIndex + PLACEHOLDER_PREFIX.length());
-                if (endIndex != -1) {
-                    String placeholder = builder
-                            .substring(startIndex + PLACEHOLDER_PREFIX.length(), endIndex);
-                    int nextIndex = endIndex + PLACEHOLDER_SUFFIX.length();
-                    Object objectVal = parameter.get(placeholder);
-                    if (objectVal == null) {
-                        startIndex = nextIndex + 1;
-                        continue;
-                    }
-                    String stringVal = String.valueOf(objectVal);
-                    builder.replace(startIndex, endIndex + PLACEHOLDER_SUFFIX.length(), stringVal);
-                    nextIndex = startIndex + stringVal.length();
-                    startIndex = builder.indexOf(PLACEHOLDER_PREFIX, nextIndex);
-                } else {
-                    startIndex = -1;
+                int endIndex = text.indexOf(PLACEHOLDER_SUFFIX, startIndex + PLACEHOLDER_PREFIX.length());
+                if (endIndex == -1) {
+                    break;
                 }
+                String name = text.substring(startIndex + PLACEHOLDER_PREFIX.length(), endIndex);
+                Object value = resolver.apply(name);
+                if (value == null) {
+                    throw new IllegalArgumentException(
+                            String.format("URI 变量 {%s} 未提供取值：%s", name, text));
+                }
+                builder.append(text, cursor, startIndex).append(encodePathSegment(String.valueOf(value)));
+                cursor = endIndex + PLACEHOLDER_SUFFIX.length();
+                startIndex = text.indexOf(PLACEHOLDER_PREFIX, cursor);
             }
+            builder.append(text, cursor, text.length());
             return builder.toString();
         }
     }

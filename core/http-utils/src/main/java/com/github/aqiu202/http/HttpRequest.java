@@ -38,7 +38,8 @@ public class HttpRequest<T extends HttpRequest<?>> {
     private static final String PREFIX_HTTPS = "https://";
 
     private static boolean isAbsoluteUrl(String url) {
-        return url.startsWith(PREFIX_HTTP) || url.startsWith(PREFIX_HTTPS);
+        return url.regionMatches(true, 0, PREFIX_HTTP, 0, PREFIX_HTTP.length())
+                || url.regionMatches(true, 0, PREFIX_HTTPS, 0, PREFIX_HTTPS.length());
     }
 
     public HttpRequest(RequestDescriptor descriptor) {
@@ -287,8 +288,17 @@ public class HttpRequest<T extends HttpRequest<?>> {
         return this.exchange(new TypeSpec<>(responseType));
     }
 
+    /**
+     * 发送请求并返回转换后的响应体；响应体无法转换为目标类型时抛出异常。
+     * 如需在转换失败时读取原始响应，请使用 {@link #exchangeForResponse(TypeSpec)}。
+     */
     public <S> S exchange(TypeSpec<S> responseType) {
         HttpResponseEntity<S> response = this.exchangeForResponse(responseType);
+        RuntimeException conversionError = response.getConversionError();
+        if (conversionError != null) {
+            throw new IllegalStateException(String.format("响应体无法转换为 %s（状态码：%d）",
+                    responseType.getType().getTypeName(), response.getStatusCode()), conversionError);
+        }
         return response.getBody();
     }
 
@@ -306,15 +316,16 @@ public class HttpRequest<T extends HttpRequest<?>> {
 
     public <S> HttpResponseEntity<S> exchangeForResponse(TypeSpec<S> responseType) {
         try {
+            this.removeDefaultsForOtherOrigin();
             List<HttpInterceptor> resolvedInterceptors = this.resolveInterceptors();
             this.processInterceptors(resolvedInterceptors);
-            if (this.enableDebug || log.isDebugEnabled()) {
+            if (this.isDebugLogEnabled()) {
                 this.printRequestDebugInfo();
             }
             int attempt = 0;
             while (true) {
                 HttpResponseEntity<S> response = this.exchanger.exchange(this, responseType);
-                if (this.enableDebug || log.isDebugEnabled()) {
+                if (this.isDebugLogEnabled()) {
                     this.printResponseDebugInfo(response);
                 }
                 if (this.retryPolicy == null || !this.retryPolicy.matches(response)
@@ -328,6 +339,50 @@ public class HttpRequest<T extends HttpRequest<?>> {
         } catch (IOException e) {
             throw new RuntimeException("Http请求异常", e);
         }
+    }
+
+    /**
+     * 配置了 baseUrl 时，默认请求头和默认查询参数只发往同源地址（协议、主机、端口均相同），
+     * 避免凭证等信息泄露给第三方；显式设置的值不受影响。
+     */
+    protected void removeDefaultsForOtherOrigin() {
+        String baseUrl = this.descriptor.getBaseUrl();
+        if (baseUrl == null || baseUrl.isBlank()) {
+            return;
+        }
+        URI base;
+        try {
+            base = URI.create(baseUrl.trim());
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+        URI target = this.getUri();
+        if (base.getHost() == null || !target.isAbsolute() || isSameOrigin(base, target)) {
+            return;
+        }
+        this.descriptor.getDefaultHeaders().forEach((name, values) -> {
+            List<String> current = this.headers.get(name);
+            if (current != null) {
+                values.forEach(current::remove);
+                if (current.isEmpty()) {
+                    this.headers.remove(name);
+                }
+            }
+        });
+        this.uriBuilder.removeQueryParams(this.descriptor.getDefaultQueryParams());
+    }
+
+    private static boolean isSameOrigin(URI base, URI target) {
+        return base.getScheme().equalsIgnoreCase(target.getScheme())
+                && base.getHost().equalsIgnoreCase(target.getHost())
+                && resolvePort(base) == resolvePort(target);
+    }
+
+    private static int resolvePort(URI uri) {
+        if (uri.getPort() != -1) {
+            return uri.getPort();
+        }
+        return "https".equalsIgnoreCase(uri.getScheme()) ? 443 : 80;
     }
 
     protected void processInterceptors(List<HttpInterceptor> interceptors) {
@@ -374,8 +429,23 @@ public class HttpRequest<T extends HttpRequest<?>> {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
+    /**
+     * 通过 {@link #debug(boolean)} 显式开启时以 INFO 级别输出，否则仅在 DEBUG 级别开启时输出。
+     */
+    private boolean isDebugLogEnabled() {
+        return this.enableDebug || this.log.isDebugEnabled();
+    }
+
+    private void printDebugLog(String format, Object... arguments) {
+        if (this.enableDebug) {
+            this.log.info(format, arguments);
+        } else {
+            this.log.debug(format, arguments);
+        }
+    }
+
     private void printRequestDebugInfo() {
-        this.log.debug("\n**************************************************************************\n" +
+        this.printDebugLog("\n**************************************************************************\n" +
                         "**********     HttpService ---- HTTP Request Info      *************\n" +
                         "**********     TraceID ---- {}      *************\n" +
                         "{}\n" +
@@ -384,7 +454,7 @@ public class HttpRequest<T extends HttpRequest<?>> {
     }
 
     private void printResponseDebugInfo(HttpResponseEntity<?> response) {
-        this.log.debug("\n**************************************************************************\n" +
+        this.printDebugLog("\n**************************************************************************\n" +
                         "**********     HttpService ---- HTTP Response Info      *************\n" +
                         "**********     TraceID ---- {}      *************\n" +
                         "{}\n" +

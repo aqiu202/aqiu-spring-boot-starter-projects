@@ -10,13 +10,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.util.Assert;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.http.HttpClient;
 import java.time.Duration;
 
 public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTemplate> {
@@ -46,16 +44,14 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
     }
 
     public static RestTemplateExchanger create(Duration connectTimeout, Duration readTimeout) {
-        HttpClient httpClient = HttpClient.newBuilder()
-                .connectTimeout(connectTimeout)
-                .build();
-        JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
-        requestFactory.setReadTimeout(readTimeout);
-        return new RestTemplateExchanger(requestFactory);
+        return new RestTemplateExchanger(defaultRequestFactory(connectTimeout, readTimeout));
     }
 
+    /**
+     * 默认连接超时 {@link #DEFAULT_CONNECT_TIMEOUT}、读取超时 {@link #DEFAULT_READ_TIMEOUT}，并自动跟随重定向。
+     */
     public RestTemplateExchanger() {
-        this(new JdkClientHttpRequestFactory());
+        this(defaultRequestFactory(DEFAULT_CONNECT_TIMEOUT, DEFAULT_READ_TIMEOUT));
     }
 
     public RestTemplateExchanger(RestTemplate restTemplate) {
@@ -86,7 +82,7 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
 
     public HttpEntity<?> buildHttpEntityWithBody(HttpBodyRequest request) throws IOException {
         HttpHeaders httpHeaders = request.getHeaders();
-        Object body = this.processBody(request.getBody());
+        Object body = this.processBody(request);
         org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
         headers.putAll(httpHeaders.getValues());
         return new HttpEntity<>(body, headers);
@@ -102,7 +98,15 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
     protected <T> HttpResponseEntity<T> doRequest(RestTemplate client, HttpRequest<?> request, HttpEntity<?> entity, TypeSpec<T> responseType) {
         HttpService.HttpMethod method = request.getMethod();
         HttpMethod httpMethod = HttpMethod.valueOf(method.getName());
-        ResponseEntity<byte[]> responseEntity = client.exchange(request.getUri(), httpMethod, entity, byte[].class);
+        ResponseEntity<byte[]> responseEntity;
+        try {
+            responseEntity = client.exchange(request.getUri(), httpMethod, entity, byte[].class);
+        } catch (RestClientResponseException e) {
+            // 4xx/5xx 不抛出异常，与其他实现保持一致，交给上层的重试策略与 responseConsumer 统一处理
+            org.springframework.http.HttpHeaders headers = e.getResponseHeaders();
+            responseEntity = new ResponseEntity<>(e.getResponseBodyAsByteArray(),
+                    headers == null ? new org.springframework.http.HttpHeaders() : headers, e.getStatusCode());
+        }
         return this.convertResponse(request, responseEntity, responseType);
     }
 

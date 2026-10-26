@@ -1,6 +1,5 @@
 package com.github.aqiu202.http.exchange;
 
-import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.*;
@@ -23,20 +22,19 @@ public class StatefulRestTemplate extends RestTemplate {
     private final CookieManager cookieManager;
 
     public StatefulRestTemplate() {
-        this(Duration.ofSeconds(30));
+        this(AbstractSpringHttpExchanger.DEFAULT_CONNECT_TIMEOUT);
     }
 
     public StatefulRestTemplate(Duration connectTimeout) {
         super();
         // 使用内存型 CookieStore，作用范围仅限当前实例
         this.cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
-        this.httpClient = HttpClient.newBuilder()
+        this.httpClient = AbstractSpringHttpExchanger.defaultHttpClientBuilder(connectTimeout)
                 .cookieHandler(this.cookieManager)
-                .connectTimeout(connectTimeout)
-                .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
         // 将带 CookieHandler 的 JDK HttpClient 装配到 RestTemplate
-        super.setRequestFactory(new JdkClientHttpRequestFactory(this.httpClient));
+        super.setRequestFactory(AbstractSpringHttpExchanger.defaultRequestFactory(this.httpClient,
+                AbstractSpringHttpExchanger.DEFAULT_READ_TIMEOUT));
     }
 
     /**

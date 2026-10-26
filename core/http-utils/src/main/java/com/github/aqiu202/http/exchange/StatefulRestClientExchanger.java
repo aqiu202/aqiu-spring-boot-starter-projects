@@ -28,29 +28,25 @@ public class StatefulRestClientExchanger extends RestClientExchanger {
 
     private final HttpClient httpClient;
     private final CookieManager cookieManager;
-    private final RestClient restClient;
 
     public StatefulRestClientExchanger() {
-        this(Duration.ofSeconds(30));
+        this(DEFAULT_CONNECT_TIMEOUT);
     }
 
     public StatefulRestClientExchanger(Duration connectTimeout) {
         // 使用内存型 CookieStore，作用范围仅限当前实例
-        this.cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
-        this.httpClient = HttpClient.newBuilder()
-                .cookieHandler(this.cookieManager)
-                .connectTimeout(connectTimeout)
-                .followRedirects(HttpClient.Redirect.NORMAL)
-                .build();
-        // 将带 CookieHandler 的 JDK HttpClient 装配到 RestClient
-        this.restClient = RestClient.builder()
-                .requestFactory(new JdkClientHttpRequestFactory(this.httpClient))
-                .build();
+        this(new CookieManager(null, CookiePolicy.ACCEPT_ALL), connectTimeout);
     }
 
-    @Override
-    protected RestClient createRequestInstance() {
-        return this.restClient;
+    private StatefulRestClientExchanger(CookieManager cookieManager, Duration connectTimeout) {
+        this(cookieManager, defaultHttpClientBuilder(connectTimeout).cookieHandler(cookieManager).build());
+    }
+
+    private StatefulRestClientExchanger(CookieManager cookieManager, HttpClient httpClient) {
+        // 将带 CookieHandler 的 JDK HttpClient 装配到 RestClient，直接交给父类，避免额外创建默认客户端
+        super(defaultRequestFactory(httpClient, DEFAULT_READ_TIMEOUT));
+        this.cookieManager = cookieManager;
+        this.httpClient = httpClient;
     }
 
     /**
@@ -100,6 +96,6 @@ public class StatefulRestClientExchanger extends RestClientExchanger {
      * 获取内部构建好的 {@link RestClient}，可直接用于常规调用。
      */
     public RestClient getRestClient() {
-        return this.restClient;
+        return this.getRequestInstance();
     }
 }

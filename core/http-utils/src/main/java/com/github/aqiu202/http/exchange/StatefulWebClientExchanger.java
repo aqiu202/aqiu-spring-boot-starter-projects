@@ -31,21 +31,17 @@ public class StatefulWebClientExchanger extends WebClientExchanger {
     private final WebClient webClient;
 
     public StatefulWebClientExchanger() {
-        this(Duration.ofSeconds(30));
+        this(DEFAULT_CONNECT_TIMEOUT);
     }
 
     public StatefulWebClientExchanger(Duration connectTimeout) {
         // 使用内存型 CookieStore，作用范围仅限当前实例
         this.cookieManager = new CookieManager(null, CookiePolicy.ACCEPT_ALL);
-        this.httpClient = HttpClient.newBuilder()
+        this.httpClient = defaultHttpClientBuilder(connectTimeout)
                 .cookieHandler(this.cookieManager)
-                .connectTimeout(connectTimeout)
-                .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
         // 将带 CookieHandler 的 JDK HttpClient 装配到 WebClient
-        this.webClient = WebClient.builder()
-                .clientConnector(new JdkClientHttpConnector(this.httpClient))
-                .build();
+        this.webClient = buildWebClient(this.httpClient, DEFAULT_READ_TIMEOUT);
     }
 
     @Override

@@ -33,6 +33,7 @@ public abstract class AbstractHttpExchanger<D> implements HttpExchanger {
         HttpService.HttpMethod method = request.getMethod();
         switch (method) {
             case GET:
+            case HEAD:
             case OPTIONS:
             case TRACE:
                 return this.request(instance, request, responseType);

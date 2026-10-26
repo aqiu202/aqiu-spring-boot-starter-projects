@@ -10,13 +10,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
-import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.util.Assert;
 import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.net.http.HttpClient;
 import java.time.Duration;
 
 /**
@@ -55,16 +52,14 @@ public class RestClientExchanger extends AbstractSpringHttpExchanger<RestClient>
     }
 
     public static RestClientExchanger create(Duration connectTimeout, Duration readTimeout) {
-        HttpClient httpClient = HttpClient.newBuilder()
-                .connectTimeout(connectTimeout)
-                .build();
-        JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
-        requestFactory.setReadTimeout(readTimeout);
-        return new RestClientExchanger(requestFactory);
+        return new RestClientExchanger(defaultRequestFactory(connectTimeout, readTimeout));
     }
 
+    /**
+     * 默认连接超时 {@link #DEFAULT_CONNECT_TIMEOUT}、读取超时 {@link #DEFAULT_READ_TIMEOUT}，并自动跟随重定向。
+     */
     public RestClientExchanger() {
-        this(new JdkClientHttpRequestFactory());
+        this(defaultRequestFactory(DEFAULT_CONNECT_TIMEOUT, DEFAULT_READ_TIMEOUT));
     }
 
     public RestClientExchanger(RestClient restClient) {
@@ -107,7 +102,7 @@ public class RestClientExchanger extends AbstractSpringHttpExchanger<RestClient>
     }
 
     public void resolveRequestBody(RestClient.RequestBodySpec requestSpec, HttpBodyRequest request) throws IOException {
-        Object processedBody = this.processBody(request.getBody());
+        Object processedBody = this.processBody(request);
         if (processedBody != null) {
             requestSpec.body(processedBody);
         }
