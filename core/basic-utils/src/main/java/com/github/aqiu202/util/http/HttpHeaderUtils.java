@@ -2,7 +2,6 @@ package com.github.aqiu202.util.http;
 
 import com.github.aqiu202.util.StringUtils;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -178,47 +177,6 @@ public abstract class HttpHeaderUtils {
         return v == null ? "application/octet-stream" : v;
     }
 
-    /**
-     * 设置返回头
-     *
-     * @param response 响应对象
-     * @param fileName 文件名
-     * @param typeName 类型名
-     */
-    public static void setHeaderForDownload(HttpServletResponse response, String typeName, String fileName) {
-        if (response == null) {
-            return;
-        }
-        String contentType = getContentType(typeName);
-        response.setContentType(contentType);
-
-        if (StringUtils.isNotBlank(fileName)) {
-            response.setHeader("Content-Disposition", buildContentDisposition(fileName));
-            //需要暴露给前端js
-            response.addHeader("Access-Control-Expose-Headers", "Content-Disposition");
-        }
-    }
-
-    public static void setContentType(HttpServletResponse response, String fileName) {
-        setHeaderForDownload(response, getFileSuffix(fileName), null);
-    }
-
-    /**
-     * 设置返回头
-     *
-     * @param response 响应对象
-     * @param fileName 文件名
-     */
-    public static void setHeaderForDownload(HttpServletResponse response, String fileName) {
-        if (StringUtils.isBlank(fileName)) {
-            setHeaderForDownload(response, "", "");
-            return;
-        }
-        String suffixName = getFileSuffix(fileName);
-        //设置响应头
-        setHeaderForDownload(response, suffixName, fileName);
-    }
-
     private static String getFileSuffix(String fileName) {
         String suffixName = "";
         if (fileName.lastIndexOf('.') > 0 && fileName.lastIndexOf('.') < (fileName.length() - 1)) {
@@ -243,9 +201,4 @@ public abstract class HttpHeaderUtils {
         }
     }
 
-    public static void main(String[] args) {
-        String fileName = "测试.txt";
-        System.out.println(formatAttachmentFileName(fileName));
-        System.out.println(new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1));
-    }
 }

@@ -1,6 +1,6 @@
 package com.github.aqiu202.util.retry;
 
-import jakarta.annotation.Nonnull;
+import javax.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
