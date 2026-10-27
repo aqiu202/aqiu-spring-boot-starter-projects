@@ -6,6 +6,7 @@ import com.github.aqiu202.http.HttpService;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.util.TypeSpec;
+import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.JdkClientHttpConnector;
@@ -125,7 +126,17 @@ public class WebClientExchanger extends AbstractSpringHttpExchanger<WebClient> {
     public <T> HttpResponseEntity<T> forResponse(HttpRequest<?> request, WebClient.RequestBodySpec requestBodySpec,
                                                  TypeSpec<T> responseType) {
         ResponseEntity<byte[]> responseEntity = requestBodySpec
-                .exchangeToMono(response -> response.toEntity(byte[].class))
+                .exchangeToMono(response -> response.body((inputMessage, context) ->
+                                DataBufferUtils.join(inputMessage.getBody()))
+                        .map(buffer -> {
+                            byte[] bytes = new byte[buffer.readableByteCount()];
+                            buffer.read(bytes);
+                            DataBufferUtils.release(buffer);
+                            return new ResponseEntity<>(bytes, response.headers().asHttpHeaders(),
+                                    response.statusCode());
+                        })
+                        .defaultIfEmpty(new ResponseEntity<>(null, response.headers().asHttpHeaders(),
+                                response.statusCode())))
                 .block();
         return this.convertResponse(request, responseEntity, responseType);
     }

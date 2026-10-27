@@ -8,7 +8,10 @@ import com.github.aqiu202.http.intercept.HttpInterceptor;
 import com.github.aqiu202.http.util.JsonSerializer;
 import com.github.aqiu202.http.util.RetryPolicy;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 public class DefaultHttpService implements HttpService {
@@ -37,7 +40,13 @@ public class DefaultHttpService implements HttpService {
         this.defaultHeaders = defaultHeaders;
         this.defaultQueryParams = defaultQueryParams;
         this.exchanger = exchanger;
-        this.interceptors = interceptors == null ? List.of() : List.copyOf(interceptors);
+        if (interceptors == null) {
+            this.interceptors = Collections.emptyList();
+        } else {
+            List<HttpInterceptor> copy = new ArrayList<>(interceptors);
+            copy.forEach(interceptor -> Objects.requireNonNull(interceptor, "interceptor must not be null"));
+            this.interceptors = Collections.unmodifiableList(copy);
+        }
         this.responseConsumer = responseConsumer;
         this.retryPolicy = retryPolicy;
     }

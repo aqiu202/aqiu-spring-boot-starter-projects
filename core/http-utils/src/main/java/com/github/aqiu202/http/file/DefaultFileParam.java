@@ -1,9 +1,11 @@
 package com.github.aqiu202.http.file;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.util.Objects;
 
 public class DefaultFileParam implements FileParam {
     private String filename;
@@ -12,12 +14,12 @@ public class DefaultFileParam implements FileParam {
     private final String contentType;
 
     public DefaultFileParam(InputStream inputStream, String contentType) {
-        this.inputStream = inputStream;
+        this.inputStream = Objects.requireNonNull(inputStream, "inputStream must not be null");
         this.contentType = contentType;
     }
 
     public DefaultFileParam(byte[] data, String contentType) {
-        this.data = data;
+        this.data = Objects.requireNonNull(data, "data must not be null");
         this.contentType = contentType;
     }
 
@@ -61,7 +63,13 @@ public class DefaultFileParam implements FileParam {
     public synchronized byte[] getBytes() throws IOException {
         if (this.data == null) {
             try (InputStream is = this.inputStream) {
-                this.data = is.readAllBytes();
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                byte[] buffer = new byte[8192];
+                int count;
+                while ((count = is.read(buffer)) != -1) {
+                    output.write(buffer, 0, count);
+                }
+                this.data = output.toByteArray();
             }
             this.inputStream = null;
         }

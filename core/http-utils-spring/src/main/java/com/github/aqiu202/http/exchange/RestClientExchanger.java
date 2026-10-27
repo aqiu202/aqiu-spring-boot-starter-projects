@@ -7,7 +7,6 @@ import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.util.TypeSpec;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.util.Assert;
@@ -110,13 +109,9 @@ public class RestClientExchanger extends AbstractSpringHttpExchanger<RestClient>
 
     public <T> HttpResponseEntity<T> forResponse(HttpRequest<?> request, RestClient.RequestBodySpec requestSpec,
                                                  TypeSpec<T> responseType) {
-        // 覆盖默认的 4xx/5xx 异常处理，交给上层的 responseConsumer 统一处理
-        RestClient.ResponseSpec responseSpec = requestSpec
-                .retrieve()
-                .onStatus(HttpStatusCode::isError, (req, res) -> {
-                });
-        // 先按原始字节接收，保证空 body / 非 JSON 响应也能保留原文
-        ResponseEntity<byte[]> responseEntity = responseSpec.toEntity(byte[].class);
+        // 直接读取原始字节，避免 HTTP 状态或非法响应 charset 在核心转换前被处理。
+        ResponseEntity<byte[]> responseEntity = requestSpec.exchange((req, res) ->
+                new ResponseEntity<>(res.getBody().readAllBytes(), res.getHeaders(), res.getStatusCode()), false);
         return this.convertResponse(request, responseEntity, responseType);
     }
 

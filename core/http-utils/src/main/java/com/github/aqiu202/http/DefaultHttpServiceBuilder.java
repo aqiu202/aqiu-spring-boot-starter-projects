@@ -3,13 +3,13 @@ package com.github.aqiu202.http;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.exchange.HttpExchanger;
-import com.github.aqiu202.http.exchange.RestClientExchanger;
+import com.github.aqiu202.http.exchange.ApacheHttpClientExchanger;
 import com.github.aqiu202.http.data.HttpQueries;
 import com.github.aqiu202.http.intercept.HttpInterceptor;
 import com.github.aqiu202.http.util.JacksonSerializer;
 import com.github.aqiu202.http.util.JsonSerializer;
 import com.github.aqiu202.http.util.RetryPolicy;
-import org.springframework.http.HttpStatus;
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,15 +25,12 @@ public class DefaultHttpServiceBuilder implements HttpService.Builder {
     private final HttpQueries defaultQueryParams = new HttpQueries();
     private final List<HttpInterceptor> interceptors = new ArrayList<>();
     private JsonSerializer jsonSerializer = JacksonSerializer.INSTANCE;
-    private HttpExchanger exchanger = RestClientExchanger.INSTANCE;
+    private HttpExchanger exchanger = ApacheHttpClientExchanger.INSTANCE;
     private RetryPolicy retryPolicy;
     private BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer = (request, responseEntity) -> {
         int statusCode = responseEntity.getStatusCode();
         if (statusCode < 200 || statusCode >= 300) {
-            // 非标准状态码（如 599）没有对应的 HttpStatus，不能使用 HttpStatus.valueOf
-            HttpStatus httpStatus = HttpStatus.resolve(statusCode);
-            throw new RuntimeException(String.format("HTTP请求失败：[%d] %s", statusCode,
-                    httpStatus == null ? "" : httpStatus.getReasonPhrase()).trim());
+            throw new RuntimeException(String.format("HTTP请求失败：[%d]", statusCode));
         }
     };
 
@@ -121,6 +118,7 @@ public class DefaultHttpServiceBuilder implements HttpService.Builder {
     public HttpService build() {
         return new DefaultHttpService(this.enableDebug, this.baseUrl, this.jsonSerializer,
                 this.defaultHeaders, this.defaultQueryParams, this.exchanger,
-                List.copyOf(this.interceptors), this.responseConsumer, this.retryPolicy);
+                this.interceptors,
+                this.responseConsumer, this.retryPolicy);
     }
 }

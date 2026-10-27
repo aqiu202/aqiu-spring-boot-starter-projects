@@ -1,9 +1,7 @@
 package com.github.aqiu202.http.util;
 
 import com.github.aqiu202.http.data.HttpQueries;
-import tools.jackson.core.type.TypeReference;
-import com.github.aqiu202.util.JacksonUtils;
-import jakarta.annotation.Nullable;
+import javax.annotation.Nullable;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -303,7 +301,11 @@ public class URIBuilder {
     }
 
     private static String encode(String value) {
-        return URLEncoder.encode(value == null ? "" : value, StandardCharsets.UTF_8);
+        try {
+            return URLEncoder.encode(value == null ? "" : value, StandardCharsets.UTF_8.name());
+        } catch (java.io.UnsupportedEncodingException e) {
+            throw new IllegalStateException("UTF-8 is not supported", e);
+        }
     }
 
     public String buildQueryString() {

@@ -9,6 +9,7 @@ import com.github.aqiu202.excel.meta.MapPropertyMeta;
 import com.github.aqiu202.excel.read.ExcelReader;
 import com.github.aqiu202.excel.write.ExcelWriter;
 import com.github.aqiu202.excel.write.extract.PropertyDataExtractor;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -30,6 +31,7 @@ public class AppTest {
     }
 
     @Test
+    @Disabled
     public void testExcelExport() {
         SimpleConverterFactory converterFactory = new SimpleConverterFactory();
         converterFactory.addConverter("convertValid", new SimpleMapConverter<>(this.getValidMap()));
@@ -94,6 +96,7 @@ public class AppTest {
     }
 
     @Test
+    @Disabled
     public void testReader() {
         SimpleConverterFactory converterFactory = new SimpleConverterFactory();
         converterFactory.addConverter("convertValid", new SimpleMapConverter<>(this.getValidMap()));

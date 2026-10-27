@@ -8,9 +8,13 @@ import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.util.TypeSpec;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.util.Assert;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
@@ -100,7 +104,10 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
         HttpMethod httpMethod = HttpMethod.valueOf(method.getName());
         ResponseEntity<byte[]> responseEntity;
         try {
-            responseEntity = client.exchange(request.getUri(), httpMethod, entity, byte[].class);
+            responseEntity = client.execute(request.getUri(), httpMethod,
+                    this.requestCallback(client, entity),
+                    response -> new ResponseEntity<>(response.getBody().readAllBytes(),
+                            response.getHeaders(), response.getStatusCode()));
         } catch (RestClientResponseException e) {
             // 4xx/5xx 不抛出异常，与其他实现保持一致，交给上层的重试策略与 responseConsumer 统一处理
             org.springframework.http.HttpHeaders headers = e.getResponseHeaders();
@@ -108,6 +115,25 @@ public class RestTemplateExchanger extends AbstractSpringHttpExchanger<RestTempl
                     headers == null ? new org.springframework.http.HttpHeaders() : headers, e.getStatusCode());
         }
         return this.convertResponse(request, responseEntity, responseType);
+    }
+
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    private RequestCallback requestCallback(RestTemplate client, HttpEntity<?> entity) {
+        return request -> {
+            request.getHeaders().putAll(entity.getHeaders());
+            Object body = entity.getBody();
+            if (body == null) {
+                return;
+            }
+            MediaType contentType = entity.getHeaders().getContentType();
+            for (HttpMessageConverter<?> converter : client.getMessageConverters()) {
+                if (converter.canWrite(body.getClass(), contentType)) {
+                    ((HttpMessageConverter) converter).write(body, contentType, request);
+                    return;
+                }
+            }
+            throw new RestClientException("无法写入请求体类型：" + body.getClass().getName());
+        };
     }
 
 }

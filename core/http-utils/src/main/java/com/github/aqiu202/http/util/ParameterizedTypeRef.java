@@ -1,7 +1,6 @@
 package com.github.aqiu202.http.util;
 
 import java.util.Objects;
-import org.springframework.util.Assert;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -13,10 +12,14 @@ public abstract class ParameterizedTypeRef<T> {
     public ParameterizedTypeRef() {
         Class<?> parameterizedTypeReferenceSubclass = findParameterizedTypeReferenceSubclass(getClass());
         Type type = parameterizedTypeReferenceSubclass.getGenericSuperclass();
-        Assert.isInstanceOf(ParameterizedType.class, type, "Type must be a parameterized type");
+        if (!(type instanceof ParameterizedType)) {
+            throw new IllegalArgumentException("Type must be a parameterized type");
+        }
         ParameterizedType parameterizedType = (ParameterizedType) type;
         Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
-        Assert.isTrue(actualTypeArguments.length == 1, "Number of type arguments must be 1");
+        if (actualTypeArguments.length != 1) {
+            throw new IllegalArgumentException("Number of type arguments must be 1");
+        }
         this.type = actualTypeArguments[0];
     }
 
@@ -50,6 +53,7 @@ public abstract class ParameterizedTypeRef<T> {
 
 
     public static <T> ParameterizedTypeRef<T> forType(Type type) {
+        Objects.requireNonNull(type, "type must not be null");
         return new ParameterizedTypeRef<T>(type) {
         };
     }

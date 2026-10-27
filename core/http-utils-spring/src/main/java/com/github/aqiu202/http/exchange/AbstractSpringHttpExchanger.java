@@ -6,6 +6,7 @@ import com.github.aqiu202.http.data.HttpBodyEntity;
 import com.github.aqiu202.http.data.HttpHeaders;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.file.FileParam;
+import com.github.aqiu202.http.file.SpringFileParams;
 import com.github.aqiu202.http.util.TypeSpec;
 import org.springframework.core.io.AbstractResource;
 import org.springframework.core.io.Resource;
@@ -17,25 +18,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.net.http.HttpClient;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 public abstract class AbstractSpringHttpExchanger<T> extends AbstractHttpExchanger<T> {
-
-    /**
-     * 默认连接超时
-     */
-    public static final Duration DEFAULT_CONNECT_TIMEOUT = Duration.ofSeconds(30);
-    /**
-     * 默认读取超时
-     */
-    public static final Duration DEFAULT_READ_TIMEOUT = Duration.ofSeconds(60);
 
     /**
      * 各实现共用的 JDK {@link HttpClient} 默认配置：设置连接超时，并自动跟随重定向（不允许 HTTPS 降级到 HTTP），
@@ -107,11 +96,12 @@ public abstract class AbstractSpringHttpExchanger<T> extends AbstractHttpExchang
                         for (Object value : values) {
                             if (value instanceof FileParam) {
                                 FileParam fileParam = (FileParam) value;
+                                this.checkFilename(fileParam.getFilename());
                                 // 使用字节数组资源，保证重试时请求体可重复发送
-                                MultipartBodyBuilder.PartBuilder partBuilder =
-                                        bodyBuilder.part(key, fileParam.toByteArrayResource());
+                                MultipartBodyBuilder.PartBuilder partBuilder = bodyBuilder.part(key,
+                                        SpringFileParams.toByteArrayResource(fileParam));
                                 String contentType = fileParam.getContentType();
-                                if (contentType != null && !contentType.isBlank()) {
+                                if (contentType != null && !contentType.trim().isEmpty()) {
                                     partBuilder.contentType(MediaType.parseMediaType(contentType));
                                 }
                             } else {
@@ -130,55 +120,15 @@ public abstract class AbstractSpringHttpExchanger<T> extends AbstractHttpExchang
     }
 
     /**
-     * 以原始字节为基础构建响应：始终保留原始文本，再按目标类型转换。
-     * <p>
-     * 空 body 或非 JSON 文本不会抛出异常，转换失败时 body 为 {@code null}，
-     * 失败原因记录在 {@link HttpResponseEntity#getConversionError()}。
+     * Spring 响应仅负责类型适配，解码和转换统一由核心完成。
      */
-    @SuppressWarnings("unchecked")
     protected <S> HttpResponseEntity<S> convertResponse(HttpRequest<?> request, ResponseEntity<byte[]> response,
                                                         TypeSpec<S> responseType) {
         HttpHeaders httpHeaders = new HttpHeaders();
         org.springframework.http.HttpHeaders headers = response.getHeaders();
-        headers.forEach((key, values) ->
-                httpHeaders.add(key, values.toArray(new Object[0]))
-        );
-        int statusCode = response.getStatusCode().value();
-        byte[] bytes = response.getBody();
-        if (bytes != null && bytes.length == 0) {
-            bytes = null;
-        }
-        String rawBody = bytes == null ? null : new String(bytes, resolveCharset(headers));
-        Type type = responseType.getType();
-        S body = null;
-        RuntimeException conversionError = null;
-        if (type == byte[].class) {
-            body = (S) bytes;
-        } else if (type == String.class) {
-            body = (S) rawBody;
-        } else if (rawBody != null && !rawBody.isBlank()) {
-            try {
-                body = request.getJsonSerializer().deserialize(rawBody, type);
-            } catch (RuntimeException e) {
-                conversionError = e;
-            }
-        }
-        return new HttpResponseEntity<>(statusCode, body, httpHeaders, rawBody, conversionError);
-    }
-
-    /**
-     * 优先使用响应 Content-Type 中声明的字符集，未声明或无法解析时使用 UTF-8。
-     */
-    private static Charset resolveCharset(org.springframework.http.HttpHeaders headers) {
-        try {
-            MediaType contentType = headers.getContentType();
-            if (contentType != null && contentType.getCharset() != null) {
-                return contentType.getCharset();
-            }
-        } catch (IllegalArgumentException ignored) {
-            // Content-Type 或 charset 非法时回退到 UTF-8
-        }
-        return StandardCharsets.UTF_8;
+        headers.forEach((key, values) -> httpHeaders.add(key, values.toArray(new Object[0])));
+        return this.convertResponse(request, response.getStatusCode().value(), httpHeaders,
+                response.getBody(), responseType);
     }
 
     protected void checkFilename(String filename) {

@@ -347,7 +347,7 @@ public class HttpRequest<T extends HttpRequest<?>> {
      */
     protected void removeDefaultsForOtherOrigin() {
         String baseUrl = this.descriptor.getBaseUrl();
-        if (baseUrl == null || baseUrl.isBlank()) {
+        if (baseUrl == null || baseUrl.trim().isEmpty()) {
             return;
         }
         URI base;

@@ -7,11 +7,12 @@ import com.github.aqiu202.http.HttpRequest;
 import com.github.aqiu202.http.data.HttpResponseEntity;
 import com.github.aqiu202.http.exchange.HttpExchanger;
 import com.github.aqiu202.http.intercept.HttpInterceptor;
-import org.springframework.http.HttpStatus;
-
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.BiConsumer;
-import java.util.function.Predicate;
+import java.util.function.IntPredicate;
 
 public class RequestDescriptor {
     private boolean enableDebug;
@@ -21,7 +22,7 @@ public class RequestDescriptor {
     private HttpQueries defaultQueryParams;
     private HttpExchanger exchanger;
     private List<HttpInterceptor> interceptors;
-    private Predicate<HttpStatus> statusPredicate;
+    private IntPredicate statusPredicate;
     private JsonSerializer jsonSerializer;
     private BiConsumer<HttpRequest<?>, HttpResponseEntity<?>> responseConsumer;
     private RetryPolicy retryPolicy;
@@ -41,7 +42,7 @@ public class RequestDescriptor {
         this.defaultHeaders = defaultHeaders;
         this.defaultQueryParams = defaultQueryParams;
         this.exchanger = exchanger;
-        this.interceptors = interceptors == null ? List.of() : List.copyOf(interceptors);
+        this.interceptors = immutableInterceptors(interceptors);
         this.responseConsumer = responseConsumer;
         this.jsonSerializer = jsonSerializer;
         this.retryPolicy = retryPolicy;
@@ -100,14 +101,14 @@ public class RequestDescriptor {
     }
 
     public void setInterceptors(List<HttpInterceptor> interceptors) {
-        this.interceptors = interceptors == null ? List.of() : List.copyOf(interceptors);
+        this.interceptors = immutableInterceptors(interceptors);
     }
 
-    public Predicate<HttpStatus> getStatusPredicate() {
+    public IntPredicate getStatusPredicate() {
         return statusPredicate;
     }
 
-    public void setStatusPredicate(Predicate<HttpStatus> statusPredicate) {
+    public void setStatusPredicate(IntPredicate statusPredicate) {
         this.statusPredicate = statusPredicate;
     }
 
@@ -125,6 +126,15 @@ public class RequestDescriptor {
 
     public void setRetryPolicy(RetryPolicy retryPolicy) {
         this.retryPolicy = retryPolicy;
+    }
+
+    private static List<HttpInterceptor> immutableInterceptors(List<HttpInterceptor> interceptors) {
+        if (interceptors == null) {
+            return Collections.emptyList();
+        }
+        List<HttpInterceptor> copy = new ArrayList<>(interceptors);
+        copy.forEach(interceptor -> Objects.requireNonNull(interceptor, "interceptor must not be null"));
+        return Collections.unmodifiableList(copy);
     }
 
     public boolean isEnableDebug() {
