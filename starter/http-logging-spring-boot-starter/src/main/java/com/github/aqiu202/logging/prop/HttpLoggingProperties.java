@@ -2,8 +2,11 @@ package com.github.aqiu202.logging.prop;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "pangea.logging")
-public class PangeaLoggingProperties {
+import java.util.ArrayList;
+import java.util.List;
+
+@ConfigurationProperties(prefix = "http.logging")
+public class HttpLoggingProperties {
 
     /**
      * 是否启用请求日志追踪组件
@@ -19,6 +22,16 @@ public class PangeaLoggingProperties {
     private boolean includePayload = true;
 
     private int maxPayloadSize = 6400;
+
+    /**
+     * 请求日志 URL 白名单，支持 Ant 风格路径，非空时仅记录匹配的请求
+     */
+    private List<String> whitelist = new ArrayList<>();
+
+    /**
+     * 请求日志 URL 黑名单，支持 Ant 风格路径，优先于白名单
+     */
+    private List<String> blacklist = new ArrayList<>();
 
     public boolean isEnabled() {
         return enabled;
@@ -66,5 +79,21 @@ public class PangeaLoggingProperties {
 
     public void setMaxPayloadSize(int maxPayloadSize) {
         this.maxPayloadSize = maxPayloadSize;
+    }
+
+    public List<String> getWhitelist() {
+        return whitelist;
+    }
+
+    public void setWhitelist(List<String> whitelist) {
+        this.whitelist = whitelist;
+    }
+
+    public List<String> getBlacklist() {
+        return blacklist;
+    }
+
+    public void setBlacklist(List<String> blacklist) {
+        this.blacklist = blacklist;
     }
 }

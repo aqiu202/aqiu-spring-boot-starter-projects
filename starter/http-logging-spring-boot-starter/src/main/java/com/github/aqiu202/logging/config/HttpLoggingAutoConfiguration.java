@@ -3,7 +3,7 @@ package com.github.aqiu202.logging.config;
 import com.github.aqiu202.logging.filter.LoggerTracingFilter;
 import com.github.aqiu202.logging.filter.HttpRequestLoggingFilter;
 import com.github.aqiu202.logging.filter.HttpResponseLoggingFilter;
-import com.github.aqiu202.logging.prop.PangeaLoggingProperties;
+import com.github.aqiu202.logging.prop.HttpLoggingProperties;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
@@ -12,13 +12,13 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 @AutoConfiguration
-@EnableConfigurationProperties(PangeaLoggingProperties.class)
+@EnableConfigurationProperties(HttpLoggingProperties.class)
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @ConditionalOnProperty(prefix = "http.logging", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class HttpLoggingAutoConfiguration {
 
     @Bean
-    public FilterRegistrationBean<HttpRequestLoggingFilter> requestLoggingFilterRegistration(PangeaLoggingProperties properties) {
+    public FilterRegistrationBean<HttpRequestLoggingFilter> requestLoggingFilterRegistration(HttpLoggingProperties properties) {
         FilterRegistrationBean<HttpRequestLoggingFilter> bean = new FilterRegistrationBean<>();
         HttpRequestLoggingFilter loggingFilter = new HttpRequestLoggingFilter();
         loggingFilter.setIncludeClientInfo(properties.isIncludeClientInfo());
@@ -26,6 +26,8 @@ public class HttpLoggingAutoConfiguration {
         loggingFilter.setIncludeQueryString(properties.isIncludeQueryString());
         loggingFilter.setIncludePayload(properties.isIncludePayload());
         loggingFilter.setMaxPayloadLength(properties.getMaxPayloadSize());
+        loggingFilter.setWhitelist(properties.getWhitelist());
+        loggingFilter.setBlacklist(properties.getBlacklist());
         bean.setFilter(loggingFilter);
         bean.setOrder(Integer.MAX_VALUE);
         return bean;
