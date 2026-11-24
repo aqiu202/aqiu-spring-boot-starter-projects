@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.util.AntPathMatcher;
+import org.springframework.util.PathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
@@ -17,6 +19,20 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class HttpResponseLoggingFilter extends OncePerRequestFilter {
+
+    private final PathMatcher pathMatcher = new AntPathMatcher();
+
+    private List<String> whitelist = Collections.emptyList();
+
+    private List<String> blacklist = Collections.emptyList();
+
+    public void setWhitelist(Collection<String> whitelist) {
+        this.whitelist = whitelist == null ? Collections.emptyList() : List.copyOf(whitelist);
+    }
+
+    public void setBlacklist(Collection<String> blacklist) {
+        this.blacklist = blacklist == null ? Collections.emptyList() : List.copyOf(blacklist);
+    }
 
     @Override
     protected void doFilterInternal(@Nonnull HttpServletRequest request,
@@ -67,7 +83,16 @@ public class HttpResponseLoggingFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(@Nonnull HttpServletRequest request) {
-        return !logger.isDebugEnabled();
+        if (!logger.isDebugEnabled()) {
+            return true;
+        }
+        String requestUri = request.getRequestURI();
+        String path = requestUri.substring(request.getContextPath().length());
+        return matches(blacklist, path) || (!whitelist.isEmpty() && !matches(whitelist, path));
+    }
+
+    private boolean matches(Collection<String> patterns, String path) {
+        return patterns.stream().anyMatch(pattern -> pathMatcher.match(pattern, path));
     }
 
     protected Map<String, List<String>> readHeaderAsMap(HttpServletResponse response) {

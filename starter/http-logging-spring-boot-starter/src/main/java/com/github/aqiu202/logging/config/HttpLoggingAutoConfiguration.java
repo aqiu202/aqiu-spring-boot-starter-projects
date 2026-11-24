@@ -46,9 +46,12 @@ public class HttpLoggingAutoConfiguration {
 
 
     @Bean
-    public FilterRegistrationBean<HttpResponseLoggingFilter> responseWrapperFilterRegistration() {
+    public FilterRegistrationBean<HttpResponseLoggingFilter> responseWrapperFilterRegistration(HttpLoggingProperties properties) {
         FilterRegistrationBean<HttpResponseLoggingFilter> bean = new FilterRegistrationBean<>();
-        bean.setFilter(new HttpResponseLoggingFilter());
+        HttpResponseLoggingFilter loggingFilter = new HttpResponseLoggingFilter();
+        loggingFilter.setWhitelist(properties.getWhitelist());
+        loggingFilter.setBlacklist(properties.getBlacklist());
+        bean.setFilter(loggingFilter);
         bean.setOrder(Integer.MIN_VALUE + 1);
         return bean;
     }

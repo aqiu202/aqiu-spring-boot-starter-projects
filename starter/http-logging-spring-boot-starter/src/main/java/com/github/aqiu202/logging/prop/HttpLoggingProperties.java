@@ -24,12 +24,12 @@ public class HttpLoggingProperties {
     private int maxPayloadSize = 6400;
 
     /**
-     * 请求日志 URL 白名单，支持 Ant 风格路径，非空时仅记录匹配的请求
+     * 请求/响应日志 URL 白名单，支持 Ant 风格路径，非空时仅记录匹配的请求
      */
     private List<String> whitelist = new ArrayList<>();
 
     /**
-     * 请求日志 URL 黑名单，支持 Ant 风格路径，优先于白名单
+     * 请求/响应日志 URL 黑名单，支持 Ant 风格路径，优先于白名单
      */
     private List<String> blacklist = new ArrayList<>();
 
